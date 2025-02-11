@@ -119,28 +119,28 @@ function RouteComponent() {
                             value:
                                 competitionClock
                                     ?.getMatchTimings(matchId)
-                                    .stagingOpensAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
+                                    ?.stagingOpensAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
                         },
                         {
                             label: "Staging close",
                             value:
                                 competitionClock
                                     ?.getMatchTimings(matchId)
-                                    .stagingClosesAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
+                                    ?.stagingClosesAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
                         },
                         {
                             label: "Match start",
                             value:
                                 competitionClock
                                     ?.getMatchTimings(matchId)
-                                    .startsAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
+                                    ?.startsAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
                         },
                         {
                             label: "Match end",
                             value:
                                 competitionClock
                                     ?.getMatchTimings(matchId)
-                                    .endsAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
+                                    ?.endsAt?.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS) ?? "...",
                         },
                     ]}
                 />

@@ -48,7 +48,7 @@ export default function OffsetCursorModalButton({
             return;
         }
 
-        const targetMatchStart = competitionClock.getMatchTimings(selectedMatch).startsAt;
+        const targetMatchStart = competitionClock.getMatchTimings(selectedMatch)?.startsAt;
 
         if (!targetMatchStart) {
             showFlashbar({ type: "error", content: "Match not scheduled" });

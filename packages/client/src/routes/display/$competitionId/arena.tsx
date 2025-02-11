@@ -100,7 +100,12 @@ function RouteComponent() {
                 ) {
                     return DisplayMode.POST_MATCH;
                 } else if (nextMatch) {
-                    if (now >= competitionClock.getMatchTimings(nextMatch.id).startsAt.minus({ seconds: 10 })) {
+                    if (
+                        now >=
+                        (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now()).minus({
+                            seconds: 10,
+                        })
+                    ) {
                         return DisplayMode.MATCH_START_COUNTDOWN;
                     } else {
                         return DisplayMode.PRE_MATCH;
@@ -125,7 +130,9 @@ function RouteComponent() {
                             <h1 className="text-white font-bold text-5xl text-center mb-4">Starting in</h1>
                             <h1 className="text-white font-bold font-mono text-8xl text-center">
                                 {formatClock(
-                                    competitionClock.getMatchTimings(nextMatch.id).startsAt.diff(now).as("seconds")
+                                    (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
+                                        .diff(now)
+                                        .as("seconds")
                                 )}
                             </h1>
                         </div>
@@ -165,7 +172,9 @@ function RouteComponent() {
                         <div>
                             <h1 className="text-white font-bold font-mono text-9xl text-center">
                                 {Math.ceil(
-                                    competitionClock.getMatchTimings(nextMatch.id).startsAt.diff(now).as("seconds")
+                                    (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
+                                        .diff(now)
+                                        .as("seconds")
                                 )}
                             </h1>
                         </div>
@@ -180,7 +189,7 @@ function RouteComponent() {
                         <div className="my-16">
                             <h1 className="text-white font-bold font-mono text-8xl text-center">
                                 {formatClock(
-                                    (competitionClock.getMatchTimings(currentMatch.id).endsAt ?? DateTime.now())
+                                    (competitionClock.getMatchTimings(currentMatch.id)?.endsAt ?? DateTime.now())
                                         .diff(now)
                                         .as("seconds")
                                 )}
@@ -222,7 +231,7 @@ function RouteComponent() {
                         <div>
                             <h1 className="text-white font-bold font-mono text-9xl text-center">
                                 {Math.ceil(
-                                    (competitionClock.getMatchTimings(currentMatch.id).endsAt ?? DateTime.now())
+                                    (competitionClock.getMatchTimings(currentMatch.id)?.endsAt ?? DateTime.now())
                                         .diff(now)
                                         .as("seconds")
                                 )}

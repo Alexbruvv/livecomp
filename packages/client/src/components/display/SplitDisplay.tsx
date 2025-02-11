@@ -50,8 +50,9 @@ export default function SplitDisplay({
     const nextMatchStagingClose = useMemo(() => {
         const secondsValue = Math.max(
             0,
-            (nextMatch ? competitionClock?.getMatchTimings(nextMatch.id).stagingClosesAt.diffNow().as("seconds") : 0) ??
-                0
+            (nextMatch
+                ? competitionClock?.getMatchTimings(nextMatch.id)?.stagingClosesAt.diffNow().as("seconds")
+                : 0) ?? 0
         );
 
         if (secondsValue === 0) return "Closed";

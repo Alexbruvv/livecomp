@@ -115,7 +115,7 @@ export class CompetitionClock {
     }
 
     public getMatchTimings(matchId: string) {
-        return this.timings[matchId];
+        return this.timings[matchId] as MatchTimings | undefined;
     }
 
     public getMatchStatus(matchId: string): MatchStatus {
