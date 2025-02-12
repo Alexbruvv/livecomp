@@ -9,20 +9,15 @@ import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 export const matchScoreEntries = pgTable("match_score_entries", {
     ...baseColumns,
 
-    scorerId: uuid()
-        .references(() => users.id)
-        .notNull(),
-
     matchId: uuid()
         .references(() => matches.id)
         .notNull(),
 
-    gamePoints: json().$type<Record<string, number>>().notNull(),
+    gamePoints: json().$type<Record<string, number>>().notNull(), // Maps team ID -> game points
     scoreData: json().notNull(),
 });
 
 export const matchScoreEntriesRelations = relations(matchScoreEntries, ({ one }) => ({
-    scorer: one(users, { fields: [matchScoreEntries.scorerId], references: [users.id] }),
     match: one(matches, { fields: [matchScoreEntries.matchId], references: [matches.id] }),
 }));
 
