@@ -5,6 +5,9 @@ import { DateTime } from "luxon";
 import EditMatchPeriodModalButton from "../../../../components/console/matchPeriods/EditMatchPeriodModalButton";
 import DevToolsOnly from "../../../../components/console/util/DevToolsOnly";
 import Restricted from "../../../../components/console/util/Restricted";
+import MatchesTable from "../../../../components/console/matches/MatchesTable";
+import { useMemo } from "react";
+import useCompetitionClock from "../../../../hooks/useCompetitionClock";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matchPeriods/$matchPeriodId/")({
     component: RouteComponent,
@@ -14,11 +17,20 @@ export const Route = createFileRoute("/console/competitions/$competitionId/match
 });
 
 function RouteComponent() {
-    const { matchPeriodId } = Route.useParams();
+    const { competitionId, matchPeriodId } = Route.useParams();
 
-    const { data: matchPeriod } = api.matchPeriods.fetchById.useQuery({
-        id: matchPeriodId,
-    });
+    const { data: competition } = api.competitions.fetchById.useQuery({ id: competitionId });
+    const { data: matchPeriod } = api.matchPeriods.fetchById.useQuery({ id: matchPeriodId });
+
+    const competitionClock = useCompetitionClock(competition);
+
+    const matches = useMemo(
+        () =>
+            competition?.matches?.filter(
+                (m) => competitionClock?.getMatchTimings(m.id)?.matchPeriod.id === matchPeriodId
+            ),
+        [competition?.matches, competitionClock, matchPeriodId]
+    );
 
     const { mutate: resetMatchPeriod, isPending: resetPending } = api.devTools.resetMatchPeriod.useMutation();
 
@@ -88,9 +100,11 @@ function RouteComponent() {
                 />
             </Container>
 
-            {
-                // TODO add matches table back here, with filter on match periods
-            }
+            <MatchesTable
+                matches={matches ?? []}
+                matchesPending={!competition || !competitionClock}
+                competitionId={competitionId}
+            />
         </SpaceBetween>
     );
 }

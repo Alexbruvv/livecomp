@@ -9,6 +9,7 @@ interface MatchTimings {
     endsAt: DateTime | null;
     stagingOpensAt: DateTime;
     stagingClosesAt: DateTime;
+    matchPeriod: MatchPeriod;
 }
 
 export class CompetitionClock {
@@ -70,6 +71,7 @@ export class CompetitionClock {
                 }),
                 stagingOpensAt: timeAccumulator.minus({ seconds: this.competition.game.stagingOpenOffset }),
                 stagingClosesAt: timeAccumulator.minus({ seconds: this.competition.game.stagingCloseOffset }),
+                matchPeriod,
             };
 
             if (
