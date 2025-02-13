@@ -2,6 +2,7 @@ import { log } from "./utils/log";
 import { program } from "commander";
 import { version } from "../package.json";
 import { appRouter } from "./appRouter";
+import { createBunServeHandler } from "trpc-bun-adapter";
 import { createTrpcContext } from "./trpc/trpc";
 import { drizzleClient } from "./db/db";
 import { userPasswords, users } from "./db/schema/auth";
@@ -10,10 +11,6 @@ import { displaysRepository } from "./modules/displays/displays.repository";
 import { displaysJob } from "./jobs/displays";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "path";
-import fastify from "fastify";
-import { fastifyTRPCPlugin, type FastifyTRPCPluginOptions } from "@trpc/server/adapters/fastify";
-import ws from "@fastify/websocket";
-import cors from "@fastify/cors";
 
 program
     .name("livecomp-server")
@@ -41,31 +38,28 @@ program
 
         const port = parseInt(options.port);
 
-        const server = fastify({
-            maxParamLength: 5000,
-        });
-
-        server.register(cors);
-        server.register(ws);
-        server.register(fastifyTRPCPlugin, {
-            prefix: "/trpc",
-            useWSS: true,
-            keepAlive: {
-                enabled: true,
-                pingMs: 30000,
-                pongWaitMs: 5000,
-            },
-            trpcOptions: {
-                router: appRouter,
-                createContext: createTrpcContext,
-                onError({ path, error }) {
-                    // report to error monitoring
-                    console.error(`Error in tRPC handler on path '${path}':`, error);
+        Bun.serve(
+            createBunServeHandler(
+                {
+                    router: appRouter,
+                    createContext: createTrpcContext,
+                    endpoint: "/trpc",
+                    responseMeta() {
+                        return {
+                            status: 200,
+                            headers: {
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                            },
+                        };
+                    },
                 },
-            } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
-        });
-
-        await server.listen({ port });
+                {
+                    port,
+                }
+            )
+        );
 
         log.info(`Server listening on port ${port}`);
 
