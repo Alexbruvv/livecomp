@@ -64,16 +64,6 @@ program
                     // report to error monitoring
                     console.error(`Error in tRPC handler on path '${path}':`, error);
                 },
-                responseMeta() {
-                    return {
-                        status: 200,
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                            "Access-Control-Allow-Headers": "Content-Type, Authorization",
-                        },
-                    };
-                },
             } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
         });
 
