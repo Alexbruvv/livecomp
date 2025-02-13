@@ -6,10 +6,11 @@ import * as jose from "jose";
 import { auth } from "../modules/auth/auth.module";
 import { eq } from "drizzle-orm";
 import { roleMappings, users, type Role } from "../db/schema/auth";
+import type { CreateFastifyContextOptions } from "@trpc/server/adapters/fastify";
 
-export async function createTrpcContext({ req }: FetchCreateContextFnOptions) {
-    if (req.headers.has("authorization")) {
-        const token = req.headers.get("authorization")!;
+export async function createTrpcContext({ req }: CreateFastifyContextOptions) {
+    if (req.headers.authorization) {
+        const token = req.headers.authorization;
 
         let payload;
 
