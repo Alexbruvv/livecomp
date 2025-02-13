@@ -45,7 +45,9 @@ program
             maxParamLength: 5000,
         });
 
-        server.register(cors);
+        server.register(cors, {
+            origin: "*",
+        });
         server.register(ws);
         server.register(fastifyTRPCPlugin, {
             prefix: "/trpc",
