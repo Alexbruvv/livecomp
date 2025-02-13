@@ -47,7 +47,6 @@ program
 
         server.register(cors, {
             origin: "*",
-            credentials: true,
         });
         server.register(ws);
         server.register(fastifyTRPCPlugin, {
