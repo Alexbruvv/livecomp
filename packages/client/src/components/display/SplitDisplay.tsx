@@ -32,11 +32,14 @@ export default function SplitDisplay({
         const timings =
             currentMatch && competitionClock ? competitionClock.getMatchTimings(currentMatch.id) : undefined;
 
-        const secondsValue = Math.max(0, (timings && timings.endsAt ? timings.endsAt.diffNow().as("seconds") : 0) ?? 0);
+        const secondsValue = Math.max(
+            0,
+            (timings && timings.endsAt ? timings.endsAt.diff(time).as("seconds") : 0) ?? 0
+        );
 
         if (secondsValue === 0) return "Ended";
         return formatClock(secondsValue);
-    }, [currentMatch, competitionClock]);
+    }, [currentMatch, competitionClock, time]);
 
     const nextMatch = useMemo(() => {
         const nextMatchId = competitionClock?.getNextMatchId();
@@ -51,13 +54,13 @@ export default function SplitDisplay({
         const secondsValue = Math.max(
             0,
             (nextMatch
-                ? competitionClock?.getMatchTimings(nextMatch.id)?.stagingClosesAt.diffNow().as("seconds")
+                ? competitionClock?.getMatchTimings(nextMatch.id)?.stagingClosesAt.diff(time).as("seconds")
                 : 0) ?? 0
         );
 
         if (secondsValue === 0) return "Closed";
         return formatClock(secondsValue);
-    }, [nextMatch, competitionClock]);
+    }, [nextMatch, competitionClock, time]);
 
     const { data: matches } = api.matches.fetchAll.useQuery(
         { filters: { competitionId: competition?.id } },
@@ -192,7 +195,7 @@ export default function SplitDisplay({
 
                 <div className="text-white text-3xl p-4 font-semibold bg-slate-600 border-t-2 border-white">
                     <span className="float-start">Time</span>
-                    <span className="float-end font-mono">{time.toFormat("HH:mm")}</span>
+                    <span className="float-end font-mono">{time.toFormat("HH:mm:ss")}</span>
                 </div>
             </div>
         </div>

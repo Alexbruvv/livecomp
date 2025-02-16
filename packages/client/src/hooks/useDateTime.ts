@@ -26,13 +26,18 @@ export default function useDateTime(competitionClock?: CompetitionClock) {
     const [now, setNow] = useState(getNow());
 
     useEffect(() => {
+        let timeout: Timer;
+
         const tick = () => {
             const newNow = getNow();
             setNow(newNow);
-            setTimeout(tick, 1050 - newNow.millisecond);
+            clearTimeout(timeout);
+            timeout = setTimeout(tick, 1050 - newNow.millisecond);
         };
 
         tick();
+
+        return () => clearTimeout(timeout);
     }, [getNow]);
 
     useEffect(() => {
