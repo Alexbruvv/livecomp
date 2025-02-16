@@ -11,18 +11,13 @@ export default function useDateTime(competitionClock?: CompetitionClock) {
     const [now, setNow] = useState(getNow());
 
     useEffect(() => {
-        let interval: Timer;
-        const timeout = setTimeout(() => {
-            interval = setInterval(() => {
-                setNow(getNow());
-            }, 1050);
-        }, 1000 - now.millisecond);
-
-        return () => {
-            clearTimeout(timeout);
-            clearInterval(interval);
+        const tick = () => {
+            const newNow = getNow();
+            setNow(newNow);
+            setTimeout(tick, 1050 - newNow.millisecond);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        tick();
     }, [getNow]);
 
     return now;
