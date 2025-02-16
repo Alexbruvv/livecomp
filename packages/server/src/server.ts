@@ -11,6 +11,7 @@ import { displaysRepository } from "./modules/displays/displays.repository";
 import { displaysJob } from "./jobs/displays";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "path";
+import { api } from "./api/api";
 
 program
     .name("livecomp-server")
@@ -57,6 +58,7 @@ program
                 },
                 {
                     port,
+                    fetch: api.fetch,
                 }
             )
         );

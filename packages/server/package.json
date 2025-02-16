@@ -30,6 +30,7 @@
         "cron": "^3.3.2",
         "drizzle-orm": "^0.36.1",
         "drizzle-zod": "^0.5.1",
+        "elysia": "^1.2.12",
         "jose": "^5.9.6",
         "luxon": "^3.5.0",
         "moderndash": "^3.12.0",
