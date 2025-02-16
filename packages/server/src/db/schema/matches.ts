@@ -44,7 +44,7 @@ export const matches = pgTable(
             .references(() => competitions.id)
             .notNull(),
 
-        sequenceNumber: integer().unique().notNull(),
+        sequenceNumber: integer().notNull(),
     },
     (matches) => ({
         uniqueSequenceNumber: unique("unique_sequence_number").on(matches.competitionId, matches.sequenceNumber),
