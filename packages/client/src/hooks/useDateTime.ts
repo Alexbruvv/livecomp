@@ -36,6 +36,8 @@ export default function useDateTime(competitionClock?: CompetitionClock) {
     }, [getNow]);
 
     useEffect(() => {
+        determineOffsetMs().then(setOffsetMs);
+
         const interval = setInterval(async () => {
             setOffsetMs(await determineOffsetMs());
         }, 60000);

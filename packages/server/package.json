@@ -21,6 +21,7 @@
         "typescript": "^5.0.0"
     },
     "dependencies": {
+        "@elysiajs/cors": "^1.2.0",
         "@livecomp/utils": "workspace:*",
         "@sentry/remix": "^8.38.0",
         "@sentry/types": "^8.38.0",
