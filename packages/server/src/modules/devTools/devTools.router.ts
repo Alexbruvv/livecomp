@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import { eq } from "drizzle-orm";
 import { matchPeriods } from "../../db/schema/matches";
 import { pausesRepository } from "../pauses/pauses.repository";
-import { pauses } from "../../db/schema/competitions";
+import { offsets, pauses } from "../../db/schema/competitions";
 import { offsetsRepository } from "../offsets/offsets.repository";
 
 export const devToolsRouter = router({
@@ -23,7 +23,7 @@ export const devToolsRouter = router({
                     where: eq(pauses.competitionId, matchPeriod.competitionId),
                 });
                 await offsetsRepository.delete({
-                    where: eq(pauses.competitionId, matchPeriod.competitionId),
+                    where: eq(offsets.competitionId, matchPeriod.competitionId),
                 });
             }
 
