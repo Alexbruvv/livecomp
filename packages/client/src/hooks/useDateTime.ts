@@ -10,7 +10,7 @@ export default function useDateTime(competitionClock?: CompetitionClock) {
         );
         const delta = performance.now() - now;
 
-        return DateTime.now().diff(DateTime.fromISO(isoServerDate)).milliseconds - delta / 2;
+        return DateTime.now().diff(DateTime.fromISO(isoServerDate)).milliseconds + delta / 2;
     };
 
     const [offsetMs, setOffsetMs] = useState(0);
