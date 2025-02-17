@@ -2,42 +2,42 @@ import { CompetitionClock } from "@livecomp/utils";
 import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 
+const determineOffsetMs = async () => {
+    const now = performance.now();
+    const isoServerDate = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/now`).then((response) => response.text());
+    const delta = performance.now() - now;
+
+    return DateTime.now().diff(DateTime.fromISO(isoServerDate)).as("milliseconds") + delta / 2;
+};
+
 export default function useDateTime(competitionClock?: CompetitionClock) {
-    const determineOffsetMs = async () => {
-        const now = performance.now();
-        const isoServerDate = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/now`).then((response) =>
-            response.text()
-        );
-        const delta = performance.now() - now;
-
-        return DateTime.now().diff(DateTime.fromISO(isoServerDate)).milliseconds + delta / 2;
-    };
-
     const [offsetMs, setOffsetMs] = useState(0);
 
     const getNow = useMemo(
         () =>
             competitionClock
-                ? () => competitionClock.now().plus({ millisecond: offsetMs })
-                : () => DateTime.now().plus({ millisecond: offsetMs }),
+                ? () => competitionClock.now().plus({ milliseconds: offsetMs })
+                : () => DateTime.now().plus({ milliseconds: offsetMs }),
         [competitionClock, offsetMs]
     );
 
     const [now, setNow] = useState(getNow());
 
     useEffect(() => {
-        let timeout: Timer;
+        let timeout: Timer | null = null;
 
         const tick = () => {
             const newNow = getNow();
             setNow(newNow);
-            clearTimeout(timeout);
+            if (timeout) clearTimeout(timeout);
             timeout = setTimeout(tick, 1050 - newNow.millisecond);
         };
 
         tick();
 
-        return () => clearTimeout(timeout);
+        return () => {
+            if (timeout) clearTimeout(timeout);
+        };
     }, [getNow]);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function useDateTime(competitionClock?: CompetitionClock) {
 
         const interval = setInterval(async () => {
             setOffsetMs(await determineOffsetMs());
-        }, 60000);
+        }, 20000);
 
         return () => clearInterval(interval);
     }, []);
