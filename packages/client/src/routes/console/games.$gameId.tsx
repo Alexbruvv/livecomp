@@ -77,6 +77,10 @@ function RouteComponent() {
                                 label: "Staging close offset",
                                 value: game?.stagingCloseOffset ?? "...",
                             },
+                            {
+                                label: "Scorer",
+                                value: game ? (game.scorer ?? "None") : "...",
+                            },
                         ]}
                     />
                 </Container>

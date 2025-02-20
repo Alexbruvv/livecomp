@@ -1,7 +1,10 @@
-import { integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
+
+export const scorer = pgEnum("scorer", ["nuclear_cleanup"]);
+export type Scorer = (typeof scorer.enumValues)[number];
 
 export const games = pgTable("games", {
     ...baseColumns,
@@ -11,6 +14,8 @@ export const games = pgTable("games", {
     defaultMatchSpacing: integer().notNull(),
     stagingOpenOffset: integer().default(300).notNull(),
     stagingCloseOffset: integer().default(150).notNull(),
+
+    scorer: scorer(),
 });
 
 export const gamesRelations = relations(games, ({ many }) => ({
