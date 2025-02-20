@@ -2,13 +2,13 @@ import { CompetitionClock } from "@livecomp/utils";
 import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 
-const determineOffsetMs = async () => {
+async function determineOffsetMs() {
     const now = performance.now();
     const isoServerDate = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/now`).then((response) => response.text());
     const delta = performance.now() - now;
 
     return DateTime.now().diff(DateTime.fromISO(isoServerDate)).as("milliseconds") + delta / 2;
-};
+}
 
 export default function useDateTime(competitionClock?: CompetitionClock) {
     const [offsetMs, setOffsetMs] = useState(0);
@@ -24,20 +24,9 @@ export default function useDateTime(competitionClock?: CompetitionClock) {
     const [now, setNow] = useState(getNow());
 
     useEffect(() => {
-        let timeout: Timer | null = null;
+        const interval = setInterval(() => setNow(getNow()), 50);
 
-        const tick = () => {
-            const newNow = getNow();
-            setNow(newNow);
-            if (timeout) clearTimeout(timeout);
-            timeout = setTimeout(tick, 1050 - newNow.millisecond);
-        };
-
-        tick();
-
-        return () => {
-            if (timeout) clearTimeout(timeout);
-        };
+        return () => clearInterval(interval);
     }, [getNow]);
 
     useEffect(() => {
