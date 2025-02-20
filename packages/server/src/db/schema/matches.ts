@@ -53,7 +53,7 @@ export const matches = pgTable(
 
 export const matchesRelations = relations(matches, ({ one, many }) => ({
     dependentAssignmentConfigs: many(autoMatchAssignmentConfigs),
-    scoreEntries: many(matchScoreEntries),
+    scoreEntry: one(matchScoreEntries),
     assignments: many(matchAssignments),
     competition: one(competitions, { fields: [matches.competitionId], references: [competitions.id] }),
 }));

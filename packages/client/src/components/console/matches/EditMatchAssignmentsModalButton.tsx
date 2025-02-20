@@ -82,8 +82,6 @@ export default function EditMatchAssignmentsModalButton({
 
     const [formState, setFormState] = useState<FormData>(generateDefaultData(match, competition));
 
-    console.log(formState);
-
     useEffect(() => {
         setFormState(generateDefaultData(match, competition));
     }, [match, competition]);

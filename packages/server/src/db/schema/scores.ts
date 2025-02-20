@@ -14,6 +14,7 @@ export const matchScoreEntries = pgTable("match_score_entries", {
         .notNull(),
 
     gamePoints: json().$type<Record<string, number>>().notNull(), // Maps team ID -> game points
+    leaguePoints: json().$type<Record<string, number>>().notNull(), // Maps team ID -> league points
     scoreData: json().notNull(),
 });
 

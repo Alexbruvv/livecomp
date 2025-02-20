@@ -5,6 +5,9 @@ import DisplaysTable from "../../../components/console/displays/DisplaysTable";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/displays")({
     component: RouteComponent,
+    beforeLoad: () => ({
+        title: "Displays",
+    }),
 });
 
 function RouteComponent() {

@@ -1,10 +1,12 @@
 import { z } from "zod";
-import { protectedProcedure, publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
+import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { insertTeamSchema, teams } from "../../db/schema/teams";
 import { teamsRepository } from "./teams.repository";
 import { and, eq } from "drizzle-orm";
-import { manualPointsAdjustmentsRepository } from "../scores/manualPointsAdjustmentsRepository";
+import { manualPointsAdjustmentsRepository } from "../scores/manualPointsAdjustments.repository";
 import { manualPointsAdjustments } from "../../db/schema/scores";
+import { matchesRepository } from "../matches/matches.repository";
+import { matches } from "../../db/schema/matches";
 
 export const teamsRouter = router({
     create: restrictedProcedure("admin")
@@ -61,7 +63,20 @@ export const teamsRouter = router({
                 }
             }
 
-            // TODO: add match scores
+            const scoredMatches = await matchesRepository.findMany({
+                where: eq(matches.competitionId, competitionId),
+                with: { scoreEntry: true },
+            });
+
+            for (const match of scoredMatches.filter((match) => !!match.scoreEntry)) {
+                for (const [teamId, points] of Object.entries(match.scoreEntry!.leaguePoints)) {
+                    scores[teamId].leaguePoints += points;
+                }
+
+                for (const [teamId, points] of Object.entries(match.scoreEntry!.gamePoints)) {
+                    scores[teamId].gamePoints += points;
+                }
+            }
 
             return scores;
         }),

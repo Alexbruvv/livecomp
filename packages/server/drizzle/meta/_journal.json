@@ -281,6 +281,13 @@
       "when": 1740011749749,
       "tag": "0039_nappy_komodo",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1740012569003,
+      "tag": "0040_unique_chamber",
+      "breakpoints": true
     }
   ]
 }

@@ -7,6 +7,7 @@ import EditMatchModalButton from "../../../components/console/matches/EditMatchM
 import useCompetitionClock from "../../../hooks/useCompetitionClock";
 import { DateTime } from "luxon";
 import MatchStatusIndicator from "../../../components/console/matches/MatchStatusIndicator";
+import NuclearCleanupScorer from "../../../components/console/scorer/NuclearCleanupScorer";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,
@@ -144,6 +145,12 @@ function RouteComponent() {
                         },
                     ]}
                 />
+            </Container>
+
+            <Container header={<Header>Scorer</Header>}>
+                {match && competition?.game.scorer === "nuclear_cleanup" && (
+                    <NuclearCleanupScorer match={match} game={competition.game} />
+                )}
             </Container>
         </SpaceBetween>
     );

@@ -7,6 +7,9 @@ import useCompetitionClock from "../../../hooks/useCompetitionClock";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/control")({
     component: RouteComponent,
+    beforeLoad: () => ({
+        title: "Control",
+    }),
 });
 
 function RouteComponent() {
