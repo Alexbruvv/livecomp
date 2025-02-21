@@ -89,22 +89,36 @@ function RouteComponent() {
                     <KeyValuePairs
                         columns={competition.game.startingZones.length}
                         items={competition.game.startingZones.map((zone) => {
-                            const team = match?.assignments.find(
+                            const assignment = match?.assignments.find(
                                 (assignment) => assignment.startingZoneId === zone.id
-                            )?.team;
+                            );
+                            const team = assignment?.team;
+
+                            const mode = team ? "team" : assignment?.autoConfig ? "auto" : "empty";
 
                             return {
                                 label: `Zone ${zone.name}`,
-                                value: team ? (
-                                    <RoutedLink
-                                        to="/console/competitions/$competitionId/teams/$teamId"
-                                        params={{ competitionId, teamId: team.id }}
-                                    >
-                                        {team.shortName}
-                                    </RoutedLink>
-                                ) : (
-                                    "..."
-                                ),
+                                value:
+                                    mode === "team" ? (
+                                        <RoutedLink
+                                            to="/console/competitions/$competitionId/teams/$teamId"
+                                            params={{ competitionId, teamId: team!.id }}
+                                        >
+                                            {team!.shortName}
+                                        </RoutedLink>
+                                    ) : mode === "auto" ? (
+                                        <>
+                                            Position {assignment!.autoConfig!.position} (
+                                            {assignment!.autoConfig!.targetMatchId
+                                                ? competition.matches.find(
+                                                      (match) => match.id === assignment!.autoConfig!.targetMatchId
+                                                  )?.name
+                                                : "League"}
+                                            )
+                                        </>
+                                    ) : (
+                                        "None"
+                                    ),
                             };
                         })}
                     />
