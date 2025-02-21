@@ -221,7 +221,8 @@ export default function EditMatchAssignmentsModalButton({
                                                                         [startingZone.id]: {
                                                                             type: "auto",
                                                                             targetMatchId:
-                                                                                e.detail.selectedOption.value ?? "",
+                                                                                e.detail.selectedOption.value ??
+                                                                                undefined,
                                                                             position: formValue.position,
                                                                         },
                                                                     });
