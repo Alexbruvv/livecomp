@@ -288,6 +288,13 @@
       "when": 1740012569003,
       "tag": "0040_unique_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1740101390910,
+      "tag": "0041_aspiring_vin_gonzales",
+      "breakpoints": true
     }
   ]
 }

@@ -10,7 +10,7 @@ export const matchScoreEntries = pgTable("match_score_entries", {
     ...baseColumns,
 
     matchId: uuid()
-        .references(() => matches.id)
+        .references(() => matches.id, { onDelete: "cascade" })
         .notNull(),
 
     gamePoints: json().$type<Record<string, number>>().notNull(), // Maps team ID -> game points
