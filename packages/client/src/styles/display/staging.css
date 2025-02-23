@@ -1,0 +1,11 @@
+table {
+    @apply text-white;
+}
+
+th {
+    @apply text-4xl py-4 w-1/5;
+}
+
+td {
+    @apply font-mono text-center text-2xl py-4;
+}

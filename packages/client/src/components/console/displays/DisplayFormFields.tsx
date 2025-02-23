@@ -19,6 +19,10 @@ const MODE_OPTIONS: SelectProps.Options = [
         value: "outside",
     },
     {
+        label: "Staging",
+        value: "staging",
+    },
+    {
         label: "Arena",
         value: "arena",
     },

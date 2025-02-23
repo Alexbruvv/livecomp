@@ -17,6 +17,9 @@ const configurationSchema = z.union([
         mode: z.literal("outside"),
     }),
     z.object({
+        mode: z.literal("staging"),
+    }),
+    z.object({
         mode: z.literal("empty"),
     }),
 ]);

@@ -41,6 +41,11 @@ function RouteComponent() {
                                     Scores
                                 </Link>
                             </li>
+                            <li className="text-blue-500 font-semibold">
+                                <Link to="/display/$competitionId/staging" params={{ competitionId: competition.id }}>
+                                    Staging
+                                </Link>
+                            </li>
                             <li className="text-white">
                                 Arena
                                 <ul className="list-disc list-inside ml-4">
