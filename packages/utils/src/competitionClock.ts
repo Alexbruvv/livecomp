@@ -35,8 +35,10 @@ export class CompetitionClock {
         let timeAccumulator = DateTime.fromJSDate(matchPeriod.startsAt);
         let slackAccumulator = 0;
         for (const match of matches) {
+            timeAccumulator = timeAccumulator.plus({ seconds: match.buffer });
+
             const baseMatchEndTime = timeAccumulator.plus({
-                seconds: this.competition.game.matchDuration + this.competition.game.defaultMatchSpacing,
+                seconds: match.buffer + this.competition.game.matchDuration + this.competition.game.defaultMatchSpacing,
             });
 
             // Apply pauses
@@ -64,19 +66,13 @@ export class CompetitionClock {
                 offset = offsets[0];
             }
 
-            timings[match.id] = {
-                startsAt: timeAccumulator,
-                endsAt: timeAccumulator.plus({
-                    seconds: this.competition.game.matchDuration,
-                }),
-                stagingOpensAt: timeAccumulator.minus({ seconds: this.competition.game.stagingOpenOffset }),
-                stagingClosesAt: timeAccumulator.minus({ seconds: this.competition.game.stagingCloseOffset }),
-                matchPeriod,
-            };
-
+            // Move to next match period if match overflows
             if (
                 timeAccumulator.plus({ seconds: this.competition.game.matchDuration }) >
-                DateTime.fromJSDate(matchPeriod.endsAt).plus({ seconds: slackAccumulator })
+                DateTime.min(
+                    DateTime.fromJSDate(matchPeriod.endsAt).plus({ seconds: slackAccumulator }),
+                    DateTime.fromJSDate(matchPeriod.endsAtLatest)
+                )
             ) {
                 matchPeriod = matchPeriods.shift();
                 if (!matchPeriod) break;
@@ -88,6 +84,16 @@ export class CompetitionClock {
                     seconds: this.competition.game.defaultMatchSpacing + this.competition.game.matchDuration,
                 });
             }
+
+            timings[match.id] = {
+                startsAt: timeAccumulator,
+                endsAt: timeAccumulator.plus({
+                    seconds: this.competition.game.matchDuration,
+                }),
+                stagingOpensAt: timeAccumulator.minus({ seconds: this.competition.game.stagingOpenOffset }),
+                stagingClosesAt: timeAccumulator.minus({ seconds: this.competition.game.stagingCloseOffset }),
+                matchPeriod,
+            };
         }
 
         return timings;

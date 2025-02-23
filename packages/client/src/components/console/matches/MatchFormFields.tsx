@@ -61,6 +61,24 @@ export default function MatchFormFields({ form }: { form: UseFormReturn<FormData
                     />
                 )}
             />
+
+            <ControlledFormField
+                label="Buffer (seconds)"
+                form={form}
+                name="buffer"
+                render={({ field }) => (
+                    <Input
+                        type="number"
+                        inputMode="numeric"
+                        placeholder="Buffer"
+                        {...field}
+                        value={field.value !== undefined ? field.value.toString() : "0"}
+                        onChange={(e) => {
+                            form.setValue(field.name, parseInt(e.detail.value));
+                        }}
+                    />
+                )}
+            />
         </SpaceBetween>
     );
 }

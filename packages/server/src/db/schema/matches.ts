@@ -44,6 +44,8 @@ export const matches = pgTable(
             .references(() => competitions.id)
             .notNull(),
 
+        buffer: integer().default(0).notNull(),
+
         sequenceNumber: integer().notNull(),
     },
     (matches) => ({

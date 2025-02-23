@@ -22,6 +22,7 @@ export default function CreateMatchModalButton({ competitionId }: { competitionI
         onSettled: () =>
             form.reset({
                 sequenceNumber: 0,
+                buffer: 0,
             }),
     });
 
@@ -29,6 +30,7 @@ export default function CreateMatchModalButton({ competitionId }: { competitionI
         resolver: zodResolver(formSchema),
         defaultValues: {
             sequenceNumber: 0,
+            buffer: 0,
         },
     });
 

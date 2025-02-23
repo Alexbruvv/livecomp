@@ -66,6 +66,10 @@ function RouteComponent() {
                                 "???"
                             ),
                         },
+                        {
+                            label: "Buffer",
+                            value: match?.buffer ?? "...",
+                        },
                     ]}
                 />
             </Container>
