@@ -17,9 +17,9 @@ export default function MatchBox({
 }) {
     return (
         <div className="w-auto h-1/5 p-2 m-6 border-2 flex flex-col gap-2">
-            <h1 className="text-white text-xl font-semibold">
-                <span className="float-start">{matchName}</span>
-                <span className="float-end font-mono">{matchTime}</span>
+            <h1 className="text-white text-xl font-semibold flex justify-between">
+                <span>{matchName}</span>
+                <span className="font-mono">{matchTime}</span>
             </h1>
             <div className="flex-grow">
                 <div className="w-full h-full grid grid-cols-2">
