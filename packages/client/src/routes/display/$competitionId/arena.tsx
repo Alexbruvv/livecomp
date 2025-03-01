@@ -124,11 +124,15 @@ function RouteComponent() {
                 {displayMode === DisplayMode.PRE_MATCH && nextMatch && competition && competitionClock && (
                     <>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-8xl text-center">{nextMatch.name}</h1>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "6vw" }}>
+                                {nextMatch.name}
+                            </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-5xl text-center mb-4">Starting in</h1>
-                            <h1 className="text-white font-bold font-mono text-8xl text-center">
+                            <h1 className="text-white font-bold text-center mb-4" style={{ fontSize: "4vw" }}>
+                                Starting in
+                            </h1>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "6vw" }}>
                                 {formatClock(
                                     (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
                                         .diff(now)
@@ -137,10 +141,10 @@ function RouteComponent() {
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-8xl text-center">
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "6vw" }}>
                                 {nextAssignment?.team?.shortName}
                             </h1>
-                            <h2 className="text-white font-semibold text-5xl text-center">
+                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "4vw" }}>
                                 {nextAssignment?.team?.name}
                             </h2>
                         </div>
