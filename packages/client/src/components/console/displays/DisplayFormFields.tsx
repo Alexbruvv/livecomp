@@ -76,6 +76,9 @@ export default function DisplayFormFields({
                                     startingZoneId: startingZoneOptions[0].value ?? "",
                                 });
                                 break;
+                            case "staging":
+                                form.setValue("configuration", { mode: "staging" });
+                                break;
                             case "empty":
                                 form.setValue("configuration", {
                                     mode: "empty",
