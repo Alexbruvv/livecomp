@@ -129,7 +129,7 @@ function RouteComponent() {
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center mb-4" style={{ fontSize: "4vw" }}>
+                            <h1 className="text-white font-bold text-center mb-4" style={{ fontSize: "5vw" }}>
                                 Starting in
                             </h1>
                             <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "6vw" }}>
@@ -144,7 +144,7 @@ function RouteComponent() {
                             <h1 className="text-white font-bold text-center" style={{ fontSize: "6vw" }}>
                                 {nextAssignment?.team?.shortName}
                             </h1>
-                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "4vw" }}>
+                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "5vw" }}>
                                 {nextAssignment?.team?.name}
                             </h2>
                         </div>
