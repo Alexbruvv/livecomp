@@ -193,9 +193,9 @@ export default function SplitDisplay({
                     </tbody>
                 </table>
 
-                <div className="text-white text-3xl p-4 font-semibold bg-slate-600 border-t-2 border-white">
-                    <span className="float-start">Time</span>
-                    <span className="float-end font-mono">{time.toFormat("HH:mm:ss")}</span>
+                <div className="text-white text-3xl p-4 font-semibold bg-slate-600 border-t-2 border-white flex justify-between">
+                    <span>Time</span>
+                    <span className="font-mono">{time.toFormat("HH:mm:ss")}</span>
                 </div>
             </div>
         </div>
