@@ -25,7 +25,7 @@ function RouteComponent() {
     const scores = useMemo(
         () =>
             Object.entries(rawScores ?? [])
-                .sort((a, b) => b[1].leaguePoints - a[1].leaguePoints)
+                .sort((a, b) => b[1].leaguePoints - a[1].leaguePoints || b[1].gamePoints - a[1].gamePoints)
                 .slice(0, 10),
         [rawScores]
     );
