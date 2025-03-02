@@ -37,6 +37,10 @@ export const api = new Elysia().use(cors()).use(
             const nextMatchTimings = competitionClock.getMatchTimings(nextMatchId);
             if (!nextMatchTimings) return { nextMatch: null };
 
+            const currentMatchId = competitionClock.getCurrentMatchId();
+            const currentMatch = competition.matches.find((match) => match.id === currentMatchId);
+            if (currentMatch) return { nextMatch: currentMatch };
+
             const nextMatch = competition.matches.find((match) => match.id === nextMatchId);
             if (!nextMatch) return { nextMatch: null };
 
