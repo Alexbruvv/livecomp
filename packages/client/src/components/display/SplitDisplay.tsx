@@ -20,14 +20,14 @@ export default function SplitDisplay({
     const time = useDateTime(competitionClock);
 
     const currentMatch = useMemo(() => {
-        const currentMatchId = competitionClock?.getCurrentMatchId() ?? competitionClock?.getPreviousMatchId();
+        const currentMatchId = competitionClock?.getCurrentMatchId(time) ?? competitionClock?.getPreviousMatchId(time);
 
         if (currentMatchId) {
             return competition?.matches.find((match) => match.id === currentMatchId);
         }
 
         return undefined;
-    }, [competition?.matches, competitionClock]);
+    }, [competition?.matches, competitionClock, time]);
     const currentMatchStagingClose = useMemo(() => {
         const timings =
             currentMatch && competitionClock ? competitionClock.getMatchTimings(currentMatch.id) : undefined;
@@ -42,14 +42,14 @@ export default function SplitDisplay({
     }, [currentMatch, competitionClock, time]);
 
     const nextMatch = useMemo(() => {
-        const nextMatchId = competitionClock?.getNextMatchId();
+        const nextMatchId = competitionClock?.getNextMatchId(time);
 
         if (nextMatchId) {
             return competition?.matches.find((match) => match.id === nextMatchId);
         }
 
         return undefined;
-    }, [competition?.matches, competitionClock]);
+    }, [competition?.matches, competitionClock, time]);
     const nextMatchStagingClose = useMemo(() => {
         const secondsValue = Math.max(
             0,
@@ -68,8 +68,6 @@ export default function SplitDisplay({
     );
 
     const nextMatchTimes = useMemo<Record<string, DateTime>>(() => {
-        const now = DateTime.now();
-
         return Object.fromEntries(
             (teams ?? [])
                 .map((team) => {
@@ -78,7 +76,7 @@ export default function SplitDisplay({
                         if (!match) continue;
                         if (!match.assignments.some((assignment) => assignment.teamId === team.id)) continue;
 
-                        if (now < timings.stagingClosesAt) {
+                        if (time < timings.stagingClosesAt) {
                             return [team.id, timings.stagingClosesAt];
                         }
                     }
@@ -87,7 +85,7 @@ export default function SplitDisplay({
                 })
                 .filter((entry) => !!entry)
         );
-    }, [competitionClock, matches, teams]);
+    }, [competitionClock, matches, teams, time]);
 
     return (
         <div className="w-screen h-screen flex flex-row">
