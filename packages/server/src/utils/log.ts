@@ -3,7 +3,7 @@ import chalk from "chalk";
 const PREFIX = chalk.greenBright("[livecomp-server]");
 
 function createLogger(levelPrefix: string) {
-    return (...args: any[]) => {
+    return (...args: unknown[]) => {
         console.log(PREFIX, levelPrefix, ...args);
     };
 }

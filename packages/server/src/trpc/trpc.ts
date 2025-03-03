@@ -20,7 +20,7 @@ export async function createTrpcContext({ req }: FetchCreateContextFnOptions) {
                     audience: "livecomp:client",
                 })
             ).payload;
-        } catch (e) {
+        } catch (_) {
             return {
                 db: drizzleClient,
             };

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-private-class-members */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Code made available by cayter on GitHub.
  * Source: https://gist.github.com/cayter/49d5c256a885d90c399ca6c1eca19f51
@@ -116,7 +120,7 @@ export type PaginateByOffsetOpts<T extends Record<string, unknown>> = KnownKeysO
  */
 export type FindFirstQueryConfig<
     T extends Record<string, unknown>,
-    U extends keyof ExtractTablesWithRelations<T>
+    U extends keyof ExtractTablesWithRelations<T>,
 > = Omit<DBQueryConfig<"many", true, ExtractTablesWithRelations<T>, ExtractTablesWithRelations<T>[U]>, "limit"> & {
     tx?: Transaction<T>;
 };
@@ -126,7 +130,7 @@ export type FindFirstQueryConfig<
  */
 export type FindManyQueryConfig<
     T extends Record<string, unknown>,
-    U extends keyof ExtractTablesWithRelations<T>
+    U extends keyof ExtractTablesWithRelations<T>,
 > = DBQueryConfig<"many", true, ExtractTablesWithRelations<T>, ExtractTablesWithRelations<T>[U]> & {
     tx?: Transaction<T>;
 };
@@ -136,7 +140,7 @@ export type FindManyQueryConfig<
  */
 export type PaginateByOffsetQueryConfig<
     T extends Record<string, unknown>,
-    U extends keyof ExtractTablesWithRelations<T>
+    U extends keyof ExtractTablesWithRelations<T>,
 > = Omit<
     DBQueryConfig<"many", true, ExtractTablesWithRelations<T>, ExtractTablesWithRelations<T>[U]> & {
         page?: number;
@@ -161,19 +165,20 @@ type SimplifyShallow<T> = {
     [K in keyof T]: T[K];
 } & {};
 
-type SelectResultField<T, TDeep extends boolean = true> = T extends DrizzleTypeError<any>
-    ? T
-    : T extends AnyTable<any>
-    ? Equal<TDeep, true> extends true
-        ? SelectResultField<T["_"]["columns"], false>
-        : never
-    : T extends AnyColumn
-    ? GetColumnData<T>
-    : T extends SQL | SQL.Aliased
-    ? T["_"]["type"]
-    : T extends Record<string, any>
-    ? SelectResultFields<T, true>
-    : never;
+type SelectResultField<T, TDeep extends boolean = true> =
+    T extends DrizzleTypeError<any>
+        ? T
+        : T extends AnyTable<any>
+          ? Equal<TDeep, true> extends true
+              ? SelectResultField<T["_"]["columns"], false>
+              : never
+          : T extends AnyColumn
+            ? GetColumnData<T>
+            : T extends SQL | SQL.Aliased
+              ? T["_"]["type"]
+              : T extends Record<string, any>
+                ? SelectResultFields<T, true>
+                : never;
 
 type SelectResultFields<TSelectedFields, TDeep extends boolean = true> = SimplifyShallow<{
     [Key in keyof TSelectedFields & string]: SelectResultField<TSelectedFields[Key], TDeep>;
@@ -182,7 +187,7 @@ type SelectResultFields<TSelectedFields, TDeep extends boolean = true> = Simplif
 export abstract class Repository<
     T extends Record<string, unknown>,
     U extends PgTableWithColumns<any>,
-    V extends keyof ExtractTablesWithRelations<T>
+    V extends keyof ExtractTablesWithRelations<T>,
 > {
     /**
      * The DB instance.
@@ -217,7 +222,7 @@ export abstract class Repository<
             }
         });
 
-        // @ts-expect-error
+        // @ts-expect-error Table relations are not defined in the type
         this.#relations = this.db.schema[`${this.#modelName}Relations`].config(createTableRelationsHelpers(this.table));
     }
 
@@ -289,10 +294,10 @@ export abstract class Repository<
                     const valueMatch = err.detail?.match(valueRegex);
 
                     if (keyMatch && valueMatch) {
-                        const keys = keyMatch[1].split(", ").map((key) => key.trim());
-                        const values = valueMatch[1].split(", ").map((value) => value.trim());
+                        //const keys = keyMatch[1].split(", ").map((key) => key.trim());
+                        //const values = valueMatch[1].split(", ").map((value) => value.trim());
                         const fieldErrors: Record<string, string[]> = {};
-                        const isComposite = keys.length > 1;
+                        //const isComposite = keys.length > 1;
 
                         // TODO: Finish up composite key error handling.
                         // keys.forEach((key, _idx) => {

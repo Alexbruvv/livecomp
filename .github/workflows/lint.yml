@@ -26,8 +26,11 @@ jobs:
             - name: Install dependencies
               run: bun install --frozen-dependencies
 
-            - name: Lint
-              run: bunx eslint --fix "packages/*/src/**/*.{ts,tsx}"
+            - name: Lint client
+              run: cd packages/client && bunx eslint --fix "src/**/*.{ts,tsx}"
+
+            - name: Lint server
+              run: cd packages/server && bunx eslint --fix "src/**/*.{ts,tsx}"
 
             - name: Format
               run: bunx prettier --write .
