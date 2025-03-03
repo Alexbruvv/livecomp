@@ -1,0 +1,3 @@
+{
+    "eslint.workingDirectories": ["packages/client", "packages/server", "packages/utils"]
+}
