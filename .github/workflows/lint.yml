@@ -27,7 +27,7 @@ jobs:
               run: bun install --frozen-dependencies
 
             - name: Lint
-              run: bunx eslint --fix "src/**/*.{ts,tsx}"
+              run: bunx eslint --fix "packages/*/src/**/*.{ts,tsx}"
 
             - name: Format
               run: bunx prettier --write .
