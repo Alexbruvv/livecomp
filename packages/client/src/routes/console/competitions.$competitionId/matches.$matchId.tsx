@@ -8,6 +8,7 @@ import useCompetitionClock from "../../../hooks/useCompetitionClock";
 import { DateTime } from "luxon";
 import MatchStatusIndicator from "../../../components/console/matches/MatchStatusIndicator";
 import NuclearCleanupScorer from "../../../components/console/scorer/NuclearCleanupScorer";
+import useDateTime from "../../../hooks/useDateTime";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,
@@ -25,6 +26,7 @@ function RouteComponent() {
     });
 
     const competitionClock = useCompetitionClock(competition);
+    useDateTime();
 
     return (
         <SpaceBetween size="s">
