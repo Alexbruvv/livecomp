@@ -106,6 +106,18 @@ export const displaysRouter = router({
             emitDisplayMessage(ids, { type: "refresh" });
         }),
 
+    showMessage: restrictedProcedure("admin")
+        .input(
+            z.object({
+                ids: z.array(z.string()),
+                message: z.string(),
+                durationMs: z.number(),
+            })
+        )
+        .mutation(async ({ input: { ids, message, durationMs } }) => {
+            emitDisplayMessage(ids, { type: "showText", text: message, durationMs });
+        }),
+
     delete: restrictedProcedure("admin")
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
