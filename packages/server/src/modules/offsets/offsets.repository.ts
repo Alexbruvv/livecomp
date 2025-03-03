@@ -1,7 +1,7 @@
 import { appDb } from "../../db/db";
 import { Repository } from "../../db/repository";
 import type { AppSchema } from "../../db/schema";
-import { offsets, pauses, type Offset, type Pause } from "../../db/schema/competitions";
+import { offsets, type Offset } from "../../db/schema/competitions";
 import { stream } from "../../trpc/stream";
 
 export class OffsetsRepository extends Repository<AppSchema, AppSchema["offsets"], "offsets"> {

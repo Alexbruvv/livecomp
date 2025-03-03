@@ -1,7 +1,7 @@
 import { appDb } from "../../db/db";
 import { Repository } from "../../db/repository";
 import type { AppSchema } from "../../db/schema";
-import { autoMatchAssignmentConfigs, type AutoMatchAssignmentConfig } from "../../db/schema/matches";
+import { autoMatchAssignmentConfigs } from "../../db/schema/matches";
 import { stream } from "../../trpc/stream";
 
 class AutoMatchAssignmentConfigsRepository extends Repository<
@@ -14,12 +14,12 @@ class AutoMatchAssignmentConfigsRepository extends Repository<
         stream.broadcastInvalidateMessage("matches", "fetchById");
     }
 
-    async afterUpdate(row: AutoMatchAssignmentConfig) {
+    async afterUpdate() {
         stream.broadcastInvalidateMessage("matches", "fetchAll");
         stream.broadcastInvalidateMessage("matches", "fetchById");
     }
 
-    async afterDelete(row: AutoMatchAssignmentConfig) {
+    async afterDelete() {
         stream.broadcastInvalidateMessage("matches", "fetchAll");
         stream.broadcastInvalidateMessage("matches", "fetchById");
     }

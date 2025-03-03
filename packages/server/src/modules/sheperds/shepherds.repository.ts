@@ -5,7 +5,7 @@ import { shepherds, type Shepherd } from "../../db/schema/venues";
 import { stream } from "../../trpc/stream";
 
 class ShepherdsRepository extends Repository<AppSchema, AppSchema["shepherds"], "shepherds"> {
-    async afterCreate(row: Shepherd) {
+    async afterCreate() {
         stream.broadcastInvalidateMessage("shepherds", "fetchAll");
     }
 
@@ -14,7 +14,7 @@ class ShepherdsRepository extends Repository<AppSchema, AppSchema["shepherds"], 
         stream.broadcastInvalidateMessage("shepherds", "fetchById", { id: row.id });
     }
 
-    async afterDelete(row: Shepherd) {
+    async afterDelete() {
         stream.broadcastInvalidateMessage("shepherds", "fetchAll");
     }
 }

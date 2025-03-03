@@ -5,7 +5,7 @@ import { type StartingZone, startingZones } from "../../db/schema/games";
 import { stream } from "../../trpc/stream";
 
 class StartingZonesRepository extends Repository<AppSchema, AppSchema["startingZones"], "startingZones"> {
-    async afterCreate(row: StartingZone) {
+    async afterCreate() {
         stream.broadcastInvalidateMessage("startingZones", "fetchAll");
     }
 
@@ -14,7 +14,7 @@ class StartingZonesRepository extends Repository<AppSchema, AppSchema["startingZ
         stream.broadcastInvalidateMessage("startingZones", "fetchById", { id: row.id });
     }
 
-    async afterDelete(row: StartingZone) {
+    async afterDelete() {
         stream.broadcastInvalidateMessage("startingZones", "fetchAll");
     }
 }

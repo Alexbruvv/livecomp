@@ -1,4 +1,4 @@
-import { integer, json, pgEnum, pgTable, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { competitions } from "./competitions";
 import { relations, type InferSelectModel } from "drizzle-orm";
@@ -24,7 +24,7 @@ export const matchPeriods = pgTable("match_periods", {
         .notNull(),
 });
 
-export const matchPeriodsRelations = relations(matchPeriods, ({ one, many }) => ({
+export const matchPeriodsRelations = relations(matchPeriods, ({ one }) => ({
     competition: one(competitions, { fields: [matchPeriods.competitionId], references: [competitions.id] }),
 }));
 

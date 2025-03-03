@@ -5,7 +5,7 @@ import { type MatchPeriod, matchPeriods } from "../../db/schema/matches";
 import { stream } from "../../trpc/stream";
 
 class MatchPeriodsRepository extends Repository<AppSchema, AppSchema["matchPeriods"], "matchPeriods"> {
-    async afterCreate(row: MatchPeriod) {
+    async afterCreate() {
         stream.broadcastInvalidateMessage("matchPeriods", "fetchAll");
     }
 

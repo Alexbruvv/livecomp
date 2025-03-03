@@ -1,4 +1,4 @@
-import { pgTable, primaryKey, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { relations, sql, type InferSelectModel } from "drizzle-orm";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";

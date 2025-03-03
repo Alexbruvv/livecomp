@@ -2,7 +2,7 @@ import { z } from "zod";
 import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { insertMatchPeriodSchema, matchPeriods } from "../../db/schema/matches";
 import { matchPeriodsRepository } from "./matchPeriods.repository";
-import { and, asc, eq, or } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 
 export const matchPeriodsRouter = router({
     create: restrictedProcedure("admin")
