@@ -26,9 +26,9 @@ jobs:
             - name: Install dependencies
               run: bun install --frozen-dependencies
 
-            - name: Run linters
-              uses: wearerequired/lint-action@v2
-              with:
-                  eslint: true
-                  prettier: true
+            - name: Lint
+              run: bunx eslint --fix "src/**/*.{ts,tsx}"
+
+            - name: Format
+              run: bunx prettier --write .
 
