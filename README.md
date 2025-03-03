@@ -1,5 +1,7 @@
 # Livecomp
 
+![Lint + Format CI Status](https://github.com/alexbruvv/livecomp/actions/workflows/lint.yml/badge.svg)
+
 Livecomp is a software stack for running robotics competitions.
 
 ## Architecture
