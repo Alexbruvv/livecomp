@@ -66,6 +66,8 @@ export class CompetitionClock {
                 offset = offsets[0];
             }
 
+            if (offset) offsets.unshift(offset); // Return offset to the stack if we haven't applied it
+
             // Move to next match period if match overflows
             if (
                 timeAccumulator.plus({ seconds: this.competition.game.matchDuration }) >
