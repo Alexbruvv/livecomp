@@ -12,6 +12,7 @@ class GamesRepository extends Repository<AppSchema, AppSchema["games"], "games">
     async afterUpdate(row: Game) {
         stream.broadcastInvalidateMessage("games", "fetchAll");
         stream.broadcastInvalidateMessage("games", "fetchById", { id: row.id });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 
     async afterDelete() {

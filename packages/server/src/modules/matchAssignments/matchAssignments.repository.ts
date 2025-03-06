@@ -8,16 +8,19 @@ class MatchAssignmentsRepository extends Repository<AppSchema, AppSchema["matchA
     async afterCreate(row: MatchAssignment) {
         stream.broadcastInvalidateMessage("matches", "fetchAll");
         stream.broadcastInvalidateMessage("matches", "fetchById", { id: row.matchId });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 
     async afterUpdate(row: MatchAssignment) {
         stream.broadcastInvalidateMessage("matches", "fetchAll");
         stream.broadcastInvalidateMessage("matches", "fetchById", { id: row.matchId });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 
     async afterDelete(row: MatchAssignment) {
         stream.broadcastInvalidateMessage("matches", "fetchAll");
         stream.broadcastInvalidateMessage("matches", "fetchById", { id: row.matchId });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 }
 

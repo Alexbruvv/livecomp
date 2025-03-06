@@ -12,6 +12,7 @@ class StartingZonesRepository extends Repository<AppSchema, AppSchema["startingZ
     async afterUpdate(row: StartingZone) {
         stream.broadcastInvalidateMessage("startingZones", "fetchAll");
         stream.broadcastInvalidateMessage("startingZones", "fetchById", { id: row.id });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 
     async afterDelete() {
