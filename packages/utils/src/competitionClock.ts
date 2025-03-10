@@ -13,10 +13,18 @@ interface MatchTimings {
 }
 
 export class CompetitionClock {
+    private __test_now: DateTime | undefined;
     private timings: Record<string, MatchTimings>;
 
-    constructor(private readonly competition: ExcludeNull<AppRouterOutput["competitions"]["fetchById"]>) {
+    /**
+     * @param testNow Allows overriding the current time for testing purposes
+     */
+    constructor(
+        private readonly competition: ExcludeNull<AppRouterOutput["competitions"]["fetchById"]>,
+        testNow?: DateTime
+    ) {
         this.timings = this.computeMatchTimings();
+        this.__test_now = testNow;
     }
 
     private computeMatchTimings() {
@@ -108,6 +116,10 @@ export class CompetitionClock {
     public now() {
         if (this.isPaused()) {
             return DateTime.fromJSDate(this.competition.pauses.find((pause) => pause.endsAt === null)!.startsAt);
+        }
+
+        if (this.__test_now) {
+            return this.__test_now;
         }
 
         return DateTime.now();
