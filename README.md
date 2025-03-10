@@ -27,7 +27,7 @@ Requirements:
 
 Steps:
 
-1. In both the `packages/client` and `packages/server` directories, copy the `.example.env` file to `.env.` and specify your own values for the environment variables
+1. In both the `packages/client` and `packages/server` directories, copy the `.example.env` file to `.env` and specify your own values for the environment variables
 2. Navigate back to the root directory (the one that contains this README)
 3. Run `bun install`
 4. Run `bun db:migrate`
