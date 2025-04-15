@@ -5,8 +5,7 @@ import { DateTime } from "luxon";
 import { eq } from "drizzle-orm";
 import { matchPeriods } from "../../db/schema/matches";
 import { pausesRepository } from "../pauses/pauses.repository";
-import { offsets, pauses } from "../../db/schema/competitions";
-import { offsetsRepository } from "../offsets/offsets.repository";
+import { pauses } from "../../db/schema/competitions";
 
 export const devToolsRouter = router({
     resetMatchPeriod: restrictedProcedure("admin")
@@ -21,9 +20,6 @@ export const devToolsRouter = router({
             if (matchPeriod) {
                 await pausesRepository.delete({
                     where: eq(pauses.competitionId, matchPeriod.competitionId),
-                });
-                await offsetsRepository.delete({
-                    where: eq(offsets.competitionId, matchPeriod.competitionId),
                 });
             }
 

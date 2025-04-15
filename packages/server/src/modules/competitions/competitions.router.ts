@@ -9,7 +9,6 @@ import { matchesRepository } from "../matches/matches.repository";
 import { matchAssignmentsRepository } from "../matchAssignments/matchAssignments.repository";
 import { matches, matchPeriods } from "../../db/schema/matches";
 import { pausesRepository } from "../pauses/pauses.repository";
-import { offsetsRepository } from "../offsets/offsets.repository";
 
 export const competitionsRouter = router({
     create: restrictedProcedure("admin")
@@ -55,7 +54,6 @@ export const competitionsRouter = router({
                     matchPeriods: {
                         orderBy: asc(matchPeriods.startsAt),
                     },
-                    offsets: true,
                     pauses: true,
                 },
             });
@@ -127,6 +125,8 @@ export const competitionsRouter = router({
                 .sort((a, b) => a.sort - b.sort)
                 .map(({ team }) => team);
 
+            console.log(teams.length);
+
             let sequenceNumber = 0;
 
             for (const matchTeamIndexes of parsedSchedule) {
@@ -178,23 +178,6 @@ export const competitionsRouter = router({
             }
 
             await pausesRepository.update({ endsAt: new Date() }, { where: eq(pauses.id, activePause.id) });
-        }),
-
-    offset: restrictedProcedure("admin")
-        .input(z.object({ id: z.string(), offset: z.number() }))
-        .mutation(async ({ input: { id, offset } }) => {
-            const now = new Date();
-
-            await offsetsRepository.create({
-                appliesFrom: now,
-                offset,
-                competitionId: id,
-            });
-
-            await pausesRepository.create({
-                competitionId: id,
-                startsAt: now,
-            });
         }),
 
     delete: restrictedProcedure("admin")

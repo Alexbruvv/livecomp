@@ -1,4 +1,4 @@
-import { boolean, integer, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { boolean, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { games } from "./games";
@@ -28,7 +28,6 @@ export const competitionsRelations = relations(competitions, ({ one, many }) => 
     matches: many(matches),
     teams: many(teams),
     pauses: many(pauses),
-    offsets: many(offsets),
 }));
 
 export const competitionSchema = createSelectSchema(competitions);
@@ -53,24 +52,4 @@ export const pausesRelations = relations(pauses, ({ one }) => ({
 export const pauseSchema = createSelectSchema(pauses);
 export const insertPauseSchema = createInsertSchema(pauses);
 export type Pause = InferSelectModel<typeof pauses>;
-
-export const offsets = pgTable("offsets", {
-    ...baseColumns,
-
-    competitionId: uuid()
-        .references(() => competitions.id)
-        .notNull(),
-
-    appliesFrom: timestamp({ withTimezone: false }).notNull(),
-
-    offset: integer().notNull(),
-});
-
-export const offsetsRelations = relations(offsets, ({ one }) => ({
-    competition: one(competitions, { fields: [offsets.competitionId], references: [competitions.id] }),
-}));
-
-export const offsetSchema = createSelectSchema(offsets);
-export const insertOffsetSchema = createInsertSchema(offsets);
-export type Offset = InferSelectModel<typeof offsets>;
 

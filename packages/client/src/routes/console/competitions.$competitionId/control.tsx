@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { api } from "../../../utils/trpc";
 import { Button, ColumnLayout, Container, Header, KeyValuePairs, SpaceBetween } from "@cloudscape-design/components";
-import OffsetCursorModalButton from "../../../components/console/competitions/control/MoveCursorModalButton";
 import MatchesTable from "../../../components/console/matches/MatchesTable";
 import useCompetitionClock from "../../../hooks/useCompetitionClock";
 
@@ -48,7 +47,6 @@ function RouteComponent() {
                                 >
                                     Pause
                                 </Button>
-                                {competitionClock && <OffsetCursorModalButton competition={competition} />}
                             </ColumnLayout>
                         </div>
                         <div>

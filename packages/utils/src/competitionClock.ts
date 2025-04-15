@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import type { ExcludeNull, MatchStatus } from "./types";
 import type { AppRouterOutput } from "@livecomp/server/src/server";
 import type { Match, MatchPeriod } from "@livecomp/server/src/db/schema/matches";
-import type { Offset, Pause } from "@livecomp/server/src/db/schema/competitions";
+import type { Pause } from "@livecomp/server/src/db/schema/competitions";
 
 interface MatchTimings {
     startsAt: DateTime;
@@ -35,13 +35,13 @@ export class CompetitionClock {
         const matches = [...this.competition.matches.sort((a, b) => a.sequenceNumber - b.sequenceNumber)];
 
         const pauses = [...this.competition.pauses.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime())];
-        const offsets = [...this.competition.offsets.sort((a, b) => a.appliesFrom.getTime() - b.appliesFrom.getTime())];
 
         let matchPeriod = matchPeriods.shift();
         if (!matchPeriod) return timings;
 
         let timeAccumulator = DateTime.fromJSDate(matchPeriod.startsAt);
         let slackAccumulator = 0;
+
         for (const match of matches) {
             timeAccumulator = timeAccumulator.plus({ seconds: match.buffer });
 
@@ -65,16 +65,15 @@ export class CompetitionClock {
                 pause = pauses[0];
             }
 
-            // Apply offsets
-            let offset = offsets[0];
-            while (offset && DateTime.fromJSDate(offset.appliesFrom) < baseMatchEndTime) {
-                offsets.shift();
-                timeAccumulator = timeAccumulator.minus({ seconds: offset.offset });
-
-                offset = offsets[0];
-            }
-
-            if (offset) offsets.unshift(offset); // Return offset to the stack if we haven't applied it
+            timings[match.id] = {
+                startsAt: timeAccumulator,
+                endsAt: timeAccumulator.plus({
+                    seconds: this.competition.game.matchDuration,
+                }),
+                stagingOpensAt: timeAccumulator.minus({ seconds: this.competition.game.stagingOpenOffset }),
+                stagingClosesAt: timeAccumulator.minus({ seconds: this.competition.game.stagingCloseOffset }),
+                matchPeriod,
+            };
 
             // Move to next match period if match overflows
             if (
@@ -94,16 +93,6 @@ export class CompetitionClock {
                     seconds: this.competition.game.defaultMatchSpacing + this.competition.game.matchDuration,
                 });
             }
-
-            timings[match.id] = {
-                startsAt: timeAccumulator,
-                endsAt: timeAccumulator.plus({
-                    seconds: this.competition.game.matchDuration,
-                }),
-                stagingOpensAt: timeAccumulator.minus({ seconds: this.competition.game.stagingOpenOffset }),
-                stagingClosesAt: timeAccumulator.minus({ seconds: this.competition.game.stagingCloseOffset }),
-                matchPeriod,
-            };
         }
 
         return timings;
