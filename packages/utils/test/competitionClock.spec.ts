@@ -1,7 +1,6 @@
 import type { AppRouterOutput } from "@livecomp/server";
 import { DateTime } from "luxon";
 import { expect, test } from "bun:test";
-import { matchPeriods } from "@livecomp/server/src/db/schema/matches";
 import type { ExcludeNull } from "../src/types";
 import { CompetitionClock } from "../src";
 
@@ -96,7 +95,7 @@ function match({ number, buffer }: { number: number; buffer?: number }) {
  * Staging for the first match should open 300 seconds before the first match starts.
  * Staging for the second match should open 300 seconds before the second match starts.
  */
-test("Two matches are scheduled relatively correctly", () => {
+test("Two matches are scheduled correctly relative to each other", () => {
     const competition = {
         ...BASE_COMPETITION,
         matchPeriods: [
