@@ -1,0 +1,1 @@
+ALTER TABLE "matches" ADD COLUMN "released" boolean DEFAULT false NOT NULL;

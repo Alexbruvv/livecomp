@@ -309,6 +309,34 @@
       "when": 1744710351970,
       "tag": "0043_cooing_whiplash",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1744710567000,
+      "tag": "0044_crazy_carnage",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1744710717636,
+      "tag": "0045_material_wither",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1744710926770,
+      "tag": "0046_faithful_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1744711040344,
+      "tag": "0047_burly_husk",
+      "breakpoints": true
     }
   ]
 }

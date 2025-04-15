@@ -1,4 +1,4 @@
-import { boolean, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { games } from "./games";
@@ -14,6 +14,8 @@ export const competitions = pgTable("competitions", {
     shortName: varchar().unique().notNull(),
     startsAt: timestamp({ withTimezone: false }).notNull(),
     endsAt: timestamp({ withTimezone: false }).notNull(),
+
+    matchHoldOffset: integer().default(30).notNull(),
 
     acceptingNewDisplays: boolean().default(false).notNull(),
 

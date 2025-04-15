@@ -21,6 +21,9 @@ function RouteComponent() {
 
     const { mutate: pause, isPending: pausePending } = api.competitions.pause.useMutation();
     const { mutate: unpause, isPending: unpausePending } = api.competitions.unpause.useMutation();
+    const { mutate: editMatch, isPending: editMatchPending } = api.matches.update.useMutation();
+
+    const nextMatchId = competitionClock?.getNextMatchId();
 
     return (
         <SpaceBetween size="s">
@@ -28,7 +31,7 @@ function RouteComponent() {
                 {competition && (
                     <ColumnLayout columns={2}>
                         <div>
-                            <ColumnLayout columns={4}>
+                            <ColumnLayout columns={3}>
                                 <Button
                                     iconName="play"
                                     fullWidth
@@ -46,6 +49,27 @@ function RouteComponent() {
                                     onClick={() => pause({ id: competitionId })}
                                 >
                                     Pause
+                                </Button>
+                                <Button
+                                    iconName="check"
+                                    fullWidth
+                                    disabled={
+                                        !nextMatchId ||
+                                        competition.matches.find((match) => match.id === nextMatchId)?.released
+                                    }
+                                    loading={editMatchPending}
+                                    onClick={() => {
+                                        if (nextMatchId) {
+                                            editMatch({
+                                                id: nextMatchId,
+                                                data: {
+                                                    released: true,
+                                                },
+                                            });
+                                        }
+                                    }}
+                                >
+                                    Release next match
                                 </Button>
                             </ColumnLayout>
                         </div>

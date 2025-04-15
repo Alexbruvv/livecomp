@@ -1,5 +1,5 @@
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import { Table, Header, SpaceBetween, Pagination } from "@cloudscape-design/components";
+import { Table, Header, SpaceBetween, Pagination, Icon } from "@cloudscape-design/components";
 import Restricted from "../util/Restricted";
 import { AppRouterOutput } from "@livecomp/server";
 import CreateMatchModalButton from "./CreateMatchModalButton";
@@ -58,12 +58,16 @@ export default function MatchesTable({
                     id: "name",
                     header: "Name",
                     cell: (match) => (
-                        <RoutedLink
-                            to="/console/competitions/$competitionId/matches/$matchId"
-                            params={{ competitionId, matchId: match.id }}
-                        >
-                            {match.name}
-                        </RoutedLink>
+                        <>
+                            <RoutedLink
+                                to="/console/competitions/$competitionId/matches/$matchId"
+                                params={{ competitionId, matchId: match.id }}
+                            >
+                                {match.name}
+                            </RoutedLink>
+                            <span style={{ marginLeft: "10px" }} />
+                            {match.released && <Icon name="check" />}
+                        </>
                     ),
                     width: "15%",
                 },

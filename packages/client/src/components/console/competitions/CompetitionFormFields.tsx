@@ -72,6 +72,24 @@ export default function CompetitionFormFields({ form }: { form: UseFormReturn<Fo
             />
 
             <ControlledFormField
+                label="Match hold offset"
+                form={form}
+                name="matchHoldOffset"
+                render={({ field }) => (
+                    <Input
+                        type="number"
+                        inputMode="numeric"
+                        placeholder="Match hold offset"
+                        {...field}
+                        value={field.value?.toString() ?? "0"}
+                        onChange={(e) => {
+                            form.setValue(field.name, parseInt(e.detail.value));
+                        }}
+                    />
+                )}
+            />
+
+            <ControlledFormField
                 form={form}
                 name="startsAt"
                 render={({ field: startField }) => (

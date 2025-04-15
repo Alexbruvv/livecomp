@@ -1,0 +1,1 @@
+ALTER TABLE "competitions" ADD COLUMN "match_hold_offset" integer DEFAULT 30 NOT NULL;

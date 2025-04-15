@@ -12,6 +12,7 @@ import { displaysJob } from "./jobs/displays";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "path";
 import { api } from "./api/api";
+import { matchHoldsJob } from "./jobs/matchHolds";
 
 program
     .name("livecomp-server")
@@ -66,6 +67,7 @@ program
         log.info(`Server listening on port ${port}`);
 
         displaysJob.start();
+        matchHoldsJob.start();
         log.info("Cron jobs started");
     });
 

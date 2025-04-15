@@ -97,6 +97,10 @@ function RouteComponent() {
                             ),
                         },
                         {
+                            label: "Match hold offset",
+                            value: competition ? competition.matchHoldOffset : "...",
+                        },
+                        {
                             label: "Teams",
                             value: teams ? teams.length : "...",
                         },

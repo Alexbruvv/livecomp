@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgEnum, pgTable, timestamp, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { competitions } from "./competitions";
 import { relations, type InferSelectModel } from "drizzle-orm";
@@ -45,6 +45,7 @@ export const matches = pgTable(
             .notNull(),
 
         buffer: integer().default(0).notNull(),
+        released: boolean().default(false).notNull(),
 
         sequenceNumber: integer().notNull(),
     },
