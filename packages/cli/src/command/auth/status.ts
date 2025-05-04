@@ -9,6 +9,11 @@ export const authStatusCommand = new Command("status")
         const config = await loadCliConfig();
         const token = getKeychainEntry(config.instance.server_url).getPassword();
 
+        if (!token) {
+            console.log("Not authenticated. Please log in using 'livecomp auth login'");
+            return;
+        }
+
         const client = createApiClient(config.instance.server_url, token);
 
         try {
