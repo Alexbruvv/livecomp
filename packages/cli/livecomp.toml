@@ -1,0 +1,5 @@
+[instance]
+server_url = "http://localhost:3000"
+
+[config]
+competition_id = "06d61dc7-56ec-448f-9f15-b30e2d9de3ce"
