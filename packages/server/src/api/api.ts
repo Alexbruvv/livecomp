@@ -22,7 +22,6 @@ export const api = new Elysia().use(cors()).use(
                     },
                     matchPeriods: true,
                     pauses: true,
-                    offsets: true,
                     venue: true,
                     teams: true,
                 },
