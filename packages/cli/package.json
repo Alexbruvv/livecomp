@@ -1,9 +1,10 @@
 {
     "name": "@livecomp/cli",
     "private": false,
-    "version": "0.1.0",
+    "version": "0.1.1",
     "module": "src/index.ts",
     "type": "module",
+    "bin": "src/cli.ts",
     "devDependencies": {
         "@livecomp/server": "workspace:*",
         "@types/bun": "latest",
@@ -13,7 +14,7 @@
         "typescript": "^5"
     },
     "dependencies": {
-        "@livecomp/utils": "workspace:*",
+        "@livecomp/utils": "latest",
         "@napi-rs/keyring": "^1.1.7",
         "@trpc/client": "^11.1.2",
         "chalk": "^5.4.1",
