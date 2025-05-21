@@ -41,7 +41,7 @@ export const initCommand = new Command("init")
 
         const spinner = yoctoSpinner({ text: "Saving default configuration..." }).start();
         try {
-            await config.saveDefaultConfig({ competitionId: selectedCompetitionId });
+            await config.saveDefaultConfig({ serverUrl, competitionId: selectedCompetitionId });
             spinner.success("Default configuration saved");
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Unknown error";
