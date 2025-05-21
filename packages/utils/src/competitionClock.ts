@@ -129,6 +129,10 @@ export class CompetitionClock {
         return this.timings[matchId] as MatchTimings | undefined;
     }
 
+    public getUnscheduledMatches() {
+        return this.competition.matches.filter((match) => !this.getMatchTimings(match.id));
+    }
+
     public getMatchStatus(matchId: string): MatchStatus {
         const timings = this.timings[matchId];
 

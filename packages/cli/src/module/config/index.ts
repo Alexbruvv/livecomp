@@ -4,7 +4,7 @@ import { configSchema, defaultConfig, type Config } from "./schema";
 import { loadConfig } from "zod-config";
 import { tomlAdapter } from "zod-config/toml-adapter";
 
-async function saveDefaultConfig({ competitionId }: { competitionId?: string } = {}) {
+async function saveDefaultConfig({ serverUrl, competitionId }: { serverUrl?: string; competitionId?: string } = {}) {
     const file = Bun.file(CONFIG_FILE_PATH);
 
     if (await file.exists()) {
@@ -14,6 +14,10 @@ async function saveDefaultConfig({ competitionId }: { competitionId?: string } =
     await file.write(
         stringify({
             ...defaultConfig,
+
+            instance: {
+                server_url: serverUrl ?? defaultConfig.instance.server_url,
+            },
 
             config: {
                 competition_id: competitionId,
