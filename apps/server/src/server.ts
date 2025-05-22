@@ -98,3 +98,12 @@ export type AppRouter = typeof appRouter;
 export type AppRouterInput = inferRouterInputs<AppRouter>;
 export type AppRouterOutput = inferRouterOutputs<AppRouter>;
 
+export type { User, Role } from "./db/schema/auth";
+export type { Competition, Pause } from "./db/schema/competitions";
+export type { Display } from "./db/schema/displays";
+export type { Game, Scorer, StartingZone } from "./db/schema/games";
+export type { Match, MatchPeriod, MatchAssignment, AutoMatchAssignmentConfig } from "./db/schema/matches";
+export type { MatchScoreEntry, ManualPointsAdjustment } from "./db/schema/scores";
+export type { Team } from "./db/schema/teams";
+export type { Venue, Region, Shepherd } from "./db/schema/venues";
+
