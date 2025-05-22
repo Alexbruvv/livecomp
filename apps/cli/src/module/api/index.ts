@@ -1,5 +1,4 @@
-import type { AppRouter } from "@livecomp/server";
-import type { Config } from "../config/schema";
+import type { AppRouter } from "../../../../server/src/server";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import SuperJSON from "superjson";
 

@@ -1,4 +1,4 @@
-import type { AppRouterOutput } from "@livecomp/server";
+import type { AppRouterOutput } from "../../../../apps/server/src/server";
 import type { ExcludeNull } from "../types";
 
 interface SuccessfulCheckResult {

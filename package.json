@@ -4,9 +4,17 @@
     "scripts": {
         "dev": "bun --filter '{@livecomp/server,@livecomp/client}' dev",
         "db:migrate": "bun --filter @livecomp/server db:migrate",
-        "db:push": "bun --filter @livecomp/server db:push"
+        "db:push": "bun --filter @livecomp/server db:push",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs"
     },
     "workspaces": [
-        "packages/*"
-    ]
+        "packages/*",
+        "apps/*"
+    ],
+    "devDependencies": {
+        "vitepress": "^1.6.3",
+        "vue": "^3.5.14"
+    }
 }

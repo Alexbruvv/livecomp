@@ -27,10 +27,16 @@ jobs:
               run: bun install --frozen-dependencies
 
             - name: Lint client
-              run: cd packages/client && bunx eslint --fix "src/**/*.{ts,tsx}"
+              run: cd apps/client && bunx eslint --fix "src/**/*.{ts,tsx}"
 
             - name: Lint server
-              run: cd packages/server && bunx eslint --fix "src/**/*.{ts,tsx}"
+              run: cd apps/server && bunx eslint --fix "src/**/*.{ts,tsx}"
+
+            - name: Lint CLI
+              run: cd apps/cli && bunx eslint --fix "src/**/*.{ts,tsx}"
+
+            - name: Lint utils
+              run: cd packages/utils && bunx eslint --fix "src/**/*.{ts,tsx}"
 
             - name: Format
               run: bunx prettier --write .

@@ -1,8 +1,6 @@
 import { DateTime } from "luxon";
 import type { ExcludeNull, MatchStatus } from "./types";
-import type { AppRouterOutput } from "@livecomp/server/src/server";
-import type { Match, MatchPeriod } from "@livecomp/server/src/db/schema/matches";
-import type { Pause } from "@livecomp/server/src/db/schema/competitions";
+import type { AppRouterOutput, MatchPeriod } from "@livecomp/server/";
 
 interface MatchTimings {
     startsAt: DateTime;
