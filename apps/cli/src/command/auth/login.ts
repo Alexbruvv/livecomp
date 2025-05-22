@@ -2,8 +2,6 @@ import { Command } from "commander";
 import inquirer from "inquirer";
 import { loadCliConfig } from "../../module/config";
 import { createApiClient } from "../../module/api";
-import { Entry } from "@napi-rs/keyring";
-import { KEYCHAIN_SERVICE_NAME } from "../../constants";
 import { getKeychainEntry } from "../../module/keychain";
 
 export const loginCommand = new Command("login")
