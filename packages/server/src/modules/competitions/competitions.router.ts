@@ -35,6 +35,7 @@ export const competitionsRouter = router({
             return await competitionsRepository.findFirst({
                 where: eq(competitions.id, id),
                 with: {
+                    teams: true,
                     venue: true,
                     game: {
                         with: {
@@ -48,6 +49,7 @@ export const competitionsRouter = router({
                                     team: true,
                                 },
                             },
+                            scoreEntry: true,
                         },
                         orderBy: asc(matches.sequenceNumber),
                     },
