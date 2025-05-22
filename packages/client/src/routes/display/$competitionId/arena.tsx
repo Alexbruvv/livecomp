@@ -24,7 +24,6 @@ enum DisplayMode {
     PRE_MATCH = "PRE_MATCH",
     MATCH_START_COUNTDOWN = "MATCH_START_COUNTDOWN",
     MATCH_IN_PROGRESS = "MATCH_IN_PROGRESS",
-    MATCH_END_COUNTDOWN = "MATCH_END_COUNTDOWN",
     POST_MATCH = "POST_MATCH",
 }
 
@@ -85,12 +84,7 @@ function RouteComponent() {
     const displayMode: DisplayMode | undefined = useMemo(() => {
         if (competition && competitionClock) {
             if (currentMatch) {
-                const currentMatchTimings = competitionClock.getMatchTimings(currentMatch.id);
-                if (currentMatchTimings?.endsAt && currentMatchTimings.endsAt.minus({ seconds: 5 }) <= now) {
-                    return DisplayMode.MATCH_END_COUNTDOWN;
-                } else {
-                    return DisplayMode.MATCH_IN_PROGRESS;
-                }
+                return DisplayMode.MATCH_IN_PROGRESS;
             } else {
                 const previousMatchTimings = previousMatch && competitionClock.getMatchTimings(previousMatch.id);
                 if (
@@ -227,20 +221,6 @@ function RouteComponent() {
                                 ))}
                             </div>
                         )}
-                    </>
-                )}
-
-                {displayMode === DisplayMode.MATCH_END_COUNTDOWN && currentMatch && competition && competitionClock && (
-                    <>
-                        <div>
-                            <h1 className="text-white font-bold font-mono text-9xl text-center">
-                                {Math.ceil(
-                                    (competitionClock.getMatchTimings(currentMatch.id)?.endsAt ?? DateTime.now())
-                                        .diff(now)
-                                        .as("seconds")
-                                )}
-                            </h1>
-                        </div>
                     </>
                 )}
 
