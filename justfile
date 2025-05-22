@@ -5,10 +5,10 @@ dev:
     bun dev
 
 generate:
-    cd packages/server && bun --bun drizzle-kit generate
+    cd apps/server && bun --bun drizzle-kit generate
 
 migrate:
-    cd packages/server && bun --bun drizzle-kit migrate
+    cd apps/server && bun --bun drizzle-kit migrate
 
 build:
-    cd packages/client && bun run build
+    cd apps/client && bun run build
