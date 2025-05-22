@@ -8,17 +8,21 @@ class MatchScoreEntriesRepository extends Repository<AppSchema, AppSchema["match
     async afterCreate(row: MatchScoreEntry) {
         stream.broadcastInvalidateMessage("teams", "fetchAllScores");
         stream.broadcastInvalidateMessage("matches", "fetchById", { id: row.matchId });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 
     async afterUpdate(row: MatchScoreEntry) {
         stream.broadcastInvalidateMessage("teams", "fetchAllScores");
         stream.broadcastInvalidateMessage("matches", "fetchById", { id: row.matchId });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 
     async afterDelete(row: MatchScoreEntry) {
         stream.broadcastInvalidateMessage("teams", "fetchAllScores");
         stream.broadcastInvalidateMessage("matches", "fetchById", { id: row.matchId });
+        stream.broadcastInvalidateMessage("competitions", "fetchById");
     }
 }
 
 export const matchScoreEntriesRepository = new MatchScoreEntriesRepository(appDb, matchScoreEntries);
+
