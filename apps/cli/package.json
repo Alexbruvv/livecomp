@@ -1,7 +1,7 @@
 {
     "name": "@livecomp/cli",
     "private": false,
-    "version": "0.2.0",
+    "version": "0.2.1",
     "module": "src/index.ts",
     "type": "module",
     "bin": "src/index.ts",
