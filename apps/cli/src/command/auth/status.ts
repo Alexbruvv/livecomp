@@ -1,13 +1,13 @@
 import { Command } from "commander";
-import { getKeychainEntry } from "../../module/keychain";
 import { loadCliConfig } from "../../module/config";
 import { createApiClient } from "../../module/api";
+import { userConfig } from "../../module/user-config/user-config";
 
 export const authStatusCommand = new Command("status")
     .description("Check the authentication status of the Livecomp CLI")
     .action(async () => {
         const config = await loadCliConfig();
-        const token = getKeychainEntry(config.instance.server_url).getPassword();
+        const token = userConfig.read().tokens[config.instance.server_url];
 
         if (!token) {
             console.log("Not authenticated. Please log in using 'livecomp auth login'");

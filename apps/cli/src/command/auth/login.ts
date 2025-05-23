@@ -2,7 +2,7 @@ import { Command } from "commander";
 import inquirer from "inquirer";
 import { loadCliConfig } from "../../module/config";
 import { createApiClient } from "../../module/api";
-import { getKeychainEntry } from "../../module/keychain";
+import { userConfig } from "../../module/user-config/user-config";
 
 export const loginCommand = new Command("login")
     .description("Authenticate with the Livecomp server")
@@ -25,8 +25,13 @@ export const loginCommand = new Command("login")
                 password,
             });
 
-            const tokenEntry = getKeychainEntry(config.instance.server_url);
-            tokenEntry.setPassword(token);
+            userConfig.update((userCfg) => ({
+                ...userCfg,
+                tokens: {
+                    ...userCfg.tokens,
+                    [config.instance.server_url]: token,
+                },
+            }));
 
             console.log("Authentication successful!");
         } catch (e) {

@@ -1,15 +1,15 @@
 import { Command } from "commander";
 import { createApiClient } from "../../module/api";
 import { loadCliConfig } from "../../module/config";
-import { getKeychainEntry } from "../../module/keychain";
 import { CompetitionClock } from "@livecomp/utils";
 import chalk from "chalk";
+import { userConfig } from "../../module/user-config/user-config";
 
 export const competitionStatusCommand = new Command("status")
     .description("Check the status of the selected competition")
     .action(async () => {
         const config = await loadCliConfig();
-        const token = getKeychainEntry(config.instance.server_url).getPassword();
+        const token = userConfig.read().tokens[config.instance.server_url];
 
         if (!token) {
             console.log("Not authenticated. Please log in using 'livecomp auth login'");

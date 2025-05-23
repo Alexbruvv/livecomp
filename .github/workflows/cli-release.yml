@@ -18,27 +18,22 @@ jobs:
                       target: bun-linux-x64
                       asset_name_suffix: linux-x64
                       output_filename_override: ""
-                      keyring_import: "linux-x64-gnu"
                     - os: ubuntu-latest
                       target: bun-linux-arm64
                       asset_name_suffix: linux-arm64
                       output_filename_override: ""
-                      keyring_import: "linux-arm64-gnu"
                     - os: ubuntu-latest
                       target: bun-darwin-x64
                       asset_name_suffix: darwin-x64
                       output_filename_override: ""
-                      keyring_import: "darwin-x64"
                     - os: ubuntu-latest
                       target: bun-darwin-arm64
                       asset_name_suffix: darwin-arm64
                       output_filename_override: ""
-                      keyring_import: "darwin-arm64"
                     - os: ubuntu-latest
                       target: bun-windows-x64
                       asset_name_suffix: windows-x64
                       output_filename_override: ".exe"
-                      keyring_import: "win32-x64-msvc"
         runs-on: ${{ matrix.config.os }}
         steps:
             - name: Checkout code for release tag
@@ -53,15 +48,6 @@ jobs:
 
             - name: Install dependencies
               run: bun install --frozen-lockfile
-
-            - name: Require keyring import
-              run: |
-                  mkdir -p node_modules/@napi-rs/keyring-${{ matrix.config.keyring_import }}
-                  wget https://github.com/Brooooooklyn/keyring-node/releases/latest/download/keyring.${{ matrix.config.keyring_import }}.node -O node_modules/@napi-rs/keyring-${{ matrix.config.keyring_import }}/keyring.${{ matrix.config.keyring_import }}.node
-                  cd apps/cli
-                  SEARCH_STRING="// <ci-keyring-import>"
-                  REPLACE_STRING="require(\"@napi-rs/keyring-${{ matrix.config.keyring_import }}/keyring.${{ matrix.config.keyring_import }}.node\");"
-                  sed -i "s|$SEARCH_STRING|$REPLACE_STRING|g" src/index.ts
 
             - name: Compile CLI
               run: |

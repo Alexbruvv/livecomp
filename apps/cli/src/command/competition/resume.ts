@@ -1,14 +1,14 @@
 import { Command } from "commander";
 import { createApiClient } from "../../module/api";
 import { loadCliConfig } from "../../module/config";
-import { getKeychainEntry } from "../../module/keychain";
+import { userConfig } from "../../module/user-config/user-config";
 
 export const resumeCommand = new Command("resume")
     .alias("unpause")
     .description("Resume the selected competition")
     .action(async () => {
         const config = await loadCliConfig();
-        const token = getKeychainEntry(config.instance.server_url).getPassword();
+        const token = userConfig.read().tokens[config.instance.server_url];
 
         if (!token) {
             console.log("Not authenticated. Please log in using 'livecomp auth login'");

@@ -3,8 +3,9 @@ import { version } from "../package.json";
 import { initCommand } from "./command/init";
 import { authCommand } from "./command/auth/auth";
 import { competitionCommand } from "./command/competition/competition";
+import { userConfig } from "./module/user-config/user-config";
 
-// <ci-keyring-import>
+userConfig.ensureConfigDirectoryExists();
 
 program
     .name("livecomp")

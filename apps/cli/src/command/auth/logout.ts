@@ -1,10 +1,17 @@
 import { Command } from "commander";
 import { loadCliConfig } from "../../module/config";
-import { getKeychainEntry } from "../../module/keychain";
+import { userConfig } from "../../module/user-config/user-config";
 
 export const logoutCommand = new Command("logout").action(async () => {
     const config = await loadCliConfig();
-    getKeychainEntry(config.instance.server_url).deleteCredential();
+
+    userConfig.update((userCfg) => ({
+        ...userCfg,
+        tokens: {
+            ...userCfg.tokens,
+            [config.instance.server_url]: undefined,
+        },
+    }));
 
     console.log("Logged out successfully.");
 });
