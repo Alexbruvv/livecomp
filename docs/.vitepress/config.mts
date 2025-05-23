@@ -8,10 +8,14 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             { text: "Home", link: "/" },
-            { text: "Docs", link: "/administration/deployment" },
+            { text: "Docs", link: "/usage/cli" },
         ],
 
         sidebar: [
+            {
+                text: "Usage",
+                items: [{ text: "CLI", link: "/usage/cli" }],
+            },
             {
                 text: "Administration",
                 items: [{ text: "Deployment", link: "/administration/deployment" }],

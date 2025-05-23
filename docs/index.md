@@ -8,7 +8,7 @@ hero:
     actions:
         - theme: brand
           text: Docs
-          link: /administration/deployment
+          link: /usage/cli
 
 features:
     - title: Web UI
