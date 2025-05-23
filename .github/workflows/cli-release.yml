@@ -30,7 +30,7 @@ jobs:
                       target: bun-darwin-arm64
                       asset_name_suffix: darwin-arm64
                       output_filename_override: ""
-                    - os: windows-latest
+                    - os: ubuntu-latest
                       target: bun-windows-x64
                       asset_name_suffix: windows-x64
                       output_filename_override: ".exe"
