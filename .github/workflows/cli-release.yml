@@ -22,11 +22,11 @@ jobs:
                       target: bun-linux-arm64
                       asset_name_suffix: linux-arm64
                       output_filename_override: ""
-                    - os: macos-13
+                    - os: ubuntu-latest
                       target: bun-darwin-x64
                       asset_name_suffix: darwin-x64
                       output_filename_override: ""
-                    - os: macos-13
+                    - os: ubuntu-latest
                       target: bun-darwin-arm64
                       asset_name_suffix: darwin-arm64
                       output_filename_override: ""
