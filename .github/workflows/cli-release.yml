@@ -1,0 +1,108 @@
+name: Release CLI
+
+on:
+    push:
+        tags:
+            - "cli-v*.*.*"
+
+permissions:
+    contents: write
+
+jobs:
+    create_release:
+        name: Create GitHub Release
+        runs-on: ubuntu-latest
+        outputs:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            release_tag: ${{ github.ref_name }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref_name }}
+                  release_name: Release ${{ github.ref_name }}
+                  body: |
+                      Automated release for ${{ github.ref_name }}.
+                      See [CHANGELOG.md](CHANGELOG.md) for details. 
+                      (Or add release notes generation step here)
+                  draft: false
+                  prerelease: false # Set to true if these are pre-releases
+
+    build_and_upload_assets:
+        name: Build and upload assets
+        needs: create_release
+        runs-on: ${{ matrix.config.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                config:
+                    - os: ubuntu-latest
+                      target: bun-linux-x64
+                      asset_name_suffix: linux-x64
+                      output_filename_override: ""
+                    - os: ubuntu-latest
+                      target: bun-linux-arm64
+                      asset_name_suffix: linux-arm64
+                      output_filename_override: ""
+                    - os: macos-13
+                      target: bun-darwin-x64
+                      asset_name_suffix: darwin-x64
+                      output_filename_override: ""
+                    - os: macos-13
+                      target: bun-darwin-arm64
+                      asset_name_suffix: darwin-arm64
+                      output_filename_override: ""
+                    - os: windows-latest
+                      target: bun-windows-x64
+                      asset_name_suffix: windows-x64
+                      output_filename_override: ".exe"
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Bun
+              uses: oven-sh/setup-bun@v1
+              with:
+                  bun-version: latest
+
+            - name: Install dependencies
+              run: bun install --frozen-lockfile
+
+            - name: Determine CLI Name and Version (from package.json)
+              id: project_meta
+              run: |
+                  CLI_NAME=$(node -p "require('./package.json').name")
+                  # A more robust way to get name if it has slashes e.g. @scope/pkg
+                  # CLI_NAME=$(node -p "require('./package.json').name.split('/').pop()")
+                  echo "CLI_NAME=${CLI_NAME}" >> $GITHUB_OUTPUT
+                  echo "APP_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+              # Ensure you have a package.json with "name" and "version" fields.
+
+            - name: Compile CLI
+              env:
+                  CLI_NAME: livecomp-cli
+              run: |
+                  OUT_FILENAME="${CLI_NAME}-${{ matrix.config.asset_name_suffix }}${{ matrix.config.output_filename_override }}"
+                  echo "Building: $OUT_FILENAME for target ${{ matrix.config.target }}"
+                  cd apps/cli && bun build ./src/index.ts \
+                    --compile \
+                    --outfile ./dist/$OUT_FILENAME \
+                    --target ${{ matrix.config.target }}
+
+            - name: Upload Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ needs.create_release.outputs.upload_url }}
+                  asset_path: ./dist/${{ steps.project_meta.outputs.CLI_NAME }}-${{ matrix.config.asset_name_suffix }}${{ matrix.config.output_filename_override }}
+                  asset_name: ${{ steps.project_meta.outputs.CLI_NAME }}-${{ matrix.config.asset_name_suffix }}${{ matrix.config.output_filename_override }}
+                  asset_content_type: application/octet-stream
+
