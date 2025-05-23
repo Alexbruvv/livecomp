@@ -18,22 +18,27 @@ jobs:
                       target: bun-linux-x64
                       asset_name_suffix: linux-x64
                       output_filename_override: ""
+                      keyring_import: "@napi-rs/keyring-linux-x64-gnu"
                     - os: ubuntu-latest
                       target: bun-linux-arm64
                       asset_name_suffix: linux-arm64
                       output_filename_override: ""
+                      keyring_import: "@napi-rs/keyring-linux-arm64-gnu"
                     - os: ubuntu-latest
                       target: bun-darwin-x64
                       asset_name_suffix: darwin-x64
                       output_filename_override: ""
+                      keyring_import: "@napi-rs/keyring-darwin-x64"
                     - os: ubuntu-latest
                       target: bun-darwin-arm64
                       asset_name_suffix: darwin-arm64
                       output_filename_override: ""
+                      keyring_import: "@napi-rs/keyring-darwin-arm64"
                     - os: ubuntu-latest
                       target: bun-windows-x64
                       asset_name_suffix: windows-x64
                       output_filename_override: ".exe"
+                      keyring_import: "@napi-rs/keyring-win32-x64-msvc"
         runs-on: ${{ matrix.config.os }}
         steps:
             - name: Checkout code for release tag
@@ -48,6 +53,12 @@ jobs:
 
             - name: Install dependencies
               run: bun install --frozen-lockfile
+
+            - name: Require keyring import
+              run: |
+                  SEARCH_STRING="// <ci-keyring-import>"
+                  REPLACE_STRING="require(\"${{ matrix.config.keyring_import }}\");"
+                  sed -i "s|$SEARCH_STRING|$REPLACE_STRING|g" apps/cli/src/index.ts
 
             - name: Compile CLI
               run: |
