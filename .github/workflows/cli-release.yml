@@ -56,10 +56,10 @@ jobs:
 
             - name: Require keyring import
               run: |
-                  cd apps/cli
-                  bun add @napi-rs/keyring-${{ matrix.config.keyring_import }}
+                  cd apps/cli/src
+                  wget https://github.com/Brooooooklyn/keyring-node/releases/latest/download/keyring.${{ matrix.config.keyring_import }}.node
                   SEARCH_STRING="// <ci-keyring-import>"
-                  REPLACE_STRING="require(\"@napi-rs/keyring-${{ matrix.config.keyring_import }}/keyring.${{ matrix.config.keyring_import }}.node\");"
+                  REPLACE_STRING="require(\"./keyring.${{ matrix.config.keyring_import }}.node\");"
                   sed -i "s|$SEARCH_STRING|$REPLACE_STRING|g" src/index.ts
 
             - name: Compile CLI
