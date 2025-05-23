@@ -56,6 +56,9 @@ jobs:
 
                   cd apps/cli && bun build ./src/index.ts \
                     --compile \
+                    --minify \
+                    --sourcemap \
+                    --bytecode \
                     --outfile ./dist/$OUT_FILENAME \
                     --target ${{ matrix.config.target }} \
 
