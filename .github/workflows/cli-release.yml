@@ -18,27 +18,27 @@ jobs:
                       target: bun-linux-x64
                       asset_name_suffix: linux-x64
                       output_filename_override: ""
-                      keyring_import: "@napi-rs/keyring-linux-x64-gnu"
+                      keyring_import: "linux-x64-gnu"
                     - os: ubuntu-latest
                       target: bun-linux-arm64
                       asset_name_suffix: linux-arm64
                       output_filename_override: ""
-                      keyring_import: "@napi-rs/keyring-linux-arm64-gnu"
+                      keyring_import: "linux-arm64-gnu"
                     - os: ubuntu-latest
                       target: bun-darwin-x64
                       asset_name_suffix: darwin-x64
                       output_filename_override: ""
-                      keyring_import: "@napi-rs/keyring-darwin-x64"
+                      keyring_import: "darwin-x64"
                     - os: ubuntu-latest
                       target: bun-darwin-arm64
                       asset_name_suffix: darwin-arm64
                       output_filename_override: ""
-                      keyring_import: "@napi-rs/keyring-darwin-arm64"
+                      keyring_import: "darwin-arm64"
                     - os: ubuntu-latest
                       target: bun-windows-x64
                       asset_name_suffix: windows-x64
                       output_filename_override: ".exe"
-                      keyring_import: "@napi-rs/keyring-win32-x64-msvc"
+                      keyring_import: "win32-x64-msvc"
         runs-on: ${{ matrix.config.os }}
         steps:
             - name: Checkout code for release tag
@@ -57,9 +57,9 @@ jobs:
             - name: Require keyring import
               run: |
                   cd apps/cli
-                  bun add ${{ matrix.config.keyring_import }}
+                  bun add @napi-rs/keyring-${{ matrix.config.keyring_import }}
                   SEARCH_STRING="// <ci-keyring-import>"
-                  REPLACE_STRING="require(\"${{ matrix.config.keyring_import }}\");"
+                  REPLACE_STRING="require(\"@napi-rs/keyring-${{ matrix.config.keyring_import }}/keyring.${{ matrix.config.keyring_import }}.node\");"
                   sed -i "s|$SEARCH_STRING|$REPLACE_STRING|g" src/index.ts
 
             - name: Compile CLI
