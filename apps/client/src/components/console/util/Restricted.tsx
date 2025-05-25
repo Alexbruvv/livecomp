@@ -1,17 +1,20 @@
-import { Role, roleMappings } from "@livecomp/server/src/db/schema/auth";
-import { PropsWithChildren, useContext, useMemo } from "react";
-import { AuthContext } from "../../../utils/context";
+import { PropsWithChildren } from "react";
+import { authClient } from "../../../utils/auth";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Restricted({ role, children }: { role: Role } & PropsWithChildren) {
-    const userContext = useContext(AuthContext);
+export default function Restricted({
+    permissions,
+    children,
+}: { permissions: Parameters<typeof authClient.admin.hasPermission>[0]["permissions"] } & PropsWithChildren) {
+    const { data, isPending } = useQuery({
+        queryKey: ["hasPermissions", JSON.stringify(permissions)],
+        queryFn: () => authClient.admin.hasPermission({ permissions }),
+    });
 
-    const hasRole = useMemo(() => {
-        if (!userContext.hasLoaded || !userContext.user) return false;
-        if (userContext.user.role === role) return true;
+    if (isPending || !data?.data?.success) {
+        return null;
+    }
 
-        return roleMappings[userContext.user.role].includes(role);
-    }, [role, userContext]);
-
-    return hasRole ? children : null;
+    return children;
 }
 

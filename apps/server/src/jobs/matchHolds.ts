@@ -22,6 +22,7 @@ export const matchHoldsJob = new CronJob("* * * * * *", async () => {
                             team: true,
                         },
                     },
+                    scoreEntry: true,
                 },
                 orderBy: asc(matches.sequenceNumber),
             },
@@ -29,6 +30,7 @@ export const matchHoldsJob = new CronJob("* * * * * *", async () => {
                 orderBy: asc(matchPeriods.startsAt),
             },
             pauses: true,
+            teams: true,
         },
     });
 

@@ -3,47 +3,15 @@ import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { drizzleClient } from "../db/db";
 import { SuperJSON } from "superjson";
 import * as jose from "jose";
-import { auth } from "../modules/auth/auth.module";
 import { eq } from "drizzle-orm";
-import { roleMappings, users, type Role } from "../db/schema/auth";
+import { auth } from "../auth";
 
 export async function createTrpcContext({ req }: FetchCreateContextFnOptions) {
-    if (req.headers.has("authorization")) {
-        const token = req.headers.get("authorization")!;
-
-        let payload;
-
-        try {
-            payload = (
-                await jose.jwtVerify(token, auth.encodedSecret, {
-                    issuer: "livecomp:server",
-                    audience: "livecomp:client",
-                })
-            ).payload;
-        } catch (_) {
-            return {
-                db: drizzleClient,
-            };
-        }
-
-        const userId = payload.userId;
-
-        if (userId) {
-            const user = await drizzleClient.query.users.findFirst({
-                where: eq(users.id, userId as string),
-            });
-
-            if (user) {
-                return {
-                    db: drizzleClient,
-                    user,
-                };
-            }
-        }
-    }
+    const session = await auth.api.getSession({ headers: req.headers });
 
     return {
         db: drizzleClient,
+        session,
     };
 }
 
@@ -57,21 +25,33 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
-    if (!ctx.user) {
+    if (
+        !(await auth.api.userHasPermission({
+            body: {
+                userId: ctx.session?.user.id,
+                permissions: {
+                    system: ["login"],
+                },
+            },
+        }))
+    ) {
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
     }
 
     return next({
-        ctx: {
-            ...ctx,
-            user: ctx.user,
-        },
+        ctx,
     });
 });
 
-export const restrictedProcedure = (role: Role) =>
+export const restrictedProcedure = (
+    permissions: Parameters<(typeof auth)["api"]["userHasPermission"]>[0]["body"]["permissions"]
+) =>
     protectedProcedure.use(async ({ ctx, next }) => {
-        if (ctx.user.role !== role && !roleMappings[ctx.user.role].includes(role)) {
+        if (
+            !(await auth.api.userHasPermission({
+                body: { userId: ctx.session?.user.id, permissions: permissions as any },
+            }))
+        ) {
             throw new TRPCError({ code: "FORBIDDEN", message: "Forbidden" });
         }
 

@@ -35,6 +35,9 @@ jobs:
             - name: Lint CLI
               run: cd apps/cli && bunx eslint --fix "src/**/*.{ts,tsx}"
 
+            - name: Lint shared
+              run: cd packages/shared && bunx eslint --fix "src/**/*.{ts,tsx}"
+
             - name: Lint utils
               run: cd packages/utils && bunx eslint --fix "src/**/*.{ts,tsx}"
 

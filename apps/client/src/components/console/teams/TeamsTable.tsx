@@ -46,7 +46,7 @@ export default function TeamsTable({
             header={
                 <Header
                     actions={
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["configure"] }}>
                             <SpaceBetween size="s" direction="horizontal">
                                 <GenerateTeamsModalButton competitionId={competition.id} />
                                 <CreateTeamModalButton competition={competition} />
@@ -91,7 +91,7 @@ export default function TeamsTable({
                     id: "actions",
                     header: "Actions",
                     cell: (team) => (
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["configure"] }}>
                             <SpaceBetween direction="horizontal" size="xs">
                                 <DeleteTeamButton team={team} />
                             </SpaceBetween>

@@ -4,62 +4,67 @@ import { competitionsRepository } from "../modules/competitions/competitions.rep
 import { eq } from "drizzle-orm";
 import { competitions } from "../db/schema/competitions";
 import { CompetitionClock } from "@livecomp/utils";
+import { auth } from "../auth";
 
-export const api = new Elysia().use(cors()).use(
-    new Elysia({ prefix: "api" })
-        .get("now", () => new Date().toISOString())
-        .get("/:competitionId/live", async ({ params: { competitionId } }) => {
-            const competition = await competitionsRepository.findFirst({
-                where: eq(competitions.id, competitionId),
-                with: {
-                    game: {
-                        with: { startingZones: true },
-                    },
-                    matches: {
-                        with: {
-                            assignments: true,
+export const api = new Elysia()
+    .use(cors())
+    .mount(auth.handler)
+    .use(
+        new Elysia({ prefix: "api" })
+            .get("now", () => new Date().toISOString())
+            .get("/:competitionId/live", async ({ params: { competitionId } }) => {
+                const competition = await competitionsRepository.findFirst({
+                    where: eq(competitions.id, competitionId),
+                    with: {
+                        game: {
+                            with: { startingZones: true },
                         },
+                        matches: {
+                            with: {
+                                assignments: true,
+                                scoreEntry: true,
+                            },
+                        },
+                        matchPeriods: true,
+                        pauses: true,
+                        venue: true,
+                        teams: true,
                     },
-                    matchPeriods: true,
-                    pauses: true,
-                    venue: true,
-                    teams: true,
-                },
-            });
+                });
 
-            if (!competition) return null;
+                if (!competition) return null;
 
-            const competitionClock = new CompetitionClock(competition);
-            const nextMatchId = competitionClock.getNextMatchId();
-            if (!nextMatchId) return { nextMatch: null };
+                const competitionClock = new CompetitionClock(competition);
+                const nextMatchId = competitionClock.getNextMatchId();
+                if (!nextMatchId) return { nextMatch: null };
 
-            const nextMatchTimings = competitionClock.getMatchTimings(nextMatchId);
-            if (!nextMatchTimings) return { nextMatch: null };
+                const nextMatchTimings = competitionClock.getMatchTimings(nextMatchId);
+                if (!nextMatchTimings) return { nextMatch: null };
 
-            const currentMatchId = competitionClock.getCurrentMatchId();
-            const currentMatch = competition.matches.find((match) => match.id === currentMatchId);
-            const currentMatchTimings = currentMatchId && competitionClock.getMatchTimings(currentMatchId);
-            if (currentMatch && currentMatchTimings)
+                const currentMatchId = competitionClock.getCurrentMatchId();
+                const currentMatch = competition.matches.find((match) => match.id === currentMatchId);
+                const currentMatchTimings = currentMatchId && competitionClock.getMatchTimings(currentMatchId);
+                if (currentMatch && currentMatchTimings)
+                    return {
+                        nextMatch: {
+                            matchNumber: currentMatch.sequenceNumber,
+                            startsAt: currentMatchTimings.startsAt.toISO(),
+                            now: competitionClock.now().toISO(),
+                        },
+                    };
+
+                const nextMatch = competition.matches.find((match) => match.id === nextMatchId);
+                if (!nextMatch) return { nextMatch: null };
+
+                if (competitionClock.isPaused()) return { nextMatch: null };
+
                 return {
                     nextMatch: {
-                        matchNumber: currentMatch.sequenceNumber,
-                        startsAt: currentMatchTimings.startsAt.toISO(),
+                        matchNumber: nextMatch.sequenceNumber,
+                        startsAt: nextMatchTimings.startsAt.toISO(),
                         now: competitionClock.now().toISO(),
                     },
                 };
-
-            const nextMatch = competition.matches.find((match) => match.id === nextMatchId);
-            if (!nextMatch) return { nextMatch: null };
-
-            if (competitionClock.isPaused()) return { nextMatch: null };
-
-            return {
-                nextMatch: {
-                    matchNumber: nextMatch.sequenceNumber,
-                    startsAt: nextMatchTimings.startsAt.toISO(),
-                    now: competitionClock.now().toISO(),
-                },
-            };
-        })
-);
+            })
+    );
 

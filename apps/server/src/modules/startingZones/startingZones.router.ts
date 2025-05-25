@@ -5,7 +5,7 @@ import { and, eq } from "drizzle-orm";
 import { startingZonesRepository } from "./startingZones.repository";
 
 export const startingZonesRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ game: ["configure"] })
         .input(z.object({ data: insertStartingZoneSchema }))
         .mutation(async ({ input: { data } }) => {
             return await startingZonesRepository.create(data);
@@ -38,13 +38,13 @@ export const startingZonesRouter = router({
         return await startingZonesRepository.findFirst({ where: eq(startingZones.id, id) });
     }),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ game: ["configure"] })
         .input(z.object({ id: z.string(), data: insertStartingZoneSchema.partial() }))
         .mutation(async ({ input: { id, data } }) => {
             return await startingZonesRepository.update(data, { where: eq(startingZones.id, id) });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ game: ["configure"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await startingZonesRepository.delete({ where: eq(startingZones.id, id) });

@@ -1,11 +1,9 @@
 import { TopNavigation } from "@cloudscape-design/components";
 import { useNavigate } from "@tanstack/react-router";
-import { useContext } from "react";
 import useDateTime from "../../../hooks/useDateTime";
 import { DateTime } from "luxon";
-import { AuthContext } from "../../../utils/context";
-import { api } from "../../../utils/trpc";
 import { followHandler, route } from "../../../utils/followHandler";
+import { authClient, useSession } from "../../../utils/auth";
 
 export default function ConsoleTopNavigtion({
     darkMode,
@@ -16,9 +14,8 @@ export default function ConsoleTopNavigtion({
 }) {
     const navigate = useNavigate();
     const now = useDateTime();
-    const utils = api.useUtils();
 
-    const userContext = useContext(AuthContext);
+    const session = useSession();
 
     return (
         <TopNavigation
@@ -39,18 +36,17 @@ export default function ConsoleTopNavigtion({
                 },
                 {
                     type: "menu-dropdown",
-                    text: userContext.user?.name,
-                    onItemFollow: (e) => {
+                    text: session.data?.user.name,
+                    onItemFollow: async (e) => {
                         if (e.detail.id === "logout") {
-                            localStorage.removeItem("accessToken");
-                            utils.users.fetchCurrent.invalidate().catch(console.log);
+                            await authClient.signOut();
                             navigate({ to: "/auth/login" });
                             return;
                         }
 
                         followHandler(navigate)(e);
                     },
-                    description: userContext.user?.username,
+                    description: session.data?.user.username ?? "",
                     iconName: "user-profile",
                     items: [
                         { id: "changePassword", text: "Change password", href: route("/console/changePassword") },

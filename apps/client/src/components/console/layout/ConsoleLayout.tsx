@@ -5,8 +5,7 @@ import {
     Flashbar,
     SideNavigationProps,
 } from "@cloudscape-design/components";
-import { PropsWithChildren, useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../utils/context";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { followHandler, route } from "../../../utils/followHandler";
 import { api } from "../../../utils/trpc";
 import { Navigate, useLocation, useNavigate, useRouterState } from "@tanstack/react-router";
@@ -14,6 +13,8 @@ import { useAtomValue } from "jotai";
 import { flashbarItemsAtom } from "../../../state/flashbars";
 import { applyMode, Mode } from "@cloudscape-design/global-styles";
 import ConsoleTopNavigtion from "./ConsoleTopNavigation";
+import { authClient, useSession } from "../../../utils/auth";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ConsoleLayout({ children }: PropsWithChildren) {
     const navigate = useNavigate();
@@ -41,9 +42,13 @@ export default function ConsoleLayout({ children }: PropsWithChildren) {
             };
         });
 
-    const userContext = useContext(AuthContext);
+    const session = useSession();
+    const { data: canListUsers } = useQuery({
+        queryKey: ["canListUsers"],
+        queryFn: () => authClient.admin.hasPermission({ permission: { user: ["list"] } }),
+    });
 
-    if (userContext.hasLoaded && !userContext.user) {
+    if (!session.isPending && !session.data?.user) {
         return <Navigate to="/auth/login" />;
     }
 
@@ -91,7 +96,7 @@ export default function ConsoleLayout({ children }: PropsWithChildren) {
                             },
                             { type: "link", text: "Games", href: route("/console/games") },
                             { type: "link", text: "Venues", href: route("/console/venues") },
-                            ...(userContext.user?.role === "sysadmin" ? sysAdminItems : []),
+                            ...(canListUsers ? sysAdminItems : []),
                         ]}
                     />
                 }

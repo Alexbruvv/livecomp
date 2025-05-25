@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormRootError from "../../components/console/form/FormRootError";
 import ControlledFormField from "../../components/console/form/ControlledFormField";
-import { api } from "../../utils/trpc";
 import { showFlashbar } from "../../state/flashbars";
+import { useMutation } from "@tanstack/react-query";
+import { authClient } from "../../utils/auth";
 
 export const Route = createFileRoute("/console/changePassword")({
     component: RouteComponent,
@@ -19,7 +20,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 function RouteComponent() {
-    const { mutate: changePassword, isPending } = api.auth.changePassword.useMutation({
+    const { mutate: changePassword, isPending } = useMutation({
+        mutationFn: (data: FormData) => authClient.changePassword(data),
         onSettled: () => form.reset(),
         onSuccess: () => {
             showFlashbar({

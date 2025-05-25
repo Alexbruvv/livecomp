@@ -5,7 +5,7 @@ import { matchPeriodsRepository } from "./matchPeriods.repository";
 import { and, asc, eq } from "drizzle-orm";
 
 export const matchPeriodsRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ data: insertMatchPeriodSchema }))
         .mutation(async ({ input: { data } }) => {
             return await matchPeriodsRepository.create(data);
@@ -43,7 +43,7 @@ export const matchPeriodsRouter = router({
         });
     }),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ competition: ["configure"] })
         .input(
             z.object({
                 id: z.string(),
@@ -54,7 +54,7 @@ export const matchPeriodsRouter = router({
             return await matchPeriodsRepository.update(data, { where: eq(matchPeriods.id, id) });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await matchPeriodsRepository.delete({ where: eq(matchPeriods.id, id) });

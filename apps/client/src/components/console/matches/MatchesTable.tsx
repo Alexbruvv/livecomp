@@ -39,7 +39,7 @@ export default function MatchesTable({
             header={
                 <Header
                     actions={
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["configure"] }}>
                             <SpaceBetween size="s">
                                 <CreateMatchModalButton competitionId={competitionId} />
                             </SpaceBetween>
@@ -100,7 +100,7 @@ export default function MatchesTable({
                     id: "actions",
                     header: "Actions",
                     cell: (match) => (
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["configure"] }}>
                             <SpaceBetween direction="horizontal" size="xs">
                                 <DeleteMatchButton match={match} />
                             </SpaceBetween>

@@ -1,4 +1,3 @@
-import * as authSchema from "./auth";
 import * as competitionsSchema from "./competitions";
 import * as gamesSchema from "./games";
 import * as matchesSchema from "./matches";
@@ -6,6 +5,7 @@ import * as scoresSchema from "./scores";
 import * as teamsSchema from "./teams";
 import * as venuesSchema from "./venues";
 import * as displaysSchema from "./displays";
+import * as authSchema from "../../../auth-schema";
 
 export const schema = {
     ...authSchema,

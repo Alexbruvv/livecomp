@@ -11,7 +11,7 @@ import { matches, matchPeriods } from "../../db/schema/matches";
 import { pausesRepository } from "../pauses/pauses.repository";
 
 export const competitionsRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ competition: ["create"] })
         .input(
             z.object({
                 data: insertCompetitionSchema,
@@ -61,13 +61,13 @@ export const competitionsRouter = router({
             });
         }),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ competition: ["update"] })
         .input(z.object({ id: z.string(), data: insertCompetitionSchema.partial() }))
         .mutation(async ({ input: { id, data } }) => {
             return await competitionsRepository.update(data, { where: eq(competitions.id, id) });
         }),
 
-    generateTeams: restrictedProcedure("admin")
+    generateTeams: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ competitionId: z.string(), count: z.number() }))
         .mutation(async ({ input: { competitionId, count } }) => {
             const competition = await competitionsRepository.findFirst({
@@ -94,7 +94,7 @@ export const competitionsRouter = router({
             }
         }),
 
-    importSchedule: restrictedProcedure("admin")
+    importSchedule: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ id: z.string(), data: z.object({ schedule: z.string() }) }))
         .mutation(async ({ input: { id, data } }) => {
             const competition = await competitionsRepository.findFirst({
@@ -154,7 +154,7 @@ export const competitionsRouter = router({
             }
         }),
 
-    pause: restrictedProcedure("admin")
+    pause: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             const activePause = await pausesRepository.findFirst({
@@ -168,7 +168,7 @@ export const competitionsRouter = router({
             await pausesRepository.create({ competitionId: id, startsAt: new Date() });
         }),
 
-    unpause: restrictedProcedure("admin")
+    unpause: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             const activePause = await pausesRepository.findFirst({
@@ -182,7 +182,7 @@ export const competitionsRouter = router({
             await pausesRepository.update({ endsAt: new Date() }, { where: eq(pauses.id, activePause.id) });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ competition: ["delete"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await competitionsRepository.delete({ where: eq(competitions.id, id) });

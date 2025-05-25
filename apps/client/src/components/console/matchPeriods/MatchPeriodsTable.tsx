@@ -32,7 +32,7 @@ export default function MatchPeriodsTable({
             header={
                 <Header
                     actions={
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["configure"] }}>
                             <SpaceBetween size="s">
                                 <CreateMatchPeriodModalButton competition={competition} />
                             </SpaceBetween>
@@ -78,7 +78,7 @@ export default function MatchPeriodsTable({
                     id: "actions",
                     header: "Actions",
                     cell: (matchPeriod) => (
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["configure"] }}>
                             <SpaceBetween direction="horizontal" size="xs">
                                 <DeleteMatchPeriodButton matchPeriod={matchPeriod} />
                             </SpaceBetween>

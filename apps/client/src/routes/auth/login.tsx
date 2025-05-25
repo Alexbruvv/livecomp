@@ -4,8 +4,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import ControlledFormField from "../../components/console/form/ControlledFormField";
 import FormRootError from "../../components/console/form/FormRootError";
-import { api } from "../../utils/trpc";
 import { z } from "zod";
+import { authClient } from "../../utils/auth";
+import { useState } from "react";
 
 export const Route = createFileRoute("/auth/login")({
     component: RouteComponent,
@@ -19,25 +20,28 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 function RouteComponent() {
-    const utils = api.useUtils();
-
     const navigate = useNavigate();
-
-    const { mutate: login, isPending } = api.auth.login.useMutation({
-        onSuccess: async ({ token }) => {
-            localStorage.setItem("accessToken", token);
-            await utils.users.fetchCurrent.invalidate();
-            navigate({ to: "/console/dashboard" });
-        },
-        onError: (error) => {
-            form.setError("root", { message: error.message });
-        },
-    });
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (data: FormData) => login(data);
+
+    const [isPending, setIsPending] = useState(false);
+
+    const onSubmit = (data: FormData) => {
+        setIsPending(true);
+        authClient.signIn.username(data, {
+            onResponse: () => setIsPending(false),
+            onSuccess: () => {
+                navigate({ to: "/console" });
+            },
+            onError: (error) => {
+                form.setError("root", { message: error.error.message });
+            },
+        });
+    };
+
+    console.log(form.formState.errors);
 
     return (
         <ContentLayout

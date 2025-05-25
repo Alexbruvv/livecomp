@@ -44,7 +44,7 @@ function RouteComponent() {
                         actions={
                             <SpaceBetween direction="horizontal" size="s">
                                 <DevToolsOnly>
-                                    <Restricted role="admin">
+                                    <Restricted permissions={{ competition: ["configure"] }}>
                                         <Button
                                             onClick={() => resetMatchPeriod({ id: matchPeriodId })}
                                             loading={resetPending}
