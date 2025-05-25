@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { admin, openAPI, username } from "better-auth/plugins";
+import { admin, bearer, openAPI, username } from "better-auth/plugins";
 import { accessControl, roles } from "@livecomp/shared";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzleClient } from "./db/db";
@@ -17,6 +17,7 @@ export const auth = betterAuth({
     }),
     plugins: [
         openAPI(),
+        bearer(),
         username(),
         admin({
             ac: accessControl,

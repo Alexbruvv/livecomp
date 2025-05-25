@@ -12,7 +12,7 @@ export function createApiClient(serverUrl: string, authToken?: string | null) {
                     if (!authToken) return {};
 
                     return {
-                        authorization: authToken,
+                        authorization: `Bearer ${authToken}`,
                     };
                 },
             }),

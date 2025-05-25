@@ -3,15 +3,16 @@ import { createApiClient } from "../../module/api";
 import { loadCliConfig } from "../../module/config";
 import { CompetitionClock } from "@livecomp/utils";
 import chalk from "chalk";
-import { userConfig } from "../../module/user-config/user-config";
+import createCustomAuthClient from "../../module/auth";
 
 export const competitionStatusCommand = new Command("status")
     .description("Check the status of the selected competition")
     .action(async () => {
         const config = await loadCliConfig();
-        const token = userConfig.read().tokens[config.instance.server_url];
+        const authClient = createCustomAuthClient({ baseUrl: config.instance.server_url });
+        const { data } = await authClient.getSession();
 
-        if (!token) {
+        if (!data?.session) {
             console.log("Not authenticated. Please log in using 'livecomp auth login'");
             return;
         }
@@ -21,7 +22,7 @@ export const competitionStatusCommand = new Command("status")
             return;
         }
 
-        const client = createApiClient(config.instance.server_url, token);
+        const client = createApiClient(config.instance.server_url, data.session.token);
         const competition = await client.competitions.fetchById.query({
             id: config.config.competition_id,
         });

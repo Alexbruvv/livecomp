@@ -2,8 +2,6 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { drizzleClient } from "../db/db";
 import { SuperJSON } from "superjson";
-import * as jose from "jose";
-import { eq } from "drizzle-orm";
 import { auth } from "../auth";
 
 export async function createTrpcContext({ req }: FetchCreateContextFnOptions) {
@@ -26,14 +24,16 @@ export const publicProcedure = t.procedure;
 
 export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
     if (
-        !(await auth.api.userHasPermission({
-            body: {
-                userId: ctx.session?.user.id,
-                permissions: {
-                    system: ["login"],
+        !(
+            await auth.api.userHasPermission({
+                body: {
+                    userId: ctx.session?.user.id,
+                    permissions: {
+                        system: ["login"],
+                    },
                 },
-            },
-        }))
+            })
+        ).success
     ) {
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
     }
@@ -48,9 +48,11 @@ export const restrictedProcedure = (
 ) =>
     protectedProcedure.use(async ({ ctx, next }) => {
         if (
-            !(await auth.api.userHasPermission({
-                body: { userId: ctx.session?.user.id, permissions: permissions as any },
-            }))
+            !(
+                await auth.api.userHasPermission({
+                    body: { userId: ctx.session?.user.id, permissions: permissions as any },
+                })
+            ).success
         ) {
             throw new TRPCError({ code: "FORBIDDEN", message: "Forbidden" });
         }

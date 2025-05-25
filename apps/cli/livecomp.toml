@@ -1,5 +1,5 @@
 [instance]
-server_url = "https://srv.comp.acolville.co.uk"
+server_url = "http://localhost:3000"
 
 [config]
 competition_id = "d0205cd7-eacc-46e9-a4c0-672a311c12e0"
