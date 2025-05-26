@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { authClient } from "../../../utils/auth";
+import { authClient } from "@livecomp/shared";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Restricted({

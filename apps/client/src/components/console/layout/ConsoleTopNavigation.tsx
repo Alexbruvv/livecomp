@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import useDateTime from "../../../hooks/useDateTime";
 import { DateTime } from "luxon";
 import { followHandler, route } from "../../../utils/followHandler";
-import { authClient, useSession } from "../../../utils/auth";
+import { authClient, useSession } from "@livecomp/shared";
 
 export default function ConsoleTopNavigtion({
     darkMode,
@@ -46,7 +46,7 @@ export default function ConsoleTopNavigtion({
 
                         followHandler(navigate)(e);
                     },
-                    description: session.data?.user.username ?? "",
+                    description: session.data?.user.email ?? "",
                     iconName: "user-profile",
                     items: [
                         { id: "changePassword", text: "Change password", href: route("/console/changePassword") },

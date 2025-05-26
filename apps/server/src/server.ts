@@ -74,12 +74,12 @@ program
         log.info("Cron jobs started");
     });
 
-program.command("add-superadmin-user <username> <password>").action(async (username: string, password: string) => {
+program.command("add-superadmin-user <email> <password>").action(async (email: string, password: string) => {
     const { user } = await auth.api.createUser({
         body: {
-            email: `${username}@donotuse.livecomp.co.uk`,
+            email,
             password,
-            name: username,
+            name: email.split("@")[0],
         },
     });
 
@@ -93,12 +93,11 @@ program.command("add-superadmin-user <username> <password>").action(async (usern
     await drizzleClient
         .update(users)
         .set({
-            username,
             role: "superAdmin",
         })
         .where(eq(users.id, user.id));
 
-    log.info(`User ${username} added`);
+    log.info(`User ${email} added`);
     process.exit(0);
 });
 

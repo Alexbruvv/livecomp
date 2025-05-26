@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import ControlledFormField from "../../components/console/form/ControlledFormField";
 import FormRootError from "../../components/console/form/FormRootError";
 import { z } from "zod";
-import { authClient } from "../../utils/auth";
+import { authClient } from "@livecomp/shared";
 import { useState } from "react";
 import { delay } from "../../utils/promise";
 
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/auth/login")({
 });
 
 const formSchema = z.object({
-    username: z.string(),
+    email: z.string().email(),
     password: z.string(),
 });
 
@@ -31,7 +31,7 @@ function RouteComponent() {
 
     const onSubmit = (data: FormData) => {
         setIsPending(true);
-        authClient.signIn.username(data, {
+        authClient.signIn.email(data, {
             onSuccess: async (ctx) => {
                 const authToken = ctx.response.headers.get("Set-Auth-Token");
 
@@ -72,8 +72,8 @@ function RouteComponent() {
 
                             <ControlledFormField
                                 form={form}
-                                name="username"
-                                render={({ field }) => <Input placeholder="Username" {...field} />}
+                                name="email"
+                                render={({ field }) => <Input placeholder="Email" {...field} />}
                             />
 
                             <ControlledFormField

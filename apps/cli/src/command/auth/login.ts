@@ -6,8 +6,8 @@ import { userConfig } from "../../module/user-config/user-config";
 
 export const loginCommand = new Command("login")
     .description("Authenticate with the Livecomp server")
-    .argument("<username>", "The username to authenticate with")
-    .action(async (username: string) => {
+    .argument("<email>", "The email address to authenticate with")
+    .action(async (email: string) => {
         const config = await loadCliConfig();
         const authClient = createCustomAuthClient({ baseUrl: config.instance.server_url });
 
@@ -20,8 +20,8 @@ export const loginCommand = new Command("login")
         ]);
 
         try {
-            const { data, error } = await authClient.signIn.username({
-                username,
+            const { data, error } = await authClient.signIn.email({
+                email,
                 password,
             });
 

@@ -18,7 +18,6 @@ export const auth = betterAuth({
     plugins: [
         openAPI(),
         bearer(),
-        username(),
         admin({
             ac: accessControl,
             roles,

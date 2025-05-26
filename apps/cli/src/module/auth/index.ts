@@ -1,13 +1,13 @@
 import { createAuthClient } from "better-auth/client";
 import { userConfig } from "../user-config/user-config";
-import { usernameClient } from "better-auth/client/plugins";
+import { authClientOptions } from "@livecomp/shared";
 
 export default function createCustomAuthClient({ baseUrl }: { baseUrl: string }) {
     const userCfg = userConfig.read();
 
     return createAuthClient({
+        ...authClientOptions,
         baseURL: baseUrl,
-        plugins: [usernameClient()],
 
         fetchOptions: {
             auth: {

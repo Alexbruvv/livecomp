@@ -8,8 +8,6 @@ export const users = pgTable("users", {
  image: text('image'),
  createdAt: timestamp('created_at').$defaultFn(() => new Date).notNull(),
  updatedAt: timestamp('updated_at').$defaultFn(() => new Date).notNull(),
- username: text('username').unique(),
- displayUsername: text('display_username'),
  role: text('role'),
  banned: boolean('banned'),
  banReason: text('ban_reason'),

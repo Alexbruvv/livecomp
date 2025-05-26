@@ -7,7 +7,7 @@ import FormRootError from "../../components/console/form/FormRootError";
 import ControlledFormField from "../../components/console/form/ControlledFormField";
 import { showFlashbar } from "../../state/flashbars";
 import { useMutation } from "@tanstack/react-query";
-import { authClient } from "../../utils/auth";
+import { authClient } from "@livecomp/shared";
 
 export const Route = createFileRoute("/console/changePassword")({
     component: RouteComponent,

@@ -16,7 +16,7 @@ export const authStatusCommand = new Command("status")
         }
 
         try {
-            console.log(`Authenticated as ${data?.user.name} (${data?.user.username})`);
+            console.log(`Authenticated as ${data?.user.name} (${data?.user.email})`);
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Unknown error";
             console.error(`Failed to fetch current user: ${errorMessage}`);

@@ -13,8 +13,8 @@ import { useAtomValue } from "jotai";
 import { flashbarItemsAtom } from "../../../state/flashbars";
 import { applyMode, Mode } from "@cloudscape-design/global-styles";
 import ConsoleTopNavigtion from "./ConsoleTopNavigation";
-import { authClient, useSession } from "../../../utils/auth";
 import { useQuery } from "@tanstack/react-query";
+import { authClient, useSession } from "@livecomp/shared";
 
 export default function ConsoleLayout({ children }: PropsWithChildren) {
     const navigate = useNavigate();
