@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { admin, bearer, openAPI, username } from "better-auth/plugins";
+import { admin, bearer, openAPI } from "better-auth/plugins";
 import { accessControl, roles } from "@livecomp/shared";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzleClient } from "./db/db";

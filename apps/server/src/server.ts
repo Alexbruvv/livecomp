@@ -13,7 +13,6 @@ import path from "path";
 import { api } from "./api/api";
 import { matchHoldsJob } from "./jobs/matchHolds";
 import { auth } from "./auth";
-import { userSchema } from "better-auth/db";
 import { users } from "../auth-schema";
 import { eq } from "drizzle-orm";
 
@@ -69,8 +68,8 @@ program
 
         log.info(`Server listening on port ${port}`);
 
-        //displaysJob.start();
-        //matchHoldsJob.start();
+        displaysJob.start();
+        matchHoldsJob.start();
         log.info("Cron jobs started");
     });
 

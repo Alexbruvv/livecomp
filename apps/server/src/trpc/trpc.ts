@@ -48,13 +48,16 @@ export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
 });
 
 export const restrictedProcedure = (
-    permissions: Parameters<(typeof auth)["api"]["userHasPermission"]>[0]["body"]["permissions"]
+    permissions: Exclude<Parameters<(typeof auth)["api"]["userHasPermission"]>[0]["body"]["permissions"], undefined>
 ) =>
     protectedProcedure.use(async ({ ctx, next }) => {
         if (
             !(
                 await auth.api.userHasPermission({
-                    body: { userId: ctx.session?.user.id, permissions: permissions as any },
+                    body: {
+                        userId: ctx.session?.user.id,
+                        permissions,
+                    },
                 })
             ).success
         ) {
