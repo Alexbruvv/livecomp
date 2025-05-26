@@ -32,7 +32,13 @@ function RouteComponent() {
         setIsPending(true);
         authClient.signIn.username(data, {
             onResponse: () => setIsPending(false),
-            onSuccess: () => {
+            onSuccess: (ctx) => {
+                const authToken = ctx.response.headers.get("Set-Auth-Token");
+
+                if (authToken) {
+                    localStorage.setItem("auth_token", authToken);
+                }
+
                 navigate({ to: "/console" });
             },
             onError: (error) => {
@@ -40,8 +46,6 @@ function RouteComponent() {
             },
         });
     };
-
-    console.log(form.formState.errors);
 
     return (
         <ContentLayout

@@ -21,10 +21,10 @@ export const trpcClient = api.createClient({
                 transformer: SuperJSON,
 
                 async headers() {
-                    if (!localStorage.getItem("accessToken")) return {};
+                    if (!localStorage.getItem("auth_token")) return {};
 
                     return {
-                        authorization: localStorage.getItem("accessToken")!,
+                        Authorization: `Bearer ${localStorage.getItem("auth_token")!}`,
                     };
                 },
             }),

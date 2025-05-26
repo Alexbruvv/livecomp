@@ -69,8 +69,8 @@ program
 
         log.info(`Server listening on port ${port}`);
 
-        displaysJob.start();
-        matchHoldsJob.start();
+        //displaysJob.start();
+        //matchHoldsJob.start();
         log.info("Cron jobs started");
     });
 

@@ -23,11 +23,15 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
+    if (!ctx.session?.user) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
+    }
+
     if (
         !(
             await auth.api.userHasPermission({
                 body: {
-                    userId: ctx.session?.user.id,
+                    userId: ctx.session.user.id,
                     permissions: {
                         system: ["login"],
                     },

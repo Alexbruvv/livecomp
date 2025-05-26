@@ -23,7 +23,7 @@ const marshal = accessControl.newRole({
 const admin = accessControl.newRole({
     ...marshal.statements,
     competition: ["create", "update", "configure", "control", "score", "delete"],
-    game: ["create", "update", "delete"],
+    game: ["create", "update", "configure", "delete"],
     venue: ["create", "update", "configure", "delete"],
 });
 
