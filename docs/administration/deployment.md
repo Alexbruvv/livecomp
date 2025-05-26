@@ -61,7 +61,7 @@ This will start the client on port `3001`. The `-s` flag ensures that all subpat
 Finally, from the `apps/server` directory, the following command can be executed to create a user.
 
 ```bash
-bun run src/server.ts create-sysadmin-user <username> <password>
+bun run src/server.ts create-superadmin-user <email> <password>
 ```
 
 ## Additional steps
