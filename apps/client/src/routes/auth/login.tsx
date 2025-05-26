@@ -7,6 +7,7 @@ import FormRootError from "../../components/console/form/FormRootError";
 import { z } from "zod";
 import { authClient } from "../../utils/auth";
 import { useState } from "react";
+import { delay } from "../../utils/promise";
 
 export const Route = createFileRoute("/auth/login")({
     component: RouteComponent,
@@ -31,18 +32,21 @@ function RouteComponent() {
     const onSubmit = (data: FormData) => {
         setIsPending(true);
         authClient.signIn.username(data, {
-            onResponse: () => setIsPending(false),
-            onSuccess: (ctx) => {
+            onSuccess: async (ctx) => {
                 const authToken = ctx.response.headers.get("Set-Auth-Token");
 
                 if (authToken) {
                     localStorage.setItem("auth_token", authToken);
                 }
 
+                await delay(500); // Delay to ensure session is established before redirecting
+
+                setIsPending(false);
                 navigate({ to: "/console" });
             },
             onError: (error) => {
                 form.setError("root", { message: error.error.message });
+                setIsPending(false);
             },
         });
     };

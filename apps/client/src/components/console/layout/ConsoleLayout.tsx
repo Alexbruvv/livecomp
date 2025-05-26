@@ -96,7 +96,7 @@ export default function ConsoleLayout({ children }: PropsWithChildren) {
                             },
                             { type: "link", text: "Games", href: route("/console/games") },
                             { type: "link", text: "Venues", href: route("/console/venues") },
-                            ...(canListUsers ? sysAdminItems : []),
+                            ...(canListUsers?.data?.success ? sysAdminItems : []),
                         ]}
                     />
                 }
