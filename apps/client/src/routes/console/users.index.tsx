@@ -7,6 +7,7 @@ import { authClient, User } from "@livecomp/shared";
 import { useQuery } from "@tanstack/react-query";
 import DeleteUserButton from "../../components/console/users/DeleteUserButton";
 import CreateUserModalButton from "../../components/console/users/CreateUserModalButton";
+import RevokeAllSessionsButton from "../../components/console/users/RevokeAllSessionsButton";
 
 export const Route = createFileRoute("/console/users/")({
     component: RouteComponent,
@@ -52,29 +53,26 @@ function RouteComponent() {
                                     {user.email}
                                 </RoutedLink>
                             ),
-                            width: "25%",
                         },
                         {
                             id: "name",
                             header: "Name",
                             cell: (user) => user.name,
-                            width: "25%",
                         },
                         {
                             id: "role",
                             header: "Role",
                             cell: (user) => user.role,
-                            width: "25%",
                         },
                         {
                             id: "actions",
                             header: "Actions",
                             cell: (user) => (
                                 <SpaceBetween direction="horizontal" size="s">
+                                    <RevokeAllSessionsButton user={user} />
                                     <DeleteUserButton user={user} />
                                 </SpaceBetween>
                             ),
-                            width: "25%",
                         },
                     ]}
                     {...collectionProps}
