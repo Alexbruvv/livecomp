@@ -70,9 +70,9 @@ function RouteComponent() {
                     header: "Result",
                     cell: (check) =>
                         check.result.success ? (
-                            <StatusIndicator type="success">Passed</StatusIndicator>
+                            <StatusIndicator type="success">Passing</StatusIndicator>
                         ) : (
-                            <StatusIndicator type="warning">Failed</StatusIndicator>
+                            <StatusIndicator type="warning">Failing</StatusIndicator>
                         ),
                 },
                 {
