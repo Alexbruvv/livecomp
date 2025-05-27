@@ -11,6 +11,7 @@ import { authClient } from "@livecomp/shared";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
+import RevokeUserSessionButton from "../../components/console/users/RevokeUserSessionButton";
 
 export const Route = createFileRoute("/console/users/$userId")({
     component: RouteComponent,
@@ -95,6 +96,15 @@ function RouteComponent() {
                             id: "expiresAt",
                             header: "Expires at",
                             cell: (session) => new Date(session.expiresAt).toLocaleString(),
+                        },
+                        {
+                            id: "actions",
+                            header: "Actions",
+                            cell: (session) => (
+                                <SpaceBetween direction="horizontal" size="xs">
+                                    <RevokeUserSessionButton session={session} />
+                                </SpaceBetween>
+                            ),
                         },
                     ]}
                 />
