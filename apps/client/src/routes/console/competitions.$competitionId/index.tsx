@@ -41,7 +41,7 @@ function RouteComponent() {
                 header={
                     <Header
                         actions={
-                            <Restricted role="admin">
+                            <Restricted permissions={{ competition: ["configure"] }}>
                                 <SpaceBetween direction="horizontal" size="s">
                                     {competition && <ImportScheduleModalButton competition={competition} />}
                                     {competition && <EditCompetitionModalButton competition={competition} />}

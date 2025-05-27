@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { api } from "../../utils/trpc";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { Alert, ContentLayout, Header, SpaceBetween, Table } from "@cloudscape-design/components";
 import { RoutedLink } from "../../components/console/util/RoutedLink";
 import Restricted from "../../components/console/util/Restricted";
+import { authClient, User } from "@livecomp/shared";
+import { useQuery } from "@tanstack/react-query";
 import DeleteUserButton from "../../components/console/users/DeleteUserButton";
 import CreateUserModalButton from "../../components/console/users/CreateUserModalButton";
+import RevokeAllSessionsButton from "../../components/console/users/RevokeAllSessionsButton";
 
 export const Route = createFileRoute("/console/users/")({
     component: RouteComponent,
@@ -15,19 +17,24 @@ export const Route = createFileRoute("/console/users/")({
 });
 
 function RouteComponent() {
-    const { data: users, isPending, isError } = api.users.fetchAll.useQuery();
+    const { data, isError, isPending } = useQuery({
+        queryKey: ["users", "list"],
+        queryFn: () => authClient.admin.listUsers({ query: { limit: 100 } }),
+    });
 
-    const { items, collectionProps } = useCollection(users ?? [], {});
+    const { items, collectionProps } = useCollection((data?.data?.users ?? []) as User[], {});
 
     return (
         <ContentLayout header={<Header variant="h1">Manage users</Header>}>
-            <Restricted role="sysadmin">
+            <Restricted permissions={{ user: ["list"] }}>
                 <Table
                     header={
                         <Header
                             actions={
                                 <SpaceBetween direction="horizontal" size="s">
-                                    <CreateUserModalButton />
+                                    <Restricted permissions={{ user: ["create"] }}>
+                                        <CreateUserModalButton />
+                                    </Restricted>
                                 </SpaceBetween>
                             }
                         >
@@ -39,36 +46,33 @@ function RouteComponent() {
                     items={items}
                     columnDefinitions={[
                         {
-                            id: "username",
-                            header: "Username",
+                            id: "email",
+                            header: "Email",
                             cell: (user) => (
                                 <RoutedLink to="/console/users/$userId" params={{ userId: user.id }}>
-                                    {user.username}
+                                    {user.email}
                                 </RoutedLink>
                             ),
-                            width: "25%",
                         },
                         {
                             id: "name",
                             header: "Name",
                             cell: (user) => user.name,
-                            width: "25%",
                         },
                         {
                             id: "role",
                             header: "Role",
                             cell: (user) => user.role,
-                            width: "25%",
                         },
                         {
                             id: "actions",
                             header: "Actions",
                             cell: (user) => (
                                 <SpaceBetween direction="horizontal" size="s">
+                                    <RevokeAllSessionsButton user={user} />
                                     <DeleteUserButton user={user} />
                                 </SpaceBetween>
                             ),
-                            width: "25%",
                         },
                     ]}
                     {...collectionProps}

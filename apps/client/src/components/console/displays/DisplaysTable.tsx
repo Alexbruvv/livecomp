@@ -49,7 +49,7 @@ export default function DisplaysTable({
             header={
                 <Header
                     actions={
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["control"] }}>
                             <SpaceBetween size="s" direction="horizontal">
                                 {selectedItems?.length ? (
                                     <ButtonDropdown
@@ -134,7 +134,7 @@ export default function DisplaysTable({
                     id: "actions",
                     header: "Actions",
                     cell: (display) => (
-                        <Restricted role="admin">
+                        <Restricted permissions={{ competition: ["control"] }}>
                             <SpaceBetween direction="horizontal" size="xs">
                                 <EditDisplayModalButton display={display} />
                                 <DeleteDisplayButton display={display} />

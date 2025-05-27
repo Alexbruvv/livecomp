@@ -4,40 +4,51 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import ControlledFormField from "../../components/console/form/ControlledFormField";
 import FormRootError from "../../components/console/form/FormRootError";
-import { api } from "../../utils/trpc";
 import { z } from "zod";
+import { authClient } from "@livecomp/shared";
+import { useState } from "react";
 
 export const Route = createFileRoute("/auth/login")({
     component: RouteComponent,
 });
 
 const formSchema = z.object({
-    username: z.string(),
+    email: z.string().email(),
     password: z.string(),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 function RouteComponent() {
-    const utils = api.useUtils();
-
     const navigate = useNavigate();
-
-    const { mutate: login, isPending } = api.auth.login.useMutation({
-        onSuccess: async ({ token }) => {
-            localStorage.setItem("accessToken", token);
-            await utils.users.fetchCurrent.invalidate();
-            navigate({ to: "/console/dashboard" });
-        },
-        onError: (error) => {
-            form.setError("root", { message: error.message });
-        },
-    });
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (data: FormData) => login(data);
+
+    const [isPending, setIsPending] = useState(false);
+
+    const onSubmit = (data: FormData) => {
+        setIsPending(true);
+        authClient.signIn.email(data, {
+            onSuccess: async (ctx) => {
+                const authToken = ctx.response.headers.get("Set-Auth-Token");
+
+                if (authToken) {
+                    localStorage.setItem("auth_token", authToken);
+                }
+
+                await authClient.getSession();
+
+                setIsPending(false);
+                navigate({ to: "/console" });
+            },
+            onError: (error) => {
+                form.setError("root", { message: error.error.message });
+                setIsPending(false);
+            },
+        });
+    };
 
     return (
         <ContentLayout
@@ -60,8 +71,8 @@ function RouteComponent() {
 
                             <ControlledFormField
                                 form={form}
-                                name="username"
-                                render={({ field }) => <Input placeholder="Username" {...field} />}
+                                name="email"
+                                render={({ field }) => <Input placeholder="Email" {...field} />}
                             />
 
                             <ControlledFormField

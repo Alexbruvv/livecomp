@@ -26,7 +26,7 @@ function RouteComponent() {
                     <Header
                         actions={
                             <SpaceBetween size="s">
-                                <Restricted role="admin">
+                                <Restricted permissions={{ competition: ["create"] }}>
                                     <CreateCompetitionModalButton />
                                 </Restricted>
                             </SpaceBetween>
@@ -69,7 +69,7 @@ function RouteComponent() {
                         id: "actions",
                         header: "Actions",
                         cell: (competition) => (
-                            <Restricted role="admin">
+                            <Restricted permissions={{ competition: ["delete"] }}>
                                 <SpaceBetween direction="horizontal" size="xs">
                                     <DeleteCompetitionButton competition={competition} />
                                 </SpaceBetween>

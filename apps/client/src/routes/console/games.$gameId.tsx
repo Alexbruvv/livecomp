@@ -43,7 +43,7 @@ function RouteComponent() {
                     header={
                         <Header
                             actions={
-                                <Restricted role="admin">
+                                <Restricted permissions={{ game: ["update"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         {game && <EditGameModalButton game={game} />}
                                     </SpaceBetween>
@@ -89,7 +89,7 @@ function RouteComponent() {
                     header={
                         <Header
                             actions={
-                                <Restricted role="admin">
+                                <Restricted permissions={{ game: ["configure"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         {game && <CreateStartingZoneModalButton gameId={game.id} />}
                                     </SpaceBetween>
@@ -117,7 +117,7 @@ function RouteComponent() {
                             id: "actions",
                             header: "Actions",
                             cell: (startingZone) => (
-                                <Restricted role="admin">
+                                <Restricted permissions={{ game: ["configure"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         <EditStartingZoneModalButton startingZone={startingZone} />
                                         <DeleteStartingZoneButton startingZone={startingZone} />
@@ -130,7 +130,7 @@ function RouteComponent() {
                         <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
                             <SpaceBetween size="m">
                                 <b>No starting zones</b>
-                                <Restricted role="admin">
+                                <Restricted permissions={{ game: ["configure"] }}>
                                     {game && <CreateStartingZoneModalButton gameId={game.id} />}
                                 </Restricted>
                             </SpaceBetween>

@@ -54,7 +54,7 @@ function RouteComponent() {
                     header={
                         <Header
                             actions={
-                                <Restricted role="admin">
+                                <Restricted permissions={{ venue: ["update"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         {venue && <EditVenueModalButton venue={venue} />}
                                     </SpaceBetween>
@@ -80,7 +80,7 @@ function RouteComponent() {
                     header={
                         <Header
                             actions={
-                                <Restricted role="admin">
+                                <Restricted permissions={{ venue: ["configure"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         {venue && <CreateRegionModalButton venueId={venue.id} />}
                                     </SpaceBetween>
@@ -103,7 +103,7 @@ function RouteComponent() {
                             id: "actions",
                             header: "Actions",
                             cell: (region) => (
-                                <Restricted role="admin">
+                                <Restricted permissions={{ venue: ["configure"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         <EditRegionModalButton region={region} />
                                         <DeleteRegionButton region={region} />
@@ -119,7 +119,7 @@ function RouteComponent() {
                             <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
                                 <SpaceBetween size="m">
                                     <b>No regions</b>
-                                    <Restricted role="admin">
+                                    <Restricted permissions={{ venue: ["configure"] }}>
                                         {venue && <CreateRegionModalButton venueId={venue.id} />}
                                     </Restricted>
                                 </SpaceBetween>
@@ -134,7 +134,7 @@ function RouteComponent() {
                     header={
                         <Header
                             actions={
-                                <Restricted role="admin">
+                                <Restricted permissions={{ venue: ["configure"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         {venue && regions && (
                                             <CreateShepherdModalButton venueId={venue.id} regions={regions} />
@@ -159,7 +159,7 @@ function RouteComponent() {
                             id: "actions",
                             header: "Actions",
                             cell: (shepherd) => (
-                                <Restricted role="admin">
+                                <Restricted permissions={{ venue: ["configure"] }}>
                                     <SpaceBetween direction="horizontal" size="xs">
                                         {regions && <EditShepherdModalButton shepherd={shepherd} regions={regions} />}
                                         {<DeleteShepherdButton shepherd={shepherd} />}
@@ -175,7 +175,7 @@ function RouteComponent() {
                             <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
                                 <SpaceBetween size="m">
                                     <b>No shepherds</b>
-                                    <Restricted role="admin">
+                                    <Restricted permissions={{ venue: ["configure"] }}>
                                         {venue && regions && (
                                             <CreateShepherdModalButton venueId={venue.id} regions={regions} />
                                         )}

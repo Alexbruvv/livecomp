@@ -337,6 +337,34 @@
       "when": 1744711040344,
       "tag": "0047_burly_husk",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1748175690231,
+      "tag": "0048_stale_sue_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1748176114539,
+      "tag": "0049_brave_texas_twister",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1748177949179,
+      "tag": "0050_sour_argent",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1748278820205,
+      "tag": "0051_skinny_madame_masque",
+      "breakpoints": true
     }
   ]
 }

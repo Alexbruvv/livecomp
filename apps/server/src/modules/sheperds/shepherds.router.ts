@@ -5,7 +5,7 @@ import { insertShepherdSchema, shepherds } from "../../db/schema/venues";
 import { shepherdsRepository } from "./shepherds.repository";
 
 export const shepherdsRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ venue: ["configure"] })
         .input(z.object({ data: insertShepherdSchema }))
         .mutation(async ({ input: { data } }) => {
             return await shepherdsRepository.create(data);
@@ -38,13 +38,13 @@ export const shepherdsRouter = router({
         .input(z.object({ id: z.string() }))
         .query(async ({ input: { id } }) => await shepherdsRepository.findFirst({ where: eq(shepherds.id, id) })),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ venue: ["configure"] })
         .input(z.object({ id: z.string(), data: insertShepherdSchema.partial() }))
         .mutation(async ({ input: { id, data } }) => {
             return await shepherdsRepository.update(data, { where: eq(shepherds.id, id) });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ venue: ["configure"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await shepherdsRepository.delete({ where: eq(shepherds.id, id) });

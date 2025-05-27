@@ -8,7 +8,7 @@ import { matchAssignmentsRepository } from "../matchAssignments/matchAssignments
 import { autoMatchAssignmentConfigsRepository } from "../matchAssignments/autoMatchAssignmentConfigs.repository";
 
 export const matchesRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ data: insertMatchSchema }))
         .mutation(async ({ input: { data } }) => {
             return await matchesRepository.create(data);
@@ -62,7 +62,7 @@ export const matchesRouter = router({
         });
     }),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ competition: ["configure"] })
         .input(
             z.object({
                 id: z.string(),
@@ -73,7 +73,7 @@ export const matchesRouter = router({
             return await matchesRepository.update(data, { where: eq(matches.id, id) });
         }),
 
-    updateAssignments: restrictedProcedure("admin")
+    updateAssignments: restrictedProcedure({ competition: ["configure"] })
         .input(
             z.object({
                 id: z.string(),
@@ -207,7 +207,7 @@ export const matchesRouter = router({
             await Promise.all(promises);
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await matchesRepository.delete({ where: eq(matches.id, id) });

@@ -1,6 +1,5 @@
 import { integer, json, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
-import { users } from "./auth";
 import { matches } from "./matches";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { teams } from "./teams";
@@ -29,9 +28,9 @@ export type MatchScoreEntry = InferSelectModel<typeof matchScoreEntries>;
 export const manualPointsAdjustments = pgTable("manual_points_adjustments", {
     ...baseColumns,
 
-    issuerId: uuid()
+    /*issuerId: uuid()
         .references(() => users.id)
-        .notNull(),
+        .notNull(),*/
 
     teamId: uuid()
         .references(() => teams.id)
@@ -43,7 +42,6 @@ export const manualPointsAdjustments = pgTable("manual_points_adjustments", {
 });
 
 export const manualPointsAdjustmentsRelations = relations(manualPointsAdjustments, ({ one }) => ({
-    issuer: one(users, { fields: [manualPointsAdjustments.issuerId], references: [users.id] }),
     team: one(teams, { fields: [manualPointsAdjustments.teamId], references: [teams.id] }),
 }));
 

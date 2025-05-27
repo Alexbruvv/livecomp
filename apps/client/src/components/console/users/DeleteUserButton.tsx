@@ -1,16 +1,24 @@
 import { Box, Button, Header, Modal, SpaceBetween } from "@cloudscape-design/components";
 import { useState } from "react";
-import { api } from "../../../utils/trpc";
-import { User } from "@livecomp/server/src/db/schema/auth";
+import { authClient, User } from "@livecomp/shared";
+import { queryClient } from "../../../utils/trpc";
 
 export default function DeleteUserButton({ user }: { user: User }) {
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { mutate: deleteUser } = api.users.delete.useMutation({
-        onSuccess: async () => {
-            setModalVisible(false);
-        },
-    });
+    const deleteUser = () => {
+        authClient.admin.removeUser(
+            { userId: user.id },
+            {
+                onSuccess: () => {
+                    setModalVisible(false);
+                    queryClient.invalidateQueries({
+                        queryKey: ["users", "list"],
+                    });
+                },
+            }
+        );
+    };
 
     return (
         <>
@@ -24,7 +32,7 @@ export default function DeleteUserButton({ user }: { user: User }) {
                     <Box float="right">
                         <SpaceBetween direction="horizontal" size="xs">
                             <Button onClick={() => setModalVisible(false)}>Cancel</Button>
-                            <Button variant="primary" onClick={() => deleteUser({ id: user.id })}>
+                            <Button variant="primary" onClick={() => deleteUser()}>
                                 Confirm
                             </Button>
                         </SpaceBetween>

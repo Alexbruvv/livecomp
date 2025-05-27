@@ -5,7 +5,7 @@ import { venuesRepository } from "./venues.repository";
 import { eq } from "drizzle-orm";
 
 export const venuesRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ venue: ["create"] })
         .input(z.object({ data: insertVenueSchema }))
         .mutation(async ({ input: { data } }) => {
             return await venuesRepository.create(data);
@@ -19,13 +19,13 @@ export const venuesRouter = router({
         .input(z.object({ id: z.string() }))
         .query(async ({ input: { id } }) => await venuesRepository.findFirst({ where: eq(venues.id, id) })),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ venue: ["update"] })
         .input(z.object({ id: z.string(), data: insertVenueSchema.partial() }))
         .mutation(async ({ input: { id, data } }) => {
             return await venuesRepository.update(data, { where: eq(venues.id, id) });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ venue: ["delete"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await venuesRepository.delete({ where: eq(venues.id, id) });

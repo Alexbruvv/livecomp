@@ -49,7 +49,7 @@ function RouteComponent() {
                         id: "actions",
                         header: "Actions",
                         cell: (game) => (
-                            <Restricted role="admin">
+                            <Restricted permissions={{ game: ["delete"] }}>
                                 <SpaceBetween direction="horizontal" size="xs">
                                     <DeleteGameButton game={game} />
                                 </SpaceBetween>
@@ -63,7 +63,7 @@ function RouteComponent() {
                 header={
                     <Header
                         actions={
-                            <Restricted role="admin">
+                            <Restricted permissions={{ game: ["create"] }}>
                                 <SpaceBetween size="xs">
                                     <CreateGameModalButton />
                                 </SpaceBetween>
@@ -80,7 +80,7 @@ function RouteComponent() {
                         <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
                             <SpaceBetween size="m">
                                 <b>No games</b>
-                                <Restricted role="admin">
+                                <Restricted permissions={{ game: ["create"] }}>
                                     <CreateGameModalButton />
                                 </Restricted>
                             </SpaceBetween>

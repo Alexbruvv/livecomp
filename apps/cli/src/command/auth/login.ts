@@ -1,15 +1,15 @@
 import { Command } from "commander";
 import inquirer from "inquirer";
 import { loadCliConfig } from "../../module/config";
-import { createApiClient } from "../../module/api";
+import createCustomAuthClient from "../../module/auth";
 import { userConfig } from "../../module/user-config/user-config";
 
 export const loginCommand = new Command("login")
     .description("Authenticate with the Livecomp server")
-    .argument("<username>", "The username to authenticate with")
-    .action(async (username: string) => {
+    .argument("<email>", "The email address to authenticate with")
+    .action(async (email: string) => {
         const config = await loadCliConfig();
-        const client = createApiClient(config.instance.server_url);
+        const authClient = createCustomAuthClient({ baseUrl: config.instance.server_url });
 
         const { password } = await inquirer.prompt([
             {
@@ -20,18 +20,27 @@ export const loginCommand = new Command("login")
         ]);
 
         try {
-            const { token } = await client.auth.login.mutate({
-                username,
+            const { data, error } = await authClient.signIn.email({
+                email,
                 password,
             });
 
-            userConfig.update((userCfg) => ({
-                ...userCfg,
-                tokens: {
-                    ...userCfg.tokens,
-                    [config.instance.server_url]: token,
-                },
-            }));
+            if (error) {
+                console.error(`Failed to authenticate: ${error.statusText}`);
+                return;
+            }
+
+            const authToken = data.token;
+
+            if (authToken) {
+                userConfig.update((cfg) => ({
+                    ...cfg,
+                    tokens: {
+                        ...cfg.tokens,
+                        [config.instance.server_url]: authToken,
+                    },
+                }));
+            }
 
             console.log("Authentication successful!");
         } catch (e) {

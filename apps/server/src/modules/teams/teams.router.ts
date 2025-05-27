@@ -9,7 +9,7 @@ import { matchesRepository } from "../matches/matches.repository";
 import { matches } from "../../db/schema/matches";
 
 export const teamsRouter = router({
-    create: restrictedProcedure("admin")
+    create: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ data: insertTeamSchema }))
         .mutation(async ({ input: { data } }) => {
             return await teamsRepository.create(data);
@@ -81,13 +81,13 @@ export const teamsRouter = router({
             return scores;
         }),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ id: z.string(), data: insertTeamSchema.partial() }))
         .mutation(async ({ input: { id, data } }) => {
             return await teamsRepository.update(data, { where: eq(teams.id, id) });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ competition: ["configure"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await teamsRepository.delete({ where: eq(teams.id, id) });

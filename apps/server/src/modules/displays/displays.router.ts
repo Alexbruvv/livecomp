@@ -89,7 +89,7 @@ export const displaysRouter = router({
             });
         }),
 
-    update: restrictedProcedure("admin")
+    update: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ id: z.string(), data: insertDisplaySchema.partial() }))
         .mutation(async ({ input: { id, data } }) => {
             return await displaysRepository.update(data, { where: eq(displays.id, id) });
@@ -100,13 +100,13 @@ export const displaysRouter = router({
         await drizzleClient.update(displays).set({ lastHeartbeat: new Date() }).where(eq(displays.id, id));
     }),
 
-    refresh: restrictedProcedure("admin")
+    refresh: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ ids: z.array(z.string()) }))
         .mutation(async ({ input: { ids } }) => {
             emitDisplayMessage(ids, { type: "refresh" });
         }),
 
-    showMessage: restrictedProcedure("admin")
+    showMessage: restrictedProcedure({ competition: ["control"] })
         .input(
             z.object({
                 ids: z.array(z.string()),
@@ -118,7 +118,7 @@ export const displaysRouter = router({
             emitDisplayMessage(ids, { type: "showText", text: message, durationMs });
         }),
 
-    delete: restrictedProcedure("admin")
+    delete: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             return await displaysRepository.delete({ where: eq(displays.id, id) });

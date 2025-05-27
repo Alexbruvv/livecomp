@@ -5,7 +5,6 @@ import { appRouter } from "./appRouter";
 import { createBunServeHandler } from "trpc-bun-adapter";
 import { createTrpcContext } from "./trpc/trpc";
 import { drizzleClient } from "./db/db";
-import { userPasswords, users } from "./db/schema/auth";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { displaysRepository } from "./modules/displays/displays.repository";
 import { displaysJob } from "./jobs/displays";
@@ -13,6 +12,9 @@ import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "path";
 import { api } from "./api/api";
 import { matchHoldsJob } from "./jobs/matchHolds";
+import { auth } from "./auth";
+import { users } from "../auth-schema";
+import { eq } from "drizzle-orm";
 
 program
     .name("livecomp-server")
@@ -71,24 +73,30 @@ program
         log.info("Cron jobs started");
     });
 
-program.command("add-sysadmin-user <username> <password>").action(async (username: string, password: string) => {
-    const user = (
-        await drizzleClient
-            .insert(users)
-            .values({
-                name: username,
-                username,
-                role: "sysadmin",
-            })
-            .returning()
-    )[0];
-
-    await drizzleClient.insert(userPasswords).values({
-        userId: user.id,
-        passwordHash: await Bun.password.hash(password),
+program.command("add-superadmin-user <email> <password>").action(async (email: string, password: string) => {
+    const { user } = await auth.api.createUser({
+        body: {
+            email,
+            password,
+            name: email.split("@")[0],
+        },
     });
 
-    log.info(`Sysadmin user ${username} added`);
+    auth.api.setUserPassword({
+        body: {
+            userId: user.id,
+            newPassword: password,
+        },
+    });
+
+    await drizzleClient
+        .update(users)
+        .set({
+            role: "superAdmin",
+        })
+        .where(eq(users.id, user.id));
+
+    log.info(`User ${email} added`);
     process.exit(0);
 });
 
@@ -98,7 +106,6 @@ export type AppRouter = typeof appRouter;
 export type AppRouterInput = inferRouterInputs<AppRouter>;
 export type AppRouterOutput = inferRouterOutputs<AppRouter>;
 
-export type { User, Role } from "./db/schema/auth";
 export type { Competition, Pause } from "./db/schema/competitions";
 export type { Display } from "./db/schema/displays";
 export type { Game, Scorer, StartingZone } from "./db/schema/games";

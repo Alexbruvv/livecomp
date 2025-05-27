@@ -24,7 +24,7 @@ const nuclearCleanupValidator = z.object({
 });
 
 export const scoresRouter = router({
-    submitNuclearCleanupScores: restrictedProcedure("scorer")
+    submitNuclearCleanupScores: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ matchId: z.string(), data: nuclearCleanupValidator }))
         .mutation(async ({ input: { matchId, data } }) => {
             const match = await matchesRepository.findFirst({
