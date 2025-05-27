@@ -7,7 +7,6 @@ import FormRootError from "../../components/console/form/FormRootError";
 import { z } from "zod";
 import { authClient } from "@livecomp/shared";
 import { useState } from "react";
-import { delay } from "../../utils/promise";
 
 export const Route = createFileRoute("/auth/login")({
     component: RouteComponent,
@@ -39,7 +38,7 @@ function RouteComponent() {
                     localStorage.setItem("auth_token", authToken);
                 }
 
-                await delay(500); // Delay to ensure session is established before redirecting
+                await authClient.getSession();
 
                 setIsPending(false);
                 navigate({ to: "/console" });
