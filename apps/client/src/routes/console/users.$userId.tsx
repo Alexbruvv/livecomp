@@ -1,4 +1,3 @@
-import { useCollection } from "@cloudscape-design/collection-hooks";
 import {
     ContentLayout,
     Header,
@@ -8,7 +7,7 @@ import {
     Table,
     Popover,
 } from "@cloudscape-design/components";
-import { authClient, User } from "@livecomp/shared";
+import { authClient } from "@livecomp/shared";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
