@@ -19,8 +19,12 @@ export const competitions = pgTable("competitions", {
 
     acceptingNewDisplays: boolean().default(false).notNull(),
 
-    gameId: uuid().notNull(),
-    venueId: uuid().notNull(),
+    gameId: uuid()
+        .references(() => games.id, { onDelete: "restrict", onUpdate: "cascade" })
+        .notNull(),
+    venueId: uuid()
+        .references(() => venues.id, { onDelete: "restrict", onUpdate: "cascade" })
+        .notNull(),
 });
 
 export const competitionsRelations = relations(competitions, ({ one, many }) => ({
@@ -40,7 +44,7 @@ export const pauses = pgTable("pauses", {
     ...baseColumns,
 
     competitionId: uuid()
-        .references(() => competitions.id)
+        .references(() => competitions.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 
     startsAt: timestamp({ withTimezone: false }).notNull(),

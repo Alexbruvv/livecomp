@@ -9,7 +9,7 @@ export const matchScoreEntries = pgTable("match_score_entries", {
     ...baseColumns,
 
     matchId: uuid()
-        .references(() => matches.id, { onDelete: "cascade" })
+        .references(() => matches.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 
     gamePoints: json().$type<Record<string, number>>().notNull(), // Maps team ID -> game points
@@ -28,12 +28,8 @@ export type MatchScoreEntry = InferSelectModel<typeof matchScoreEntries>;
 export const manualPointsAdjustments = pgTable("manual_points_adjustments", {
     ...baseColumns,
 
-    /*issuerId: uuid()
-        .references(() => users.id)
-        .notNull(),*/
-
     teamId: uuid()
-        .references(() => teams.id)
+        .references(() => teams.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 
     leaguePoints: integer().notNull(),

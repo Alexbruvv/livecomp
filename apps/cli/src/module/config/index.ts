@@ -1,8 +1,8 @@
 import { CONFIG_FILE_PATH } from "../../constants";
-import { stringify } from "smol-toml";
+import { stringify } from "yaml";
 import { configSchema, defaultConfig, type Config } from "./schema";
 import { loadConfig } from "zod-config";
-import { tomlAdapter } from "zod-config/toml-adapter";
+import { yamlAdapter } from "zod-config/yaml-adapter";
 
 async function saveDefaultConfig({ serverUrl, competitionId }: { serverUrl?: string; competitionId?: string } = {}) {
     const file = Bun.file(CONFIG_FILE_PATH);
@@ -35,7 +35,7 @@ export async function loadCliConfig(path: string = CONFIG_FILE_PATH) {
 
     return await loadConfig({
         schema: configSchema,
-        adapters: tomlAdapter({
+        adapters: yamlAdapter({
             path,
         }),
     });

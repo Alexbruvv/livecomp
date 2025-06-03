@@ -29,11 +29,11 @@ export type Game = InferSelectModel<typeof games>;
 export const startingZones = pgTable("starting_zones", {
     ...baseColumns,
 
-    name: varchar().notNull(),
+    name: varchar().unique().notNull(),
     color: varchar().notNull(),
 
     gameId: uuid()
-        .references(() => games.id, { onDelete: "cascade" })
+        .references(() => games.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 });
 

@@ -20,7 +20,7 @@ export const matchPeriods = pgTable("match_periods", {
     endsAtLatest: timestamp({ withTimezone: false }).notNull(),
 
     competitionId: uuid()
-        .references(() => competitions.id)
+        .references(() => competitions.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 });
 
@@ -41,7 +41,7 @@ export const matches = pgTable(
         type: matchType().notNull().default("league"),
 
         competitionId: uuid()
-            .references(() => competitions.id)
+            .references(() => competitions.id, { onDelete: "cascade", onUpdate: "cascade" })
             .notNull(),
 
         buffer: integer().default(0).notNull(),
@@ -71,10 +71,10 @@ export const matchAssignments = pgTable(
         ...baseColumns,
 
         matchId: uuid()
-            .references(() => matches.id, { onDelete: "cascade" })
+            .references(() => matches.id, { onDelete: "cascade", onUpdate: "cascade" })
             .notNull(),
 
-        teamId: uuid().references(() => teams.id, { onDelete: "cascade" }),
+        teamId: uuid().references(() => teams.id, { onDelete: "cascade", onUpdate: "cascade" }),
 
         gamePoints: integer().default(0),
 
@@ -105,7 +105,7 @@ export const autoMatchAssignmentConfigs = pgTable("auto_match_assignment_configs
     ...baseColumns,
 
     assignmentId: uuid()
-        .references(() => matchAssignments.id)
+        .references(() => matchAssignments.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 
     targetMatchId: uuid().references(() => matches.id), // If null, position is the league position

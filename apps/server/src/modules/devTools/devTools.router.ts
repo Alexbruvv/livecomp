@@ -8,7 +8,7 @@ import { pausesRepository } from "../pauses/pauses.repository";
 import { pauses } from "../../db/schema/competitions";
 
 export const devToolsRouter = router({
-    resetMatchPeriod: restrictedProcedure("admin")
+    resetMatchPeriod: restrictedProcedure({ competition: ["control"] })
         .input(z.object({ id: z.string() }))
         .mutation(async ({ input: { id } }) => {
             const now = DateTime.now();
