@@ -24,7 +24,7 @@ export const regions = pgTable("regions", {
     name: varchar().notNull(),
 
     venueId: uuid()
-        .references(() => venues.id)
+        .references(() => venues.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 });
 
@@ -42,7 +42,7 @@ export const shepherds = pgTable("shepherds", {
     name: varchar().notNull(),
 
     venueId: uuid()
-        .references(() => venues.id)
+        .references(() => venues.id, { onDelete: "cascade", onUpdate: "cascade" })
         .notNull(),
 
     regionIds: uuid()

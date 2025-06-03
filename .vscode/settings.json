@@ -1,3 +1,5 @@
 {
-    "eslint.workingDirectories": ["packages/client", "packages/server", "packages/utils"]
+    "eslint.workingDirectories": ["packages/client", "packages/server", "packages/utils"],
+    "typescript.experimental.useTsgo": false
 }
+

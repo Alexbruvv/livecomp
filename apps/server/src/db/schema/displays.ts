@@ -31,7 +31,7 @@ export const displays = pgTable(
 
         name: varchar().notNull(),
         competitionId: uuid()
-            .references(() => competitions.id)
+            .references(() => competitions.id, { onDelete: "cascade", onUpdate: "cascade" })
             .notNull(),
         identifier: varchar().notNull(),
         configuration: json().$type<z.infer<typeof configurationSchema>>().default({ mode: "identify" }).notNull(),

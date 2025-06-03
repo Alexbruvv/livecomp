@@ -47,6 +47,7 @@ export const competitionsRouter = router({
                             assignments: {
                                 with: {
                                     team: true,
+                                    autoConfig: true,
                                 },
                             },
                             scoreEntry: true,
