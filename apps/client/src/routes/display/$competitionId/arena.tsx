@@ -4,8 +4,8 @@ import { zodValidator } from "@tanstack/zod-adapter";
 import { api } from "../../../utils/trpc";
 import { useMemo } from "react";
 import { formatClock } from "../../../utils/clock";
-import useDateTime from "../../../hooks/useDateTime";
-import useCompetitionClock from "../../../hooks/useCompetitionClock";
+import useDateTime from "../../../hooks/use-date-time";
+import useCompetitionClock from "../../../hooks/use-competition-clock";
 import { DateTime } from "luxon";
 
 const searchSchema = z.object({

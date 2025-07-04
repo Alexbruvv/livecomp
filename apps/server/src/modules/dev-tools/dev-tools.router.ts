@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { restrictedProcedure, router } from "../../trpc/trpc";
-import { matchPeriodsRepository } from "../matchPeriods/matchPeriods.repository";
+import { matchPeriodsRepository } from "../match-periods/match-periods.repository";
 import { DateTime } from "luxon";
 import { eq } from "drizzle-orm";
 import { matchPeriods } from "../../db/schema/matches";

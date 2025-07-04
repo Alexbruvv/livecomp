@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "../../../utils/trpc";
 import { Button, ColumnLayout, Container, Header, KeyValuePairs, SpaceBetween } from "@cloudscape-design/components";
 import MatchesTable from "../../../components/console/matches/MatchesTable";
-import useCompetitionClock from "../../../hooks/useCompetitionClock";
+import useCompetitionClock from "../../../hooks/use-competition-clock";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/control")({
     component: RouteComponent,

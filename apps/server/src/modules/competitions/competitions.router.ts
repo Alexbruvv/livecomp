@@ -6,7 +6,7 @@ import { and, asc, eq, isNull } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { teamsRepository } from "../teams/teams.repository";
 import { matchesRepository } from "../matches/matches.repository";
-import { matchAssignmentsRepository } from "../matchAssignments/matchAssignments.repository";
+import { matchAssignmentsRepository } from "../match-assignments/match-assignments.repository";
 import { matches, matchPeriods } from "../../db/schema/matches";
 import { pausesRepository } from "../pauses/pauses.repository";
 

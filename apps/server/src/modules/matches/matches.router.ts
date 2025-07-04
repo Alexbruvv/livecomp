@@ -4,8 +4,8 @@ import { autoMatchAssignmentConfigs, insertMatchSchema, matchAssignments, matche
 import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { matchesRepository } from "./matches.repository";
 import { TRPCError } from "@trpc/server";
-import { matchAssignmentsRepository } from "../matchAssignments/matchAssignments.repository";
-import { autoMatchAssignmentConfigsRepository } from "../matchAssignments/autoMatchAssignmentConfigs.repository";
+import { matchAssignmentsRepository } from "../match-assignments/match-assignments.repository";
+import { autoMatchAssignmentConfigsRepository } from "../match-assignments/auto-match-assignment-configs.repository";
 
 export const matchesRouter = router({
     create: restrictedProcedure({ competition: ["configure"] })

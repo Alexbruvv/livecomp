@@ -7,7 +7,7 @@ import DeleteMatchButton from "./DeleteMatchButton";
 import { RoutedLink } from "../util/RoutedLink";
 import { api } from "../../../utils/trpc";
 import MatchStatusIndicator from "./MatchStatusIndicator";
-import useCompetitionClock from "../../../hooks/useCompetitionClock";
+import useCompetitionClock from "../../../hooks/use-competition-clock";
 
 export default function MatchesTable({
     matches,

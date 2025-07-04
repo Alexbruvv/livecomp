@@ -6,7 +6,7 @@ import {
     SideNavigationProps,
 } from "@cloudscape-design/components";
 import { PropsWithChildren, useEffect, useState } from "react";
-import { followHandler, route } from "../../../utils/followHandler";
+import { followHandler, route } from "../../../utils/follow-handler";
 import { api } from "../../../utils/trpc";
 import { Navigate, useLocation, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";

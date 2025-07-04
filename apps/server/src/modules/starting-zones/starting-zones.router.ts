@@ -2,7 +2,7 @@ import { z } from "zod";
 import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { insertStartingZoneSchema, startingZones } from "../../db/schema/games";
 import { and, eq } from "drizzle-orm";
-import { startingZonesRepository } from "./startingZones.repository";
+import { startingZonesRepository } from "./starting-zones.repository";
 
 export const startingZonesRouter = router({
     create: restrictedProcedure({ game: ["configure"] })

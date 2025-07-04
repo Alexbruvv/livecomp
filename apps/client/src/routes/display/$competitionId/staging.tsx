@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
 import { api } from "../../../utils/trpc";
 import SplitDisplay from "../../../components/display/SplitDisplay";
-import useCompetitionClock from "../../../hooks/useCompetitionClock";
-import useDateTime from "../../../hooks/useDateTime";
+import useCompetitionClock from "../../../hooks/use-competition-clock";
+import useDateTime from "../../../hooks/use-date-time";
 
 export const Route = createFileRoute("/display/$competitionId/staging")({
     component: RouteComponent,

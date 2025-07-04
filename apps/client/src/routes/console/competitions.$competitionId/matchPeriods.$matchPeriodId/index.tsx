@@ -7,7 +7,7 @@ import DevToolsOnly from "../../../../components/console/util/DevToolsOnly";
 import Restricted from "../../../../components/console/util/Restricted";
 import MatchesTable from "../../../../components/console/matches/MatchesTable";
 import { useMemo } from "react";
-import useCompetitionClock from "../../../../hooks/useCompetitionClock";
+import useCompetitionClock from "../../../../hooks/use-competition-clock";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matchPeriods/$matchPeriodId/")({
     component: RouteComponent,

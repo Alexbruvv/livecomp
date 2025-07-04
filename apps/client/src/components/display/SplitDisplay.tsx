@@ -1,12 +1,12 @@
 import { Fragment, PropsWithChildren, useMemo } from "react";
-import useDateTime from "../../hooks/useDateTime";
+import useDateTime from "../../hooks/use-date-time";
 import { api } from "../../utils/trpc";
 import { array } from "../../utils/array";
 import { AppRouterOutput } from "@livecomp/server";
 import MatchBox from "./MatchBox";
 import { DateTime } from "luxon";
 import { formatClock } from "../../utils/clock";
-import useCompetitionClock from "../../hooks/useCompetitionClock";
+import useCompetitionClock from "../../hooks/use-competition-clock";
 import DisplayOverlay from "./DisplayOverlay";
 
 export default function SplitDisplay({

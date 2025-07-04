@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { insertMatchPeriodSchema, matchPeriods } from "../../db/schema/matches";
-import { matchPeriodsRepository } from "./matchPeriods.repository";
+import { matchPeriodsRepository } from "./match-periods.repository";
 import { and, asc, eq } from "drizzle-orm";
 
 export const matchPeriodsRouter = router({

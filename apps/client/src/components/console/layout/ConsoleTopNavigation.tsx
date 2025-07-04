@@ -1,8 +1,8 @@
 import { TopNavigation } from "@cloudscape-design/components";
 import { useNavigate } from "@tanstack/react-router";
-import useDateTime from "../../../hooks/useDateTime";
+import useDateTime from "../../../hooks/use-date-time";
 import { DateTime } from "luxon";
-import { followHandler, route } from "../../../utils/followHandler";
+import { followHandler, route } from "../../../utils/follow-handler";
 import { authClient, useSession } from "@livecomp/shared";
 
 export default function ConsoleTopNavigtion({

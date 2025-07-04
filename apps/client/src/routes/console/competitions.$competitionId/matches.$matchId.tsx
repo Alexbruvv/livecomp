@@ -4,11 +4,11 @@ import EditMatchAssignmentsModalButton from "../../../components/console/matches
 import { createFileRoute } from "@tanstack/react-router";
 import { SpaceBetween, Header, Container, KeyValuePairs } from "@cloudscape-design/components";
 import EditMatchModalButton from "../../../components/console/matches/EditMatchModalButton";
-import useCompetitionClock from "../../../hooks/useCompetitionClock";
+import useCompetitionClock from "../../../hooks/use-competition-clock";
 import { DateTime } from "luxon";
 import MatchStatusIndicator from "../../../components/console/matches/MatchStatusIndicator";
 import NuclearCleanupScorer from "../../../components/console/scorer/NuclearCleanupScorer";
-import useDateTime from "../../../hooks/useDateTime";
+import useDateTime from "../../../hooks/use-date-time";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,

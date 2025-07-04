@@ -3,8 +3,8 @@ import SplitDisplay from "../../../components/display/SplitDisplay";
 import { api } from "../../../utils/trpc";
 import { useMemo } from "react";
 import { DateTime } from "luxon";
-import useCompetitionClock from "../../../hooks/useCompetitionClock";
-import useDateTime from "../../../hooks/useDateTime";
+import useCompetitionClock from "../../../hooks/use-competition-clock";
+import useDateTime from "../../../hooks/use-date-time";
 
 export const Route = createFileRoute("/display/$competitionId/next-matches")({
     component: RouteComponent,

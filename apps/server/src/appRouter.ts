@@ -1,13 +1,13 @@
 import { competitionsRouter } from "./modules/competitions/competitions.router";
-import { devToolsRouter } from "./modules/devTools/devTools.router";
+import { devToolsRouter } from "./modules/dev-tools/dev-tools.router";
 import { displaysRouter } from "./modules/displays/displays.router";
 import { gamesRouter } from "./modules/games/games.router";
 import { matchesRouter } from "./modules/matches/matches.router";
-import { matchPeriodsRouter } from "./modules/matchPeriods/matchPeriods.router";
+import { matchPeriodsRouter } from "./modules/match-periods/match-periods.router";
 import { regionsRouter } from "./modules/regions/regions.router";
 import { scoresRouter } from "./modules/scores/scores.router";
 import { shepherdsRouter } from "./modules/sheperds/shepherds.router";
-import { startingZonesRouter } from "./modules/startingZones/startingZones.router";
+import { startingZonesRouter } from "./modules/starting-zones/starting-zones.router";
 import { teamsRouter } from "./modules/teams/teams.router";
 import { venuesRouter } from "./modules/venues/venues.router";
 import { streamRouter } from "./trpc/stream";
