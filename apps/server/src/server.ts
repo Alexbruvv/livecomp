@@ -15,6 +15,8 @@ import { matchHoldsJob } from "./jobs/matchHolds";
 import { auth } from "./auth";
 import { users } from "../auth-schema";
 import { eq } from "drizzle-orm";
+import { MatchHooksJob } from "./jobs/hooks";
+import setupMatchEndedListener from "./listeners/match-ended";
 
 program
     .name("livecomp-server")
@@ -70,7 +72,11 @@ program
 
         displaysJob.start();
         matchHoldsJob.start();
+        new MatchHooksJob();
         log.info("Cron jobs started");
+
+        setupMatchEndedListener();
+        log.info("Listeners set up");
     });
 
 program.command("add-superadmin-user <email> <password>").action(async (email: string, password: string) => {

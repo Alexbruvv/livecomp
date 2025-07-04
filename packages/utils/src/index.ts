@@ -1,4 +1,4 @@
-import { competitionChecks } from "./checks";
-import { CompetitionClock } from "./competitionClock";
+export { competitionChecks } from "./checks";
+export { CompetitionClock, type MatchTimings } from "./competitionClock";
+export { type FullCompetition } from "./types";
 
-export { CompetitionClock, competitionChecks };

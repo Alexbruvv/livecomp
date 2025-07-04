@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import type { ExcludeNull, MatchStatus } from "./types";
 import type { AppRouterOutput, MatchPeriod } from "@livecomp/server/";
 
-interface MatchTimings {
+export interface MatchTimings {
     startsAt: DateTime;
     endsAt: DateTime | null;
     stagingOpensAt: DateTime;
