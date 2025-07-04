@@ -11,5 +11,5 @@ export const matchFileSchema = z.object({
     ),
 });
 
-export type MatchFileSchema = z.infer<typeof matchFileSchema>;
+export type MatchFileData = z.infer<typeof matchFileSchema>;
 

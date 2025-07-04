@@ -3,6 +3,7 @@ import { loadCliConfig } from "../../module/config";
 import createCustomAuthClient from "../../module/auth";
 
 export const authStatusCommand = new Command("status")
+    .alias("check")
     .description("Check the authentication status of the Livecomp CLI")
     .action(async () => {
         const config = await loadCliConfig();

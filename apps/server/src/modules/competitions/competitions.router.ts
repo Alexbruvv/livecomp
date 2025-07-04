@@ -128,8 +128,6 @@ export const competitionsRouter = router({
                 .sort((a, b) => a.sort - b.sort)
                 .map(({ team }) => team);
 
-            console.log(teams.length);
-
             let sequenceNumber = 0;
 
             for (const matchTeamIndexes of parsedSchedule) {
