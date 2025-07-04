@@ -3,7 +3,7 @@ import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { insertTeamSchema, teams } from "../../db/schema/teams";
 import { teamsRepository } from "./teams.repository";
 import { and, eq } from "drizzle-orm";
-import { manualPointsAdjustmentsRepository } from "../scores/manualPointsAdjustments.repository";
+import { manualPointsAdjustmentsRepository } from "../scores/manual-points-adjustments.repository";
 import { manualPointsAdjustments } from "../../db/schema/scores";
 import { matchesRepository } from "../matches/matches.repository";
 import { matches } from "../../db/schema/matches";

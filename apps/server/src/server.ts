@@ -11,7 +11,7 @@ import { displaysJob } from "./jobs/displays";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "path";
 import { api } from "./api/api";
-import { matchHoldsJob } from "./jobs/matchHolds";
+import { matchHoldsJob } from "./jobs/match-holds";
 import { auth } from "./auth";
 import { users } from "../auth-schema";
 import { eq } from "drizzle-orm";

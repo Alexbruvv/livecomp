@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import DisplayOverlay from "./DisplayOverlay";
 import { useNavigate } from "@tanstack/react-router";
 import { useCookies } from "react-cookie";
-import useInterval from "../../hooks/useInterval";
+import useInterval from "../../hooks/use-interval";
 
 export default function DisplayController({ displayId }: { displayId: string }) {
     const navigate = useNavigate();

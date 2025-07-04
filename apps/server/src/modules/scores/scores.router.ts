@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { matches } from "../../db/schema/matches";
 import { matchScoreEntries } from "../../db/schema/scores";
 import { TRPCError } from "@trpc/server";
-import { matchScoreEntriesRepository } from "./matchScoreEntries.repository";
+import { matchScoreEntriesRepository } from "./match-score-entries.repository";
 
 const nuclearCleanupValidator = z.object({
     teams: z.array(
