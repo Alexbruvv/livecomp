@@ -2,12 +2,13 @@ import { Command } from "commander";
 import { createApiClient } from "../../module/api";
 import { loadCliConfig } from "../../module/config";
 import { competitionChecks } from "@livecomp/utils";
-import chalk from "chalk";
 import createCustomAuthClient from "../../module/auth";
+import { TablePrinter } from "../../util/table-printer";
 
 export const checkCommand = new Command("check")
     .description("Run checks on the selected competition")
-    .action(async () => {
+    .argument("[check]", "Optional identifier of specific check to run")
+    .action(async (checkId: string | undefined) => {
         const config = await loadCliConfig();
         const authClient = createCustomAuthClient({ baseUrl: config.instance.server_url });
         const { data } = await authClient.getSession();
@@ -33,15 +34,57 @@ export const checkCommand = new Command("check")
             return;
         }
 
+        if (checkId) {
+            const check = competitionChecks.find((c) => c.identifier === checkId.toLowerCase());
+            if (!check) {
+                console.log(`Check with ID '${checkId}' not found.`);
+                return;
+            }
+
+            const result = check.check(competition);
+            console.log(`Check ID: ${check.identifier}`);
+            console.log(`Description: ${check.description}`);
+            console.log(`Passed: ${result.success ? "Yes" : "No"}`);
+            if (!result.success) {
+                console.log(`Message: ${result.message}`);
+            }
+
+            return;
+        }
+
+        const tablePrinter = new TablePrinter<{
+            identifier: string;
+            description: string;
+            passed: string;
+            message: string;
+        }>({
+            identifier: {
+                header: "ID",
+            },
+            description: {
+                header: "Description",
+            },
+            passed: {
+                header: "Passed",
+            },
+            message: {
+                header: "Message",
+            },
+        });
+
         for (const check of competitionChecks) {
-            const prefix = `${chalk.blueBright(check.identifier)} (${check.description})`;
             const result = check.check(competition);
 
-            if (result.success) {
-                console.log(`${prefix}: ${chalk.greenBright("Passed")}`);
-            } else {
-                console.log(`${prefix}: ${chalk.red(`Failed. ${result.message}`)}`);
-            }
+            tablePrinter.addRow({
+                identifier: check.identifier,
+                description: check.description.length > 50 ? `${check.description.slice(0, 50)}...` : check.description,
+                passed: result.success ? "Yes" : "No",
+                message: result.success ? "" : result.message,
+            });
         }
+
+        tablePrinter.print();
+
+        console.log("\nTo get the full description of a specific check, use 'livecomp comp check <check_id>'");
     });
 

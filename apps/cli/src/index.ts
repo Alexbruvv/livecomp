@@ -4,6 +4,7 @@ import { initCommand } from "./command/init";
 import { authCommand } from "./command/auth/auth";
 import { competitionCommand } from "./command/competition/competition";
 import { userConfig } from "./module/user-config/user-config";
+import { getCommand } from "./command/get/get";
 
 userConfig.ensureConfigDirectoryExists();
 
@@ -13,7 +14,8 @@ program
     .version(version)
     .addCommand(initCommand)
     .addCommand(authCommand)
-    .addCommand(competitionCommand);
+    .addCommand(competitionCommand)
+    .addCommand(getCommand);
 
 program.parse();
 
