@@ -1,14 +1,15 @@
 import { api } from "../../../utils/trpc";
 import { RoutedLink } from "../../../components/console/util/RoutedLink";
 import EditMatchAssignmentsModalButton from "../../../components/console/matches/EditMatchAssignmentsModalButton";
-import { createFileRoute } from "@tanstack/react-router";
-import { SpaceBetween, Header, Container, KeyValuePairs } from "@cloudscape-design/components";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { SpaceBetween, Header, Container, KeyValuePairs, Button } from "@cloudscape-design/components";
 import EditMatchModalButton from "../../../components/console/matches/EditMatchModalButton";
 import useCompetitionClock from "../../../hooks/use-competition-clock";
 import { DateTime } from "luxon";
 import MatchStatusIndicator from "../../../components/console/matches/MatchStatusIndicator";
 import NuclearCleanupScorer from "../../../components/console/scorer/NuclearCleanupScorer";
 import useDateTime from "../../../hooks/use-date-time";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,
@@ -19,18 +20,74 @@ export const Route = createFileRoute("/console/competitions/$competitionId/match
 
 function RouteComponent() {
     const { matchId, competitionId } = Route.useParams();
+    const navigate = useNavigate();
 
     const { data: match } = api.matches.fetchById.useQuery({ id: matchId });
     const { data: competition } = api.competitions.fetchById.useQuery({
         id: competitionId,
     });
 
+    const nextMatchId = useMemo(() => {
+        if (!competition || !match) return null;
+
+        const sequenceNumber = competition.matches
+            .map((m) => m.sequenceNumber)
+            .filter((num) => num > match.sequenceNumber)
+            .sort((a, b) => a - b)[0];
+        if (sequenceNumber === undefined) return null;
+
+        return competition.matches.find((m) => m.sequenceNumber === sequenceNumber)?.id ?? null;
+    }, [competition, match]);
+
+    const previousMatchId = useMemo(() => {
+        if (!competition || !match) return null;
+
+        const sequenceNumbers = competition.matches
+            .map((m) => m.sequenceNumber)
+            .filter((num) => num < match.sequenceNumber)
+            .sort((a, b) => a - b);
+        const sequenceNumber = sequenceNumbers[sequenceNumbers.length - 1];
+        if (sequenceNumber === undefined) return null;
+
+        return competition.matches.find((m) => m.sequenceNumber === sequenceNumber)?.id ?? null;
+    }, [competition, match]);
+
     const competitionClock = useCompetitionClock(competition);
     useDateTime();
 
     return (
         <SpaceBetween size="s">
-            <Header variant="h1">{match?.name ?? "..."}</Header>
+            <Header
+                variant="h1"
+                actions={
+                    <SpaceBetween size="s" direction="horizontal">
+                        <Button
+                            variant="icon"
+                            iconName="arrow-left"
+                            disabled={!previousMatchId}
+                            onClick={() =>
+                                navigate({
+                                    to: "/console/competitions/$competitionId/matches/$matchId",
+                                    params: { competitionId: competitionId, matchId: previousMatchId! },
+                                })
+                            }
+                        ></Button>
+                        <Button
+                            variant="icon"
+                            iconName="arrow-right"
+                            disabled={!nextMatchId}
+                            onClick={() =>
+                                navigate({
+                                    to: "/console/competitions/$competitionId/matches/$matchId",
+                                    params: { competitionId: competitionId, matchId: nextMatchId! },
+                                })
+                            }
+                        ></Button>
+                    </SpaceBetween>
+                }
+            >
+                {match?.name ?? "..."}
+            </Header>
 
             <Container
                 header={
