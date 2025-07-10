@@ -2,6 +2,7 @@
     "name": "@livecomp/server",
     "private": true,
     "version": "0.0.0",
+    "main": "src/server.ts",
     "scripts": {
         "dev": "bun run --watch src/server.ts start",
         "db:generate": "bun --bun drizzle-kit generate",
