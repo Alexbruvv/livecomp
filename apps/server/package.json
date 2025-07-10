@@ -1,8 +1,10 @@
 {
     "name": "@livecomp/server",
     "private": true,
-    "version": "0.0.1",
-    "main": "src/server.ts",
+    "version": "0.0.0",
+    "exports": {
+        ".": "./src/server.ts"
+    },
     "scripts": {
         "dev": "bun run --watch src/server.ts start",
         "db:generate": "bun --bun drizzle-kit generate",
@@ -42,3 +44,4 @@
         "zod": "^3.23.8"
     }
 }
+

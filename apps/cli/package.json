@@ -1,7 +1,7 @@
 {
     "name": "@livecomp/cli",
     "private": false,
-    "version": "0.5.0",
+    "version": "0.6.0",
     "module": "src/index.ts",
     "type": "module",
     "bin": "src/index.ts",
@@ -27,3 +27,4 @@
         "zod-config": "^0.1.3"
     }
 }
+

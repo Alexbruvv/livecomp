@@ -1,6 +1,9 @@
 {
     "name": "@livecomp/shared",
-    "main": "src/index.ts",
+    "version": "0.0.0",
+    "exports": {
+        ".": "./src/index.ts"
+    },
     "private": true,
     "devDependencies": {
         "@types/bun": "latest"
