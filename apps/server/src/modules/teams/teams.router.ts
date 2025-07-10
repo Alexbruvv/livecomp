@@ -49,9 +49,10 @@ export const teamsRouter = router({
                 where: eq(teams.competitionId, competitionId),
             });
 
-            const scores: Record<string, { leaguePoints: number; gamePoints: number }> = Object.fromEntries(
-                selectedTeams.map((teams) => [teams.id, { leaguePoints: 0, gamePoints: 0 }])
-            );
+            const scores: Record<string, { leaguePoints: number; gamePoints: number; matchCount: number }> =
+                Object.fromEntries(
+                    selectedTeams.map((teams) => [teams.id, { leaguePoints: 0, gamePoints: 0, matchCount: 0 }])
+                );
 
             for (const team of selectedTeams) {
                 const manualAdjustments = await manualPointsAdjustmentsRepository.findMany({
@@ -71,6 +72,7 @@ export const teamsRouter = router({
             for (const match of scoredMatches.filter((match) => !!match.scoreEntry)) {
                 for (const [teamId, points] of Object.entries(match.scoreEntry!.leaguePoints)) {
                     scores[teamId].leaguePoints += points;
+                    scores[teamId].matchCount++;
                 }
 
                 for (const [teamId, points] of Object.entries(match.scoreEntry!.gamePoints)) {

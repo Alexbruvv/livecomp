@@ -41,6 +41,7 @@ function RouteComponent() {
                             <th>Team</th>
                             <th>League Points</th>
                             <th>Game Points</th>
+                            <th>Matches Played</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,6 +50,7 @@ function RouteComponent() {
                                 <td>{teams?.find((team) => team.id === teamId)?.shortName}</td>
                                 <td>{points.leaguePoints}</td>
                                 <td>{points.gamePoints}</td>
+                                <td>{points.matchCount}</td>
                             </tr>
                         ))}
                     </tbody>
