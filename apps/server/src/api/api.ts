@@ -1,10 +1,8 @@
 import cors from "@elysiajs/cors";
 import Elysia from "elysia";
-import { competitionsRepository } from "../modules/competitions/competitions.repository";
-import { eq } from "drizzle-orm";
-import { competitions } from "../db/schema/competitions";
 import { CompetitionClock } from "@livecomp/utils";
 import { auth } from "../auth";
+import { getFullCompetition } from "../modules/competitions/query";
 
 export const api = new Elysia()
     .use(cors())
@@ -13,24 +11,7 @@ export const api = new Elysia()
         new Elysia({ prefix: "api" })
             .get("now", () => new Date().toISOString())
             .get("/:competitionId/live", async ({ params: { competitionId } }) => {
-                const competition = await competitionsRepository.findFirst({
-                    where: eq(competitions.id, competitionId),
-                    with: {
-                        game: {
-                            with: { startingZones: true },
-                        },
-                        matches: {
-                            with: {
-                                assignments: true,
-                                scoreEntry: true,
-                            },
-                        },
-                        matchPeriods: true,
-                        pauses: true,
-                        venue: true,
-                        teams: true,
-                    },
-                });
+                const competition = await getFullCompetition(competitionId);
 
                 if (!competition) return null;
 

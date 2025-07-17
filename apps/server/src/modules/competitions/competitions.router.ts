@@ -2,13 +2,13 @@ import { z } from "zod";
 import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { competitions, insertCompetitionSchema, pauses } from "../../db/schema/competitions";
 import { competitionsRepository } from "./competitions.repository";
-import { and, asc, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { teamsRepository } from "../teams/teams.repository";
 import { matchesRepository } from "../matches/matches.repository";
 import { matchAssignmentsRepository } from "../match-assignments/match-assignments.repository";
-import { matches, matchPeriods } from "../../db/schema/matches";
 import { pausesRepository } from "../pauses/pauses.repository";
+import { getFullCompetition } from "./query";
 
 export const competitionsRouter = router({
     create: restrictedProcedure({ competition: ["create"] })
@@ -32,34 +32,7 @@ export const competitionsRouter = router({
             })
         )
         .query(async ({ input: { id } }) => {
-            return await competitionsRepository.findFirst({
-                where: eq(competitions.id, id),
-                with: {
-                    teams: true,
-                    venue: true,
-                    game: {
-                        with: {
-                            startingZones: true,
-                        },
-                    },
-                    matches: {
-                        with: {
-                            assignments: {
-                                with: {
-                                    team: true,
-                                    autoConfig: true,
-                                },
-                            },
-                            scoreEntry: true,
-                        },
-                        orderBy: asc(matches.sequenceNumber),
-                    },
-                    matchPeriods: {
-                        orderBy: asc(matchPeriods.startsAt),
-                    },
-                    pauses: true,
-                },
-            });
+            return await getFullCompetition(id);
         }),
 
     update: restrictedProcedure({ competition: ["update"] })
