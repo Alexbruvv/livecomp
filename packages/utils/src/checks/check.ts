@@ -1,5 +1,4 @@
-import type { AppRouterOutput } from "../../../../apps/server/src/server";
-import type { ExcludeNull } from "../types";
+import type { FullCompetition } from "../types";
 
 interface SuccessfulCheckResult {
     success: true;
@@ -20,7 +19,7 @@ type CheckResult = SuccessfulCheckResult | FailedCheckResult;
 interface Check {
     identifier: string;
     description: string;
-    check: (competition: ExcludeNull<AppRouterOutput["competitions"]["fetchById"]>) => CheckResult;
+    check: (competition: FullCompetition) => CheckResult;
 }
 
 export const check = (check: Check) => check;

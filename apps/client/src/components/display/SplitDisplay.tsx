@@ -2,17 +2,17 @@ import { Fragment, PropsWithChildren, useMemo } from "react";
 import useDateTime from "../../hooks/use-date-time";
 import { api } from "../../utils/trpc";
 import { array } from "../../utils/array";
-import { AppRouterOutput } from "@livecomp/server";
 import MatchBox from "./MatchBox";
 import { DateTime } from "luxon";
 import { formatClock } from "../../utils/clock";
 import useCompetitionClock from "../../hooks/use-competition-clock";
 import DisplayOverlay from "./DisplayOverlay";
+import { FullCompetition } from "@livecomp/utils";
 
 export default function SplitDisplay({
     competition,
     children,
-}: { competition?: AppRouterOutput["competitions"]["fetchById"] } & PropsWithChildren) {
+}: { competition?: FullCompetition | null } & PropsWithChildren) {
     const { data: teams } = api.teams.fetchAll.useQuery({ filters: { competitionId: competition?.id ?? "" } });
     const chunkedTeams = useMemo(() => [...array.chunk(teams ?? [], 3)], [teams]);
 

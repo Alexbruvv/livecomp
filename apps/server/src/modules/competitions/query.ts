@@ -38,5 +38,3 @@ export async function getFullCompetition(id: string) {
     });
 }
 
-export type FullCompetition = NonNullable<Awaited<ReturnType<typeof getFullCompetition>>>;
-

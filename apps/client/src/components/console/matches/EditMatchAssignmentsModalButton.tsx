@@ -15,6 +15,7 @@ import { AppRouterOutput } from "@livecomp/server";
 import { ExcludeNull } from "../../../utils/types";
 import { api } from "../../../utils/trpc";
 import { showFlashbar } from "../../../state/flashbars";
+import { FullCompetition } from "@livecomp/utils";
 
 type FormData = Record<
     string,
@@ -31,7 +32,7 @@ const TYPE_OPTIONS = [
 
 function generateDefaultData(
     match: ExcludeNull<AppRouterOutput["matches"]["fetchById"]>,
-    competition: ExcludeNull<AppRouterOutput["competitions"]["fetchById"]>
+    competition: FullCompetition
 ): FormData {
     return Object.fromEntries(
         competition.game.startingZones.map((startingZone) => {
@@ -60,7 +61,7 @@ export default function EditMatchAssignmentsModalButton({
     competition,
 }: {
     match: ExcludeNull<AppRouterOutput["matches"]["fetchById"]>;
-    competition: ExcludeNull<AppRouterOutput["competitions"]["fetchById"]>;
+    competition: FullCompetition;
 }) {
     const [visible, setVisible] = useState(false);
 

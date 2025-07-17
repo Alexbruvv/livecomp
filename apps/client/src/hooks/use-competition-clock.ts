@@ -1,8 +1,7 @@
 import { useMemo } from "react";
-import { CompetitionClock } from "@livecomp/utils";
-import { AppRouterOutput } from "@livecomp/server";
+import { CompetitionClock, FullCompetition } from "@livecomp/utils";
 
-export default function useCompetitionClock<T extends AppRouterOutput["competitions"]["fetchById"] | undefined>(
+export default function useCompetitionClock<T extends FullCompetition | null | undefined>(
     competition: T
 ): T extends undefined ? CompetitionClock | undefined : CompetitionClock {
     return useMemo(() => {

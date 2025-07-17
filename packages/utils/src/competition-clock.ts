@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import type { ExcludeNull, MatchStatus } from "./types";
-import type { AppRouterOutput, MatchPeriod } from "@livecomp/server/";
+import type { FullCompetition, MatchStatus } from "./types";
+import type { MatchPeriod } from "@livecomp/server/";
 
 export interface MatchTimings {
     startsAt: DateTime;
@@ -18,7 +18,7 @@ export class CompetitionClock {
      * @param testNow Allows overriding the current time for testing purposes
      */
     constructor(
-        private readonly competition: ExcludeNull<AppRouterOutput["competitions"]["fetchById"]>,
+        private readonly competition: FullCompetition,
         testNow?: DateTime
     ) {
         this.timings = this.computeMatchTimings();
