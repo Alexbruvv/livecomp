@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, unique, uuid, varchar } from "drizzle-orm/pg-core";
 import { baseColumns } from "./base";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
@@ -26,16 +26,20 @@ export const gameSchema = createSelectSchema(games);
 export const insertGameSchema = createInsertSchema(games);
 export type Game = InferSelectModel<typeof games>;
 
-export const startingZones = pgTable("starting_zones", {
-    ...baseColumns,
+export const startingZones = pgTable(
+    "starting_zones",
+    {
+        ...baseColumns,
 
-    name: varchar().unique().notNull(),
-    color: varchar().notNull(),
+        name: varchar().notNull(),
+        color: varchar().notNull(),
 
-    gameId: uuid()
-        .references(() => games.id, { onDelete: "cascade", onUpdate: "cascade" })
-        .notNull(),
-});
+        gameId: uuid()
+            .references(() => games.id, { onDelete: "cascade", onUpdate: "cascade" })
+            .notNull(),
+    },
+    (table) => [unique("unique_starting_zone_name_game_id").on(table.name, table.gameId)]
+);
 
 export const startingZonesRelations = relations(startingZones, ({ one }) => ({
     game: one(games, { fields: [startingZones.gameId], references: [games.id] }),

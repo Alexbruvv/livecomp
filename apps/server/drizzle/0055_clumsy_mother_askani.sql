@@ -1,0 +1,2 @@
+ALTER TABLE "starting_zones" DROP CONSTRAINT "starting_zones_name_unique";--> statement-breakpoint
+ALTER TABLE "starting_zones" ADD CONSTRAINT "unique_starting_zone_name_game_id" UNIQUE("name","game_id");
