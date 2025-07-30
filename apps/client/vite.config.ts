@@ -10,7 +10,7 @@ export default defineConfig({
         TanStackRouterVite(),
         react(),
         nodePolyfills({
-            include: ["crypto", "stream", "util"],
+            include: ["crypto", "stream", "util", "vm"],
         }),
     ],
     css: {
