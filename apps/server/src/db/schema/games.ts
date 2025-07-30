@@ -3,7 +3,7 @@ import { baseColumns } from "./base";
 import { relations, type InferSelectModel } from "drizzle-orm";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 
-export const scorer = pgEnum("scorer", ["nuclear_cleanup"]);
+export const scorer = pgEnum("scorer", ["nuclear_cleanup", "tin_can_rally"]);
 export type Scorer = (typeof scorer.enumValues)[number];
 
 export const games = pgTable("games", {

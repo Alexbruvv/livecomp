@@ -10,6 +10,7 @@ type FormData = z.infer<typeof insertGameSchema>;
 const scorerOptions: SelectProps.Options = [
     { value: undefined, label: "None" },
     { value: "nuclear_cleanup", label: "Nuclear Cleanup" },
+    { value: "tin_can_rally", label: "Tin Can Rally" },
 ];
 
 export default function GameFormFields({ form }: { form: UseFormReturn<FormData> }) {

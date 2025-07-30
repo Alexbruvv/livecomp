@@ -1,0 +1,1 @@
+ALTER TYPE "public"."scorer" ADD VALUE 'tin_can_rally';

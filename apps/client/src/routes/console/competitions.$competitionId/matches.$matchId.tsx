@@ -10,6 +10,7 @@ import NuclearCleanupScorer from "../../../components/console/scorer/NuclearClea
 import useDateTime from "../../../hooks/use-date-time";
 import { useMemo } from "react";
 import { useCompetition } from "../../../data/competition";
+import TinCanRallyScorer from "../../../components/console/scorer/TinCanRallyScorer";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,
@@ -225,6 +226,9 @@ function RouteComponent() {
             <Container header={<Header>Scorer</Header>}>
                 {match && competition?.game.scorer === "nuclear_cleanup" && (
                     <NuclearCleanupScorer match={match} game={competition.game} />
+                )}
+                {match && competition?.game.scorer === "tin_can_rally" && (
+                    <TinCanRallyScorer match={match} game={competition.game} />
                 )}
             </Container>
         </SpaceBetween>
