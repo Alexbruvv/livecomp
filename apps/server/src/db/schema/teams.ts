@@ -12,7 +12,7 @@ export const teams = pgTable(
         ...baseColumns,
 
         name: varchar().notNull(),
-        shortName: varchar().unique().notNull(),
+        shortName: varchar().notNull(),
 
         regionId: uuid()
             .references(() => regions.id, { onDelete: "restrict", onUpdate: "cascade" })
