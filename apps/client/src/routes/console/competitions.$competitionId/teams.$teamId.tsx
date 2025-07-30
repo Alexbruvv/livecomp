@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { api } from "../../../utils/trpc";
 import EditTeamModalButton from "../../../components/console/teams/EditTeamModalButton";
 import MatchesTable from "../../../components/console/matches/MatchesTable";
+import useRankings from "../../../hooks/use-rankings";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/teams/$teamId")({
     component: RouteComponent,
@@ -18,6 +19,8 @@ function RouteComponent() {
     const { data: competition } = api.competitions.fetchById.useQuery({ id: competitionId });
     const { data: region } = api.regions.fetchById.useQuery({ id: team?.regionId ?? "" }, { enabled: !!team });
     const { data: matches, isPending: matchesPending } = api.matches.fetchAll.useQuery({ filters: { teamId } });
+
+    const rankings = useRankings(competition);
 
     return (
         <SpaceBetween size="s">
@@ -37,7 +40,7 @@ function RouteComponent() {
                 }
             >
                 <KeyValuePairs
-                    columns={3}
+                    columns={4}
                     items={[
                         {
                             label: "Name",
@@ -50,6 +53,10 @@ function RouteComponent() {
                         {
                             label: "Region",
                             value: region?.name ?? "...",
+                        },
+                        {
+                            label: "League Rank",
+                            value: rankings ? rankings[team?.id ?? ""] : "...",
                         },
                     ]}
                 />

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
 import SplitDisplay from "../../../components/display/SplitDisplay";
 import { api } from "../../../utils/trpc";
+import useRankings from "../../../hooks/use-rankings";
 
 export const Route = createFileRoute("/display/$competitionId/leaderboard")({
     component: RouteComponent,
@@ -22,13 +23,21 @@ function RouteComponent() {
     const { data: teams } = api.teams.fetchAll.useQuery({ filters: { competitionId } });
     const { data: rawScores } = api.teams.fetchAllScores.useQuery({ competitionId });
 
-    const scores = useMemo(
-        () =>
-            Object.entries(rawScores ?? [])
-                .sort((a, b) => b[1].leaguePoints - a[1].leaguePoints || b[1].gamePoints - a[1].gamePoints)
-                .slice(0, 10),
-        [rawScores]
-    );
+    const rankings = useRankings(competition);
+    const scores = useMemo(() => {
+        if (!rankings || !rawScores) return [];
+        return Object.entries(rankings)
+            .slice(0, 10)
+            .map(([teamId]) => {
+                const teamScores = rawScores[teamId];
+                return {
+                    teamId,
+                    leaguePoints: teamScores?.leaguePoints ?? 0,
+                    gamePoints: teamScores?.gamePoints ?? 0,
+                    matchCount: teamScores?.matchCount ?? 0,
+                };
+            });
+    }, [rankings, rawScores]);
 
     return (
         <SplitDisplay competition={competition}>
@@ -45,12 +54,12 @@ function RouteComponent() {
                         </tr>
                     </thead>
                     <tbody>
-                        {scores.map(([teamId, points]) => (
-                            <tr key={teamId}>
-                                <td>{teams?.find((team) => team.id === teamId)?.shortName}</td>
-                                <td>{points.leaguePoints}</td>
-                                <td>{points.gamePoints}</td>
-                                <td>{points.matchCount}</td>
+                        {scores.map((scores) => (
+                            <tr key={scores.teamId}>
+                                <td>{teams?.find((team) => team.id === scores.teamId)?.shortName}</td>
+                                <td>{scores.leaguePoints}</td>
+                                <td>{scores.gamePoints}</td>
+                                <td>{scores.matchCount}</td>
                             </tr>
                         ))}
                     </tbody>
