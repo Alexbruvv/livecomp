@@ -64,3 +64,7 @@ export const matchHoldsJob = new CronJob("* * * * * *", async () => {
     }
 });
 
+export default function startMatchHoldsTask() {
+    matchHoldsJob.start();
+}
+

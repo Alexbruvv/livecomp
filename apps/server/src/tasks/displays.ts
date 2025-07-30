@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 import { and, eq, gt, lte } from "drizzle-orm";
 import { displays } from "../db/schema/displays";
 
-export const displaysJob = new CronJob("* * * * * *", async () => {
+const displaysJob = new CronJob("* * * * * *", async () => {
     const targetDate = DateTime.now().minus({ seconds: 10 }).toJSDate();
 
     await displaysRepository.update(
@@ -16,4 +16,8 @@ export const displaysJob = new CronJob("* * * * * *", async () => {
         { where: and(lte(displays.lastHeartbeat, targetDate), eq(displays.online, true)) }
     );
 });
+
+export default function startDisplaysTask() {
+    displaysJob.start();
+}
 

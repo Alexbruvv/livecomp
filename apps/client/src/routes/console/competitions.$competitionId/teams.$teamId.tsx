@@ -1,9 +1,10 @@
 import { Container, Header, KeyValuePairs, SpaceBetween } from "@cloudscape-design/components";
 import { createFileRoute } from "@tanstack/react-router";
-import { api } from "../../../utils/trpc";
 import EditTeamModalButton from "../../../components/console/teams/EditTeamModalButton";
 import MatchesTable from "../../../components/console/matches/MatchesTable";
 import useRankings from "../../../hooks/use-rankings";
+import { useCompetition } from "../../../data/competition";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/teams/$teamId")({
     component: RouteComponent,
@@ -15,10 +16,13 @@ export const Route = createFileRoute("/console/competitions/$competitionId/teams
 function RouteComponent() {
     const { teamId, competitionId } = Route.useParams();
 
-    const { data: team } = api.teams.fetchById.useQuery({ id: teamId });
-    const { data: competition } = api.competitions.fetchById.useQuery({ id: competitionId });
-    const { data: region } = api.regions.fetchById.useQuery({ id: team?.regionId ?? "" }, { enabled: !!team });
-    const { data: matches, isPending: matchesPending } = api.matches.fetchAll.useQuery({ filters: { teamId } });
+    const competition = useCompetition();
+    const team = useMemo(() => competition.teams.find((t) => t.id === teamId), [competition, teamId]);
+    const region = useMemo(() => competition.venue.regions.find((r) => r.id === team?.regionId), [competition, team]);
+    const matches = useMemo(
+        () => competition.matches.filter((m) => m.assignments.some((a) => a.teamId === teamId)),
+        [competition, teamId]
+    );
 
     const rankings = useRankings(competition);
 
@@ -62,7 +66,7 @@ function RouteComponent() {
                 />
             </Container>
 
-            <MatchesTable matchesPending={matchesPending} matches={matches} competitionId={competitionId} />
+            <MatchesTable matchesPending={false} matches={matches} competitionId={competitionId} />
         </SpaceBetween>
     );
 }

@@ -1,31 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
-import { api } from "../../../utils/trpc";
+
 import SplitDisplay from "../../../components/display/SplitDisplay";
 import useCompetitionClock from "../../../hooks/use-competition-clock";
 import useDateTime from "../../../hooks/use-date-time";
+import { useCompetition } from "../../../data/competition";
 
 export const Route = createFileRoute("/display/$competitionId/staging")({
     component: RouteComponent,
 });
 
 function RouteComponent() {
-    const { competitionId } = Route.useParams();
-
     useEffect(() => {
         import("../../../styles/display/staging.css");
     }, []);
-    const { data: competition } = api.competitions.fetchById.useQuery({
-        id: competitionId,
-    });
 
+    const competition = useCompetition();
     const competitionClock = useCompetitionClock(competition);
     const now = useDateTime(competitionClock);
 
     const matches = useMemo(
         () =>
             competition && competitionClock
-                ? competition?.matches
+                ? competition.matches
                       .filter((match) => {
                           const timings = competitionClock.getMatchTimings(match.id);
 
@@ -40,7 +37,7 @@ function RouteComponent() {
 
     return (
         <SplitDisplay competition={competition}>
-            <h1 className="text-white text-4xl font-bold">Staging - {competition?.name}</h1>
+            <h1 className="text-white text-4xl font-bold">Staging - {competition.name}</h1>
 
             <div className="w-full my-24 flex flex-col justify-items-center">
                 <table className="w-full mx-auto my-auto">

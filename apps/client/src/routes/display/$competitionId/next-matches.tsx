@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import SplitDisplay from "../../../components/display/SplitDisplay";
-import { api } from "../../../utils/trpc";
 import { useMemo } from "react";
 import { DateTime } from "luxon";
 import useCompetitionClock from "../../../hooks/use-competition-clock";
 import useDateTime from "../../../hooks/use-date-time";
+import { useCompetition } from "../../../data/competition";
 
 export const Route = createFileRoute("/display/$competitionId/next-matches")({
     component: RouteComponent,
@@ -14,22 +14,18 @@ export const Route = createFileRoute("/display/$competitionId/next-matches")({
 });
 
 function RouteComponent() {
-    const { competitionId } = Route.useParams();
-
-    const { data: competition } = api.competitions.fetchById.useQuery({
-        id: competitionId,
-    });
-    const { data: teams } = api.teams.fetchAll.useQuery({ filters: { competitionId: competitionId } });
+    const competition = useCompetition();
+    const teams = useMemo(() => competition.teams, [competition]);
 
     const competitionClock = useCompetitionClock(competition);
     const now = useDateTime(competitionClock);
 
     const nextMatchTimes = useMemo<Record<string, DateTime>>(() => {
         return Object.fromEntries(
-            (teams ?? [])
+            teams
                 .map((team) => {
-                    for (const [matchId, timings] of Object.entries(competitionClock?.getTimings() ?? {})) {
-                        const match = (competition?.matches ?? []).find((match) => match.id === matchId);
+                    for (const [matchId, timings] of Object.entries(competitionClock.getTimings())) {
+                        const match = competition.matches.find((match) => match.id === matchId);
                         if (!match) continue;
                         if (!match.assignments.some((assignment) => assignment.teamId === team.id)) continue;
 
@@ -42,7 +38,7 @@ function RouteComponent() {
                 })
                 .filter((entry) => !!entry)
         );
-    }, [competition?.matches, competitionClock, now, teams]);
+    }, [competition.matches, competitionClock, now, teams]);
 
     return (
         <SplitDisplay competition={competition}>

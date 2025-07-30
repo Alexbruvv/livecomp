@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import SplitDisplay from "../../../components/display/SplitDisplay";
 import { api } from "../../../utils/trpc";
 import useRankings from "../../../hooks/use-rankings";
+import { useCompetition } from "../../../data/competition";
 
 export const Route = createFileRoute("/display/$competitionId/leaderboard")({
     component: RouteComponent,
@@ -17,10 +18,8 @@ function RouteComponent() {
     useEffect(() => {
         import("../../../styles/display/leaderboard.css");
     }, []);
-    const { data: competition } = api.competitions.fetchById.useQuery({
-        id: competitionId,
-    });
-    const { data: teams } = api.teams.fetchAll.useQuery({ filters: { competitionId } });
+    const competition = useCompetition();
+    const teams = useMemo(() => competition.teams, [competition]);
     const { data: rawScores } = api.teams.fetchAllScores.useQuery({ competitionId });
 
     const rankings = useRankings(competition);

@@ -7,16 +7,20 @@ import { createTrpcContext } from "./trpc/trpc";
 import { drizzleClient } from "./db/db";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { displaysRepository } from "./modules/displays/displays.repository";
-import { displaysJob } from "./jobs/displays";
+
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "path";
 import { api } from "./api/api";
-import { matchHoldsJob } from "./jobs/match-holds";
+
 import { auth } from "./auth";
 import { users } from "../auth-schema";
 import { eq } from "drizzle-orm";
-import { MatchHooksJob } from "./jobs/hooks";
+
 import setupMatchEndedListener from "./listeners/match-ended";
+import startDisplaysTask from "./tasks/displays";
+import startMatchHoldsTask from "./tasks/match-holds";
+import startMatchHooksTask from "./tasks/hooks";
+import startPatchCompetitionTask from "./tasks/patch-competition";
 
 program
     .name("livecomp-server")
@@ -70,10 +74,11 @@ program
 
         log.info(`Server listening on port ${port}`);
 
-        displaysJob.start();
-        matchHoldsJob.start();
-        new MatchHooksJob();
-        log.info("Cron jobs started");
+        startDisplaysTask();
+        startMatchHoldsTask();
+        startMatchHooksTask();
+        startPatchCompetitionTask();
+        log.info("Tasks started");
 
         setupMatchEndedListener();
         log.info("Listeners set up");
@@ -111,6 +116,8 @@ program.parse(process.argv);
 export type AppRouter = typeof appRouter;
 export type AppRouterInput = inferRouterInputs<AppRouter>;
 export type AppRouterOutput = inferRouterOutputs<AppRouter>;
+
+export type { CompetitionDiffEvent } from "./trpc/stream";
 
 export type { Competition, Pause } from "./db/schema/competitions";
 export type { Display } from "./db/schema/displays";

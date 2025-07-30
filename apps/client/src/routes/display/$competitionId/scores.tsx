@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import SplitDisplay from "../../../components/display/SplitDisplay";
 import { api } from "../../../utils/trpc";
+import { useCompetition } from "../../../data/competition";
 
 export const Route = createFileRoute("/display/$competitionId/scores")({
     component: RouteComponent,
@@ -11,8 +12,8 @@ export const Route = createFileRoute("/display/$competitionId/scores")({
 
 function RouteComponent() {
     const { competitionId } = Route.useParams();
-    const { data: competition } = api.competitions.fetchById.useQuery({ id: competitionId });
-    const { data: teams } = api.teams.fetchAll.useQuery({ filters: { competitionId } }, { initialData: [] });
+    const competition = useCompetition();
+    const { teams } = competition;
     const { data: scores } = api.teams.fetchAllScores.useQuery({ competitionId });
 
     return (

@@ -8,6 +8,7 @@ import Restricted from "../../../../components/console/util/Restricted";
 import MatchesTable from "../../../../components/console/matches/MatchesTable";
 import { useMemo } from "react";
 import useCompetitionClock from "../../../../hooks/use-competition-clock";
+import { useCompetition } from "../../../../data/competition";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matchPeriods/$matchPeriodId/")({
     component: RouteComponent,
@@ -19,17 +20,20 @@ export const Route = createFileRoute("/console/competitions/$competitionId/match
 function RouteComponent() {
     const { competitionId, matchPeriodId } = Route.useParams();
 
-    const { data: competition } = api.competitions.fetchById.useQuery({ id: competitionId });
-    const { data: matchPeriod } = api.matchPeriods.fetchById.useQuery({ id: matchPeriodId });
+    const competition = useCompetition();
+    const matchPeriod = useMemo(
+        () => competition.matchPeriods.find((mp) => mp.id === matchPeriodId),
+        [competition, matchPeriodId]
+    );
 
     const competitionClock = useCompetitionClock(competition);
 
     const matches = useMemo(
         () =>
-            competition?.matches?.filter(
+            competition.matches?.filter(
                 (m) => competitionClock?.getMatchTimings(m.id)?.matchPeriod.id === matchPeriodId
             ),
-        [competition?.matches, competitionClock, matchPeriodId]
+        [competition.matches, competitionClock, matchPeriodId]
     );
 
     const { mutate: resetMatchPeriod, isPending: resetPending } = api.devTools.resetMatchPeriod.useMutation();
@@ -100,11 +104,7 @@ function RouteComponent() {
                 />
             </Container>
 
-            <MatchesTable
-                matches={matches ?? []}
-                matchesPending={!competition || !competitionClock}
-                competitionId={competitionId}
-            />
+            <MatchesTable matches={matches ?? []} matchesPending={false} competitionId={competitionId} />
         </SpaceBetween>
     );
 }

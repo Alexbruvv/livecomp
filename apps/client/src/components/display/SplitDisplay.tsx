@@ -9,10 +9,7 @@ import useCompetitionClock from "../../hooks/use-competition-clock";
 import DisplayOverlay from "./DisplayOverlay";
 import { FullCompetition } from "@livecomp/utils";
 
-export default function SplitDisplay({
-    competition,
-    children,
-}: { competition?: FullCompetition | null } & PropsWithChildren) {
+export default function SplitDisplay({ competition, children }: { competition: FullCompetition } & PropsWithChildren) {
     const { data: teams } = api.teams.fetchAll.useQuery({ filters: { competitionId: competition?.id ?? "" } });
     const chunkedTeams = useMemo(() => [...array.chunk(teams ?? [], 3)], [teams]);
 
@@ -20,7 +17,7 @@ export default function SplitDisplay({
     const time = useDateTime(competitionClock);
 
     const currentMatch = useMemo(() => {
-        const currentMatchId = competitionClock?.getCurrentMatchId(time) ?? competitionClock?.getPreviousMatchId(time);
+        const currentMatchId = competitionClock.getCurrentMatchId(time) ?? competitionClock.getPreviousMatchId(time);
 
         if (currentMatchId) {
             return competition?.matches.find((match) => match.id === currentMatchId);
@@ -29,8 +26,7 @@ export default function SplitDisplay({
         return undefined;
     }, [competition?.matches, competitionClock, time]);
     const currentMatchStagingClose = useMemo(() => {
-        const timings =
-            currentMatch && competitionClock ? competitionClock.getMatchTimings(currentMatch.id) : undefined;
+        const timings = currentMatch ? competitionClock.getMatchTimings(currentMatch.id) : undefined;
 
         const secondsValue = Math.max(
             0,
@@ -49,12 +45,12 @@ export default function SplitDisplay({
         }
 
         return undefined;
-    }, [competition?.matches, competitionClock, time]);
+    }, [competition.matches, competitionClock, time]);
     const nextMatchStagingClose = useMemo(() => {
         const secondsValue = Math.max(
             0,
             (nextMatch
-                ? competitionClock?.getMatchTimings(nextMatch.id)?.stagingClosesAt.diff(time).as("seconds")
+                ? competitionClock.getMatchTimings(nextMatch.id)?.stagingClosesAt.diff(time).as("seconds")
                 : 0) ?? 0
         );
 
@@ -62,17 +58,14 @@ export default function SplitDisplay({
         return formatClock(secondsValue);
     }, [nextMatch, competitionClock, time]);
 
-    const { data: matches } = api.matches.fetchAll.useQuery(
-        { filters: { competitionId: competition?.id } },
-        { enabled: !!competition }
-    );
+    const { matches } = competition;
 
     const nextMatchTimes = useMemo<Record<string, DateTime>>(() => {
         return Object.fromEntries(
             (teams ?? [])
                 .map((team) => {
-                    for (const [matchId, timings] of Object.entries(competitionClock?.getTimings() ?? {})) {
-                        const match = (matches ?? []).find((match) => match.id === matchId);
+                    for (const [matchId, timings] of Object.entries(competitionClock.getTimings() ?? {})) {
+                        const match = matches.find((match) => match.id === matchId);
                         if (!match) continue;
                         if (!match.assignments.some((assignment) => assignment.teamId === team.id)) continue;
 
@@ -89,7 +82,7 @@ export default function SplitDisplay({
 
     return (
         <div className="w-screen h-screen flex flex-row">
-            {competitionClock?.isPaused() && (
+            {competitionClock.isPaused() && (
                 <DisplayOverlay>
                     <h1 className="text-center text-white text-4xl font-mono">The competition is currently paused.</h1>
                 </DisplayOverlay>

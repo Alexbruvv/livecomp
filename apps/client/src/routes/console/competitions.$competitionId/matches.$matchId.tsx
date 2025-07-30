@@ -1,4 +1,3 @@
-import { api } from "../../../utils/trpc";
 import { RoutedLink } from "../../../components/console/util/RoutedLink";
 import EditMatchAssignmentsModalButton from "../../../components/console/matches/EditMatchAssignmentsModalButton";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -10,6 +9,7 @@ import MatchStatusIndicator from "../../../components/console/matches/MatchStatu
 import NuclearCleanupScorer from "../../../components/console/scorer/NuclearCleanupScorer";
 import useDateTime from "../../../hooks/use-date-time";
 import { useMemo } from "react";
+import { useCompetition } from "../../../data/competition";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,
@@ -22,10 +22,8 @@ function RouteComponent() {
     const { matchId, competitionId } = Route.useParams();
     const navigate = useNavigate();
 
-    const { data: match } = api.matches.fetchById.useQuery({ id: matchId });
-    const { data: competition } = api.competitions.fetchById.useQuery({
-        id: competitionId,
-    });
+    const competition = useCompetition();
+    const match = useMemo(() => competition.matches.find((m) => m.id === matchId), [competition, matchId]);
 
     const nextMatchId = useMemo(() => {
         if (!competition || !match) return null;

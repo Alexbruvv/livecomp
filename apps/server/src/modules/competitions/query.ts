@@ -7,10 +7,14 @@ import { competitions } from "../../db/schema/competitions";
 
 export const fullCompetitionQuery = {
     teams: true,
-    venue: true,
     game: {
         with: {
             startingZones: true,
+        },
+    },
+    venue: {
+        with: {
+            regions: true,
         },
     },
     matches: {

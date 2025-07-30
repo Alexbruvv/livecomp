@@ -4,7 +4,7 @@ import { competitionsRepository } from "../modules/competitions/competitions.rep
 import { asc } from "drizzle-orm";
 import { matches, matchPeriods } from "../db/schema/matches";
 import { log } from "../utils/log";
-import { streamEmitter, type CacheInvalidationEvent } from "../trpc/stream";
+import { stream, type CacheInvalidationEvent } from "../trpc/stream";
 import { DateTime } from "luxon";
 
 export const hooks = {
@@ -22,7 +22,7 @@ const timeHookMap: Partial<Record<keyof MatchTimings, keyof typeof hooks>> = {
     endsAt: "matchEnded",
 };
 
-export class MatchHooksJob {
+class MatchHooksTask {
     private static POLL_INTERVAL = 1000 * 10; // 10 seconds
     private competitions: FullCompetition[] = [];
     private scheduledHooks: Record<
@@ -34,10 +34,10 @@ export class MatchHooksJob {
         this.updateCompetitionState().catch((e) => log.error("Failed to update competition state", e));
         setInterval(
             () => this.updateCompetitionState().catch((e) => log.error("Failed to update competition state", e)),
-            MatchHooksJob.POLL_INTERVAL
+            MatchHooksTask.POLL_INTERVAL
         );
 
-        streamEmitter.on("invalidate", (event: CacheInvalidationEvent) => {
+        stream.streamEmitter.on("invalidate", (event: CacheInvalidationEvent) => {
             if (event.routerName === "competitions") {
                 this.updateCompetitionState().catch((e) => log.error("Failed to update competition state", e));
             }
@@ -131,5 +131,9 @@ export class MatchHooksJob {
             }
         }
     }
+}
+
+export default function startMatchHooksTask() {
+    new MatchHooksTask();
 }
 

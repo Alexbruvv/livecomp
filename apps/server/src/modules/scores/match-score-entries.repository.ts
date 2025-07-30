@@ -8,7 +8,7 @@ import { getFullCompetition } from "../competitions/query";
 import { matchesRepository } from "../matches/matches.repository";
 import { matches } from "../../db/schema/matches";
 import { CompetitionClock } from "@livecomp/utils";
-import { hooks } from "../../jobs/hooks";
+import { hooks } from "../../tasks/hooks";
 
 class MatchScoreEntriesRepository extends Repository<AppSchema, AppSchema["matchScoreEntries"], "matchScoreEntries"> {
     private async triggerScoresPublished(row: MatchScoreEntry) {

@@ -1,11 +1,8 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { CompetitionProvider } from "../../data/competition";
 
-export const Route = createFileRoute("/console/competitions/$competitionId")({
+export const Route = createFileRoute("/display/$competitionId")({
     component: RouteComponent,
-    beforeLoad: () => ({
-        title: "Manage competition",
-    }),
 });
 
 function RouteComponent() {

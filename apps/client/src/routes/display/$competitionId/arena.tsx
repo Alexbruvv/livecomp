@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { api } from "../../../utils/trpc";
 import { useMemo } from "react";
 import { formatClock } from "../../../utils/clock";
 import useDateTime from "../../../hooks/use-date-time";
 import useCompetitionClock from "../../../hooks/use-competition-clock";
 import { DateTime } from "luxon";
+import { useCompetition } from "../../../data/competition";
 
 const searchSchema = z.object({
     startingZoneId: z.string(),
@@ -28,15 +28,14 @@ enum DisplayMode {
 }
 
 function RouteComponent() {
-    const { competitionId } = Route.useParams();
     const { startingZoneId } = Route.useSearch();
 
-    const { data: competition } = api.competitions.fetchById.useQuery({ id: competitionId });
+    const competition = useCompetition();
 
-    const { data: startingZone } = api.startingZones.fetchById.useQuery({ id: startingZoneId });
-    const { data: startingZones } = api.startingZones.fetchAll.useQuery(
-        { filters: { gameId: startingZone?.gameId ?? "" } },
-        { enabled: !!startingZone }
+    const startingZones = useMemo(() => competition.game.startingZones, [competition]);
+    const startingZone = useMemo(
+        () => startingZones.find((zone) => zone.id === startingZoneId),
+        [startingZoneId, startingZones]
     );
 
     const otherStartingZones = useMemo(
@@ -49,14 +48,14 @@ function RouteComponent() {
     const now = useDateTime(competitionClock);
 
     const previousMatch = useMemo(() => {
-        const previousMatchId = competitionClock?.getPreviousMatchId(now);
+        const previousMatchId = competitionClock.getPreviousMatchId(now);
         if (!previousMatchId) return undefined;
 
         return competition?.matches.find((match) => match.id === previousMatchId);
     }, [competitionClock, now, competition?.matches]);
 
     const currentMatch = useMemo(() => {
-        const currentMatchId = competitionClock?.getCurrentMatchId(now);
+        const currentMatchId = competitionClock.getCurrentMatchId(now);
         if (!currentMatchId) return undefined;
 
         return competition?.matches.find((match) => match.id === currentMatchId);
@@ -69,7 +68,7 @@ function RouteComponent() {
     }, [currentMatch, startingZoneId]);
 
     const nextMatch = useMemo(() => {
-        const nextMatchId = competitionClock?.getNextMatchId(now);
+        const nextMatchId = competitionClock.getNextMatchId(now);
         if (!nextMatchId) return undefined;
 
         return competition?.matches.find((match) => match.id === nextMatchId);
@@ -82,40 +81,36 @@ function RouteComponent() {
     }, [nextMatch, startingZoneId]);
 
     const displayMode: DisplayMode | undefined = useMemo(() => {
-        if (competition && competitionClock) {
-            if (currentMatch) {
-                return DisplayMode.MATCH_IN_PROGRESS;
-            } else {
-                const previousMatchTimings = previousMatch && competitionClock.getMatchTimings(previousMatch.id);
+        if (currentMatch) {
+            return DisplayMode.MATCH_IN_PROGRESS;
+        } else {
+            const previousMatchTimings = previousMatch && competitionClock.getMatchTimings(previousMatch.id);
+            if (
+                previousMatch &&
+                previousMatchTimings?.endsAt &&
+                now <= previousMatchTimings.endsAt.plus({ seconds: 10 })
+            ) {
+                return DisplayMode.POST_MATCH;
+            } else if (nextMatch) {
                 if (
-                    previousMatch &&
-                    previousMatchTimings?.endsAt &&
-                    now <= previousMatchTimings.endsAt.plus({ seconds: 10 })
+                    now >=
+                    (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now()).minus({
+                        seconds: 10,
+                    })
                 ) {
-                    return DisplayMode.POST_MATCH;
-                } else if (nextMatch) {
-                    if (
-                        now >=
-                        (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now()).minus({
-                            seconds: 10,
-                        })
-                    ) {
-                        return DisplayMode.MATCH_START_COUNTDOWN;
-                    } else {
-                        return DisplayMode.PRE_MATCH;
-                    }
+                    return DisplayMode.MATCH_START_COUNTDOWN;
+                } else {
+                    return DisplayMode.PRE_MATCH;
                 }
             }
         }
-
-        return undefined;
-    }, [competition, competitionClock, currentMatch, nextMatch, now, previousMatch]);
+    }, [competitionClock, currentMatch, nextMatch, now, previousMatch]);
 
     return (
         <div className="w-screen h-screen flex">
             <div className="w-1/4 h-full" style={{ backgroundColor: startingZone?.color ?? "red" }}></div>
             <div className="w-2/4 h-full flex flex-col justify-center relative">
-                {displayMode === DisplayMode.PRE_MATCH && nextMatch && competition && competitionClock && (
+                {displayMode === DisplayMode.PRE_MATCH && nextMatch && (
                     <>
                         <div className="my-16">
                             <h1 className="text-white font-bold text-center" style={{ fontSize: "6vw" }}>
@@ -165,7 +160,7 @@ function RouteComponent() {
                     </>
                 )}
 
-                {displayMode === DisplayMode.MATCH_START_COUNTDOWN && nextMatch && competition && competitionClock && (
+                {displayMode === DisplayMode.MATCH_START_COUNTDOWN && nextMatch && (
                     <>
                         <div>
                             <h1 className="text-white font-bold font-mono text-9xl text-center">
@@ -179,7 +174,7 @@ function RouteComponent() {
                     </>
                 )}
 
-                {displayMode === DisplayMode.MATCH_IN_PROGRESS && currentMatch && competitionClock && competition && (
+                {displayMode === DisplayMode.MATCH_IN_PROGRESS && currentMatch && (
                     <>
                         <div className="my-16">
                             <h1 className="text-white font-bold text-8xl text-center">{currentMatch.name}</h1>

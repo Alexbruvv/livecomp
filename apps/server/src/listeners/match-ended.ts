@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { hooks } from "../jobs/hooks";
+import { hooks } from "../tasks/hooks";
 import { matchesRepository } from "../modules/matches/matches.repository";
 import { matches } from "../db/schema/matches";
 
