@@ -1,8 +1,10 @@
 import cors from "@elysiajs/cors";
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { CompetitionClock } from "@livecomp/utils";
 import { auth } from "../auth";
 import { getFullCompetition } from "../modules/competitions/query";
+import SuperJSON from "superjson";
+import { hash } from "fast-json-stable-hash";
 
 export const api = new Elysia()
     .use(cors())
@@ -10,7 +12,30 @@ export const api = new Elysia()
     .use(
         new Elysia({ prefix: "api" })
             .get("now", () => new Date().toISOString())
-            .get("/:competitionId/live", async ({ params: { competitionId } }) => {
+            .get(
+                "/competitions/:competitionId",
+                async ({ params: { competitionId }, query: { superjson } }) => {
+                    const competition = await getFullCompetition(competitionId);
+                    if (!competition) return null;
+
+                    const competitionWithHash = {
+                        _hash: hash(competition, "sha256"),
+                        ...competition,
+                    };
+
+                    if (superjson) {
+                        return SuperJSON.serialize(competitionWithHash);
+                    }
+
+                    return competitionWithHash;
+                },
+                {
+                    query: t.Object({
+                        superjson: t.Optional(t.Literal("true")),
+                    }),
+                }
+            )
+            .get("/competitions/:competitionId/live", async ({ params: { competitionId } }) => {
                 const competition = await getFullCompetition(competitionId);
 
                 if (!competition) return null;
