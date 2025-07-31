@@ -42,7 +42,7 @@ export default async function startPatchCompetitionTask() {
                 console.log("next", nextState);
 
                 const compDiff = diff(previousState, nextState);
-                const compHash = hash(nextState, {
+                const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
                     unorderedArrays: true,
                     unorderedSets: true,
                     unorderedObjects: true,
@@ -60,7 +60,7 @@ export default async function startPatchCompetitionTask() {
                     }
 
                     const compDiff = diff(previousState, nextState);
-                    const compHash = hash(nextState, {
+                    const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
                         unorderedArrays: true,
                         unorderedSets: true,
                         unorderedObjects: true,

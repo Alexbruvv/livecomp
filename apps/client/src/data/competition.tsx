@@ -31,7 +31,7 @@ export function CompetitionProvider({ competitionId, children }: { competitionId
 
     const handleDiffEvent = async (event: CompetitionDiffEvent) => {
         const nextState = merge(competition as FullCompetition, event.diff as FullCompetition);
-        const compHash = hash(nextState, {
+        const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
             unorderedArrays: true,
             unorderedSets: true,
             unorderedObjects: true,
