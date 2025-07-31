@@ -58,7 +58,6 @@ jobs:
                     --compile \
                     --minify \
                     --sourcemap \
-                    --bytecode \
                     --outfile ./dist/$OUT_FILENAME \
                     --target ${{ matrix.config.target }} \
 
