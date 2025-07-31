@@ -2,7 +2,7 @@ import { FullCompetition } from "@livecomp/utils";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { api } from "../utils/trpc";
 import { CompetitionDiffEvent } from "@livecomp/server";
-import { hash } from "fast-json-stable-hash";
+import hash from "object-hash";
 import useTaskQueue from "../hooks/use-task-queue";
 import { merge } from "ts-deepmerge";
 
@@ -31,7 +31,11 @@ export function CompetitionProvider({ competitionId, children }: { competitionId
 
     const handleDiffEvent = async (event: CompetitionDiffEvent) => {
         const nextState = merge(competition as FullCompetition, event.diff as FullCompetition);
-        const compHash = hash(nextState, "sha256");
+        const compHash = hash(nextState, {
+            unorderedArrays: true,
+            unorderedSets: true,
+            unorderedObjects: true,
+        });
 
         if (compHash !== event.hash) {
             console.warn(
@@ -78,3 +82,4 @@ export function useCompetitionSyncStatus() {
 
     return status;
 }
+
