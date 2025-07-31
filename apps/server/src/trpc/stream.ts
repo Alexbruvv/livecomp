@@ -3,8 +3,7 @@ import type { AppRouter } from "../server";
 import { router, publicProcedure } from "./trpc";
 import type { inferRouterInputs } from "@trpc/server";
 import { z } from "zod";
-import type { RecursivePartial } from "@livecomp/shared";
-import type { FullCompetition } from "@livecomp/utils";
+import type { IChange } from "json-diff-ts";
 
 const streamEmitter = new EventEmitter();
 streamEmitter.setMaxListeners(0);
@@ -23,7 +22,7 @@ export type CacheInvalidationEvent<
 export type CompetitionDiffEvent = {
     competitionId: string;
     hash: string;
-    diff: RecursivePartial<FullCompetition>;
+    diff: IChange[];
 };
 
 function broadcastInvalidateMessage<R extends keyof RouterInput, M extends keyof RouterInput[R]>(
@@ -34,7 +33,7 @@ function broadcastInvalidateMessage<R extends keyof RouterInput, M extends keyof
     streamEmitter.emit("invalidate", { routerName, methodName, input } satisfies CacheInvalidationEvent<R, M>);
 }
 
-function broadcastCompetitionDiff(competitionId: string, hash: string, diff: RecursivePartial<FullCompetition>) {
+function broadcastCompetitionDiff(competitionId: string, hash: string, diff: IChange[]) {
     streamEmitter.emit("competitionDiff", { competitionId, hash, diff } satisfies CompetitionDiffEvent);
 }
 

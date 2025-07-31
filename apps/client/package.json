@@ -24,6 +24,7 @@
         "better-auth": "^1.2.8",
         "deep-object-diff": "^1.1.9",
         "jotai": "^2.10.3",
+        "json-diff-ts": "^4.8.1",
         "luxon": "^3.5.0",
         "object-hash": "^3.0.0",
         "openapi-fetch": "^0.13.0",
@@ -33,7 +34,6 @@
         "react-dom": "^19.1.0",
         "react-hook-form": "^7.53.1",
         "superjson": "^2.2.1",
-        "ts-deepmerge": "^7.0.3",
         "uuid": "^11.0.3",
         "zod": "^3.23.8"
     },

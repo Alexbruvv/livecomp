@@ -3,8 +3,8 @@ import { drizzleClient } from "../db/db";
 import { competitions } from "../db/schema/competitions";
 import { stream, type CacheInvalidationEvent } from "../trpc/stream";
 import { getFullCompetition } from "../modules/competitions/query";
-import { diff } from "deep-object-diff";
 import hash from "object-hash";
+import { diff } from "json-diff-ts";
 
 export default async function startPatchCompetitionTask() {
     const competitionIds = (
@@ -38,14 +38,14 @@ export default async function startPatchCompetitionTask() {
                     return;
                 }
 
-                console.log("previous", previousState);
-                console.log("next", nextState);
-
-                const compDiff = diff(previousState, nextState);
+                const compDiff = diff(previousState, nextState, {
+                    treatTypeChangeAsReplace: false,
+                });
                 const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
                     unorderedArrays: true,
                     unorderedSets: true,
                     unorderedObjects: true,
+                    respectType: false,
                 });
                 cachedCompetitions.set(competitionId, nextState);
 
@@ -59,11 +59,14 @@ export default async function startPatchCompetitionTask() {
                         continue;
                     }
 
-                    const compDiff = diff(previousState, nextState);
+                    const compDiff = diff(previousState, nextState, {
+                        treatTypeChangeAsReplace: false,
+                    });
                     const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
                         unorderedArrays: true,
                         unorderedSets: true,
                         unorderedObjects: true,
+                        respectType: false,
                     });
                     cachedCompetitions.set(competitionId, nextState);
 

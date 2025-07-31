@@ -36,6 +36,7 @@
         "drizzle-zod": "^0.5.1",
         "elysia": "^1.3.1",
         "jose": "^5.9.6",
+        "json-diff-ts": "^4.8.1",
         "luxon": "^3.5.0",
         "moderndash": "^3.12.0",
         "object-hash": "^3.0.0",

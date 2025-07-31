@@ -4,7 +4,7 @@ import { CompetitionClock } from "@livecomp/utils";
 import { auth } from "../auth";
 import { getFullCompetition } from "../modules/competitions/query";
 import SuperJSON from "superjson";
-import { hash } from "fast-json-stable-hash";
+import hash from "object-hash";
 
 export const api = new Elysia()
     .use(cors())
@@ -19,7 +19,12 @@ export const api = new Elysia()
                     if (!competition) return null;
 
                     const competitionWithHash = {
-                        _hash: hash(competition, "sha256"),
+                        _hash: hash(JSON.parse(JSON.stringify(competition)), {
+                            unorderedArrays: true,
+                            unorderedSets: true,
+                            unorderedObjects: true,
+                            respectType: false,
+                        }),
                         ...competition,
                     };
 

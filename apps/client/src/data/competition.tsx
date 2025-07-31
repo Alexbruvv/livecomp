@@ -4,7 +4,7 @@ import { api } from "../utils/trpc";
 import { CompetitionDiffEvent } from "@livecomp/server";
 import hash from "object-hash";
 import useTaskQueue from "../hooks/use-task-queue";
-import { merge } from "ts-deepmerge";
+import { applyChangeset } from "json-diff-ts";
 
 const context = createContext<{
     competition: FullCompetition | null;
@@ -30,11 +30,12 @@ export function CompetitionProvider({ competitionId, children }: { competitionId
     };
 
     const handleDiffEvent = async (event: CompetitionDiffEvent) => {
-        const nextState = merge(competition as FullCompetition, event.diff as FullCompetition);
+        const nextState = applyChangeset(competition, event.diff);
         const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
             unorderedArrays: true,
             unorderedSets: true,
             unorderedObjects: true,
+            respectType: false,
         });
 
         if (compHash !== event.hash) {
