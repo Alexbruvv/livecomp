@@ -4,6 +4,7 @@ import { Button, ColumnLayout, Container, Header, KeyValuePairs, SpaceBetween } 
 import MatchesTable from "../../../components/console/matches/MatchesTable";
 import useCompetitionClock from "../../../hooks/use-competition-clock";
 import { useCompetition } from "../../../data/competition";
+import { useMemo } from "react";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/control")({
     component: RouteComponent,
@@ -23,6 +24,10 @@ function RouteComponent() {
     const { mutate: editMatch, isPending: editMatchPending } = api.matches.update.useMutation();
 
     const nextMatchId = competitionClock.getNextMatchId();
+    const nextMatch = useMemo(
+        () => competition.matches.find((match) => match.id === nextMatchId),
+        [nextMatchId, competition]
+    );
 
     return (
         <SpaceBetween size="s">
@@ -68,7 +73,7 @@ function RouteComponent() {
                                         }
                                     }}
                                 >
-                                    Release next match
+                                    Release {nextMatch ? nextMatch.name : "next match"}
                                 </Button>
                             </ColumnLayout>
                         </div>
