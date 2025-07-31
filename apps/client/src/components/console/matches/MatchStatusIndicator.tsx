@@ -1,5 +1,5 @@
 import { StatusIndicator } from "@cloudscape-design/components";
-import { MatchStatus } from "@livecomp/utils/src/types";
+import { MatchStatus } from "@livecomp/utils";
 
 export default function MatchStatusIndicator({ status }: { status: MatchStatus | undefined }) {
     if (!status) return <>...</>;
