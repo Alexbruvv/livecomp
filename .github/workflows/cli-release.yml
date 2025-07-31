@@ -42,9 +42,9 @@ jobs:
                   ref: ${{ github.event.release.tag_name }}
 
             - name: Setup Bun
-              uses: oven-sh/setup-bun@v1
+              uses: oven-sh/setup-bun@v2
               with:
-                  bun-version: latest
+                  bun-version: 1.2.19
 
             - name: Install dependencies
               run: bun install --frozen-lockfile
