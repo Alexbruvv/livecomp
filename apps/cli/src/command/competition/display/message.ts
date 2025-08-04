@@ -7,7 +7,7 @@ import yoctoSpinner from "yocto-spinner";
 export const displayMessageCommand = new Command("message")
     .alias("msg")
     .argument("<message>")
-    .option("-d, --duration <duration>", "Duration in seconds for the message to be displayed", "5000")
+    .option("-d, --duration <duration>", "Duration in seconds for the message to be displayed", "20")
     .action(async (message: string, options) => {
         const config = await loadCliConfig();
         const authClient = createCustomAuthClient({ baseUrl: config.instance.server_url });
