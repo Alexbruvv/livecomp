@@ -35,7 +35,7 @@ const checks: Array<{
 export class LeagueRanker {
     constructor(public readonly competition: FullCompetition) {}
 
-    private getTeamRankingData(team: Team): TeamRankingData {
+    private getTeamRankingData(team: FullCompetition["teams"][number]): TeamRankingData {
         const matches = this.competition.matches.filter(
             (match) => match.type === "league" && match.assignments.some((assignment) => assignment.teamId === team.id)
         );
@@ -49,7 +49,9 @@ export class LeagueRanker {
 
         return {
             team,
-            leaguePoints: matches.reduce((total, match) => total + (match.scoreEntry?.leaguePoints[team.id] ?? 0), 0),
+            leaguePoints:
+                matches.reduce((total, match) => total + (match.scoreEntry?.leaguePoints[team.id] ?? 0), 0) +
+                team.pointsAdjustments.reduce((total, adjustment) => total + adjustment.leaguePoints, 0),
             gamePoints: matches.reduce((total, match) => total + (match.scoreEntry?.gamePoints[team.id] ?? 0), 0),
             gamePointsStdDev,
         };

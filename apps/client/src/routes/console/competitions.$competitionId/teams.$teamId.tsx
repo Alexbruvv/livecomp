@@ -5,6 +5,7 @@ import MatchesTable from "../../../components/console/matches/MatchesTable";
 import useRankings from "../../../hooks/use-rankings";
 import { useCompetition } from "../../../data/competition";
 import { useMemo } from "react";
+import PointsAdjustmentsTable from "../../../components/console/points-adjustments/PointsAdjustmentsTable";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/teams/$teamId")({
     component: RouteComponent,
@@ -23,6 +24,7 @@ function RouteComponent() {
         () => competition.matches.filter((m) => m.assignments.some((a) => a.teamId === teamId)),
         [competition, teamId]
     );
+    const pointsAdjustments = useMemo(() => team?.pointsAdjustments ?? [], [team]);
 
     const rankings = useRankings(competition);
 
@@ -67,6 +69,7 @@ function RouteComponent() {
             </Container>
 
             <MatchesTable matchesPending={false} matches={matches} competitionId={competitionId} />
+            {team && <PointsAdjustmentsTable pointsAdjustments={pointsAdjustments} teamId={team.id} />}
         </SpaceBetween>
     );
 }

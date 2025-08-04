@@ -6,7 +6,11 @@ import { competitionsRepository } from "./competitions.repository";
 import { competitions } from "../../db/schema/competitions";
 
 export const fullCompetitionQuery = {
-    teams: true,
+    teams: {
+        with: {
+            pointsAdjustments: true,
+        },
+    },
     game: {
         with: {
             startingZones: true,

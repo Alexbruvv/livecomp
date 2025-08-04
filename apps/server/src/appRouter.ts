@@ -12,6 +12,7 @@ import { teamsRouter } from "./modules/teams/teams.router";
 import { venuesRouter } from "./modules/venues/venues.router";
 import { streamRouter } from "./trpc/stream";
 import { router } from "./trpc/trpc";
+import { pointsAdjustmentsRouter } from "./modules/points-adjustments/points-adjustments.router";
 
 export const appRouter = router({
     stream: streamRouter,
@@ -22,6 +23,7 @@ export const appRouter = router({
     shepherds: shepherdsRouter,
     competitions: competitionsRouter,
     teams: teamsRouter,
+    pointsAdjustments: pointsAdjustmentsRouter,
     matchPeriods: matchPeriodsRouter,
     matches: matchesRouter,
     scores: scoresRouter,
