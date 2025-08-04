@@ -27,6 +27,7 @@ function RouteComponent() {
         if (!rankings || !rawScores) return [];
         return Object.entries(rankings)
             .slice(0, 10)
+            .sort(([, a], [, b]) => a - b)
             .map(([teamId]) => {
                 const teamScores = rawScores[teamId];
                 return {

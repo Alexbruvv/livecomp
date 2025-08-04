@@ -30,7 +30,7 @@ export function CompetitionProvider({ competitionId, children }: { competitionId
     };
 
     const handleDiffEvent = async (event: CompetitionDiffEvent) => {
-        const nextState = applyChangeset(competition, event.diff);
+        const nextState = { ...applyChangeset(competition, event.diff) };
         const compHash = hash(JSON.parse(JSON.stringify(nextState)), {
             unorderedArrays: true,
             unorderedSets: true,
