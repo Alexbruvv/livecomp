@@ -7,7 +7,7 @@ async function determineOffsetMs() {
     const isoServerDate = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/now`).then((response) => response.text());
     const delta = performance.now() - now;
 
-    return DateTime.now().diff(DateTime.fromISO(isoServerDate)).as("milliseconds") + delta / 2;
+    return DateTime.now().diff(DateTime.fromISO(isoServerDate)).as("milliseconds") - delta / 2;
 }
 
 export default function useDateTime(competitionClock?: CompetitionClock) {
