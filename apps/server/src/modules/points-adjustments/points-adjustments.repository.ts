@@ -18,6 +18,7 @@ class PointsAdjustmentsRepository extends Repository<
         if (!team) throw new Error(`Team with ID ${row.teamId} not found`);
 
         stream.broadcastInvalidateMessage("competitions", "fetchById", { id: team.competitionId });
+        stream.broadcastInvalidateMessage("teams", "fetchAllScores");
     }
 
     async afterUpdate(row: ManualPointsAdjustment) {
@@ -25,6 +26,7 @@ class PointsAdjustmentsRepository extends Repository<
         if (!team) throw new Error(`Team with ID ${row.teamId} not found`);
 
         stream.broadcastInvalidateMessage("competitions", "fetchById", { id: team.competitionId });
+        stream.broadcastInvalidateMessage("teams", "fetchAllScores");
     }
 
     async afterDelete(row: ManualPointsAdjustment) {
@@ -32,6 +34,7 @@ class PointsAdjustmentsRepository extends Repository<
         if (!team) throw new Error(`Team with ID ${row.teamId} not found`);
 
         stream.broadcastInvalidateMessage("competitions", "fetchById", { id: team.competitionId });
+        stream.broadcastInvalidateMessage("teams", "fetchAllScores");
     }
 }
 

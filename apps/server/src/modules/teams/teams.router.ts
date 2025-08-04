@@ -3,10 +3,10 @@ import { publicProcedure, restrictedProcedure, router } from "../../trpc/trpc";
 import { insertTeamSchema, teams } from "../../db/schema/teams";
 import { teamsRepository } from "./teams.repository";
 import { and, eq } from "drizzle-orm";
-import { manualPointsAdjustmentsRepository } from "../scores/manual-points-adjustments.repository";
 import { manualPointsAdjustments } from "../../db/schema/scores";
 import { matchesRepository } from "../matches/matches.repository";
 import { matches } from "../../db/schema/matches";
+import { pointsAdjustmentsRepository } from "../points-adjustments/points-adjustments.repository";
 
 export const teamsRouter = router({
     create: restrictedProcedure({ competition: ["configure"] })
@@ -55,7 +55,7 @@ export const teamsRouter = router({
                 );
 
             for (const team of selectedTeams) {
-                const manualAdjustments = await manualPointsAdjustmentsRepository.findMany({
+                const manualAdjustments = await pointsAdjustmentsRepository.findMany({
                     where: eq(manualPointsAdjustments.teamId, team.id),
                 });
 
