@@ -73,6 +73,10 @@ export class CompetitionClock {
                 matchPeriod,
             };
 
+            timeAccumulator = timeAccumulator.plus({
+                seconds: this.competition.game.matchDuration,
+            });
+
             // Move to next match period if match overflows
             if (
                 timeAccumulator.plus({ seconds: this.competition.game.matchDuration }) >
@@ -88,7 +92,7 @@ export class CompetitionClock {
                 timeAccumulator = DateTime.fromJSDate(matchPeriod.startsAt);
             } else {
                 timeAccumulator = timeAccumulator.plus({
-                    seconds: this.competition.game.defaultMatchSpacing + this.competition.game.matchDuration,
+                    seconds: this.competition.game.defaultMatchSpacing,
                 });
             }
         }
