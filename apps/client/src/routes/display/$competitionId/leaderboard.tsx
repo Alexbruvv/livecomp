@@ -41,7 +41,9 @@ function RouteComponent() {
 
     return (
         <SplitDisplay competition={competition}>
-            <h1 className="text-white text-4xl font-bold">Leaderboard - {competition?.name}</h1>
+            <h1 className="text-white font-bold" style={{ fontSize: "4vh" }}>
+                Leaderboard - {competition?.name}
+            </h1>
 
             <div className="w-full my-24 flex flex-col justify-items-center">
                 <table className="w-full mx-auto my-auto">

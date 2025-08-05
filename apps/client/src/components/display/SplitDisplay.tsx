@@ -88,8 +88,8 @@ export default function SplitDisplay({ competition, children }: { competition: F
                 </DisplayOverlay>
             )}
 
-            <div className="w-2/3 h-full p-4">{children}</div>
-            <div className="w-1/3 h-full border-l-2 flex flex-col">
+            <div className="flex-grow h-full p-4">{children}</div>
+            <div className="h-full border-l-2 flex flex-col">
                 <div className="text-white text-3xl p-4 font-bold bg-slate-600">Next matches</div>
 
                 <table className="w-full border-b-2 border-white">
