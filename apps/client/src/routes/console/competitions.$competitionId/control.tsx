@@ -29,6 +29,8 @@ function RouteComponent() {
         [nextMatchId, competition]
     );
 
+    const currentMatchId = competitionClock.getCurrentMatchId();
+
     return (
         <SpaceBetween size="s">
             <Container header={<Header description={competition.name}>Match Control</Header>}>
@@ -58,8 +60,14 @@ function RouteComponent() {
                                     iconName="check"
                                     fullWidth
                                     disabled={
+                                        !!currentMatchId ||
                                         !nextMatchId ||
                                         competition.matches.find((match) => match.id === nextMatchId)?.released
+                                    }
+                                    disabledReason={
+                                        currentMatchId
+                                            ? "You cannot release a match while one is in progress"
+                                            : undefined
                                     }
                                     loading={editMatchPending}
                                     onClick={() => {
