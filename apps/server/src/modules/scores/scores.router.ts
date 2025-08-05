@@ -51,12 +51,10 @@ export const scoresRouter = router({
                 data.teams.map((team) => {
                     let lineDeficit = 0;
                     let accumulatedScore = 0;
-                    let touchedCan = false;
-                    let linesCrossed = 0;
 
                     for (const action of team.actions) {
                         if (action === "C") {
-                            touchedCan = true;
+                            accumulatedScore--;
                         } else if (action === "X") {
                             lineDeficit++;
                         } else if (action === "I") {
@@ -64,18 +62,11 @@ export const scoresRouter = router({
                                 lineDeficit--;
                             } else {
                                 accumulatedScore += 2;
-
-                                if (!touchedCan && linesCrossed !== 0) {
-                                    accumulatedScore++;
-                                }
-
-                                linesCrossed++;
-                                touchedCan = false;
                             }
                         }
                     }
 
-                    return [team.teamId, accumulatedScore];
+                    return [team.teamId, Math.max(0, accumulatedScore)];
                 })
             );
 
