@@ -31,6 +31,14 @@ function RouteComponent() {
                           return timings.stagingClosesAt.plus({ minutes: 5 }) >= now;
                       })
                       .slice(0, 10)
+                      .sort((a, b) => {
+                          const aTimings = competitionClock.getMatchTimings(a.id);
+                          const bTimings = competitionClock.getMatchTimings(b.id);
+
+                          if (!aTimings || !bTimings) return 0;
+
+                          return aTimings.stagingOpensAt.toUnixInteger() - bTimings.stagingOpensAt.toUnixInteger();
+                      })
                 : [],
         [competition, competitionClock, now]
     );
