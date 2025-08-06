@@ -13,7 +13,11 @@ export class Hook<T> {
 
     public trigger(data: T) {
         for (const listener of this.listeners) {
-            listener(data);
+            try {
+                listener(data);
+            } catch (error) {
+                console.error("Error in hook listener:", error);
+            }
         }
     }
 }
