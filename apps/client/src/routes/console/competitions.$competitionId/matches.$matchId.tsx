@@ -11,6 +11,7 @@ import useDateTime from "../../../hooks/use-date-time";
 import { useMemo } from "react";
 import { useCompetition } from "../../../data/competition";
 import TinCanRallyScorer from "../../../components/console/scorer/TinCanRallyScorer";
+import { api } from "../../../utils/trpc";
 
 export const Route = createFileRoute("/console/competitions/$competitionId/matches/$matchId")({
     component: RouteComponent,
@@ -25,6 +26,8 @@ function RouteComponent() {
 
     const competition = useCompetition();
     const match = useMemo(() => competition.matches.find((m) => m.id === matchId), [competition, matchId]);
+
+    const { mutate: updateMatch, isPending: isUpdatingMatch } = api.matches.update.useMutation();
 
     const nextMatchId = useMemo(() => {
         if (!competition || !match) return null;
@@ -93,6 +96,20 @@ function RouteComponent() {
                     <Header
                         actions={
                             <SpaceBetween size="s" direction="horizontal">
+                                {match && (
+                                    <Button
+                                        variant={match.released ? "normal" : "primary"}
+                                        onClick={() =>
+                                            updateMatch({
+                                                id: match.id,
+                                                data: { released: !match.released },
+                                            })
+                                        }
+                                        loading={isUpdatingMatch}
+                                    >
+                                        {match.released ? "Unrelease" : "Release"}
+                                    </Button>
+                                )}
                                 {match && <EditMatchModalButton match={match} />}
                             </SpaceBetween>
                         }
@@ -127,6 +144,10 @@ function RouteComponent() {
                         {
                             label: "Buffer",
                             value: match?.buffer ?? "...",
+                        },
+                        {
+                            label: "Released",
+                            value: match?.released ? "Yes" : "No",
                         },
                     ]}
                 />
