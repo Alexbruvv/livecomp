@@ -70,14 +70,19 @@ export const scoresRouter = router({
                 })
             );
 
-            const leaguePoints = Object.fromEntries(
-                Object.entries(gamePoints)
-                    .sort((a, b) => a[1] - b[1])
-                    .map(([teamId], idx) => [
-                        teamId,
-                        data.teams.find((team) => team.teamId === teamId)?.present ? 2 * idx + 2 : 0,
-                    ])
-            );
+            let leaguePoints: Record<string, number>;
+            if (new Set(Object.values(gamePoints)).size === 1 && data.teams.every((team) => team.present)) {
+                leaguePoints = Object.fromEntries(data.teams.map((team) => [team.teamId, 4]));
+            } else {
+                leaguePoints = Object.fromEntries(
+                    Object.entries(gamePoints)
+                        .sort((a, b) => a[1] - b[1])
+                        .map(([teamId], idx) => [
+                            teamId,
+                            data.teams.find((team) => team.teamId === teamId)?.present ? 2 * idx + 2 : 0,
+                        ])
+                );
+            }
 
             if (!match.scoreEntry) {
                 await matchScoreEntriesRepository.create({
