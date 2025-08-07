@@ -72,7 +72,7 @@ export const scoresRouter = router({
 
             let leaguePoints: Record<string, number>;
             if (new Set(Object.values(gamePoints)).size === 1 && data.teams.every((team) => team.present)) {
-                leaguePoints = Object.fromEntries(data.teams.map((team) => [team.teamId, 4]));
+                leaguePoints = Object.fromEntries(data.teams.map((team) => [team.teamId, 3]));
             } else {
                 leaguePoints = Object.fromEntries(
                     Object.entries(gamePoints)
