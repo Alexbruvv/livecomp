@@ -121,7 +121,7 @@ function RouteComponent() {
                             <h1 className="text-white font-bold text-center mb-4" style={{ fontSize: "7vh" }}>
                                 Starting in
                             </h1>
-                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "9vh" }}>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "11vh" }}>
                                 {formatClock(
                                     (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
                                         .diff(now)
@@ -166,7 +166,7 @@ function RouteComponent() {
                 {displayMode === DisplayMode.MATCH_START_COUNTDOWN && nextMatch && (
                     <>
                         <div>
-                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "12vh" }}>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "15vh" }}>
                                 {Math.ceil(
                                     (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
                                         .diff(now)
@@ -185,7 +185,7 @@ function RouteComponent() {
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "10vh" }}>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "11vh" }}>
                                 {formatClock(
                                     (competitionClock.getMatchTimings(currentMatch.id)?.endsAt ?? DateTime.now())
                                         .diff(now)
