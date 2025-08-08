@@ -113,15 +113,15 @@ function RouteComponent() {
                 {displayMode === DisplayMode.PRE_MATCH && nextMatch && (
                     <>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center" style={{ fontSize: "9vh" }}>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "10vh" }}>
                                 {nextMatch.name}
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center mb-4" style={{ fontSize: "6vh" }}>
+                            <h1 className="text-white font-bold text-center mb-4" style={{ fontSize: "7vh" }}>
                                 Starting in
                             </h1>
-                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "8vh" }}>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "9vh" }}>
                                 {formatClock(
                                     (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
                                         .diff(now)
@@ -130,10 +130,10 @@ function RouteComponent() {
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center" style={{ fontSize: "9vh" }}>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "10vh" }}>
                                 {nextAssignment?.team?.shortName}
                             </h1>
-                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "6vh" }}>
+                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "7vh" }}>
                                 {nextAssignment?.team?.name}
                             </h2>
                         </div>
@@ -146,7 +146,7 @@ function RouteComponent() {
                                         <div className="w-2/4 h-full flex flex-col justify-center">
                                             <h1
                                                 className="text-white font-bold text-center"
-                                                style={{ fontSize: "6vh" }}
+                                                style={{ fontSize: "7vh" }}
                                             >
                                                 {
                                                     nextMatch.assignments.find(
@@ -166,7 +166,7 @@ function RouteComponent() {
                 {displayMode === DisplayMode.MATCH_START_COUNTDOWN && nextMatch && (
                     <>
                         <div>
-                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "11vh" }}>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "12vh" }}>
                                 {Math.ceil(
                                     (competitionClock.getMatchTimings(nextMatch.id)?.startsAt ?? DateTime.now())
                                         .diff(now)
@@ -180,12 +180,12 @@ function RouteComponent() {
                 {displayMode === DisplayMode.MATCH_IN_PROGRESS && currentMatch && (
                     <>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center" style={{ fontSize: "7vh" }}>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "8vh" }}>
                                 {currentMatch.name}
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "9vh" }}>
+                            <h1 className="text-white font-bold font-mono text-center" style={{ fontSize: "10vh" }}>
                                 {formatClock(
                                     (competitionClock.getMatchTimings(currentMatch.id)?.endsAt ?? DateTime.now())
                                         .diff(now)
@@ -194,10 +194,10 @@ function RouteComponent() {
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center" style={{ fontSize: "7vh" }}>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "8vh" }}>
                                 {currentAssignment?.team?.shortName}
                             </h1>
-                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "4vh" }}>
+                            <h2 className="text-white font-semibold text-center" style={{ fontSize: "5vh" }}>
                                 {currentAssignment?.team?.name}
                             </h2>
                         </div>
@@ -227,12 +227,12 @@ function RouteComponent() {
                 {displayMode === DisplayMode.POST_MATCH && previousMatch && (
                     <>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center" style={{ fontSize: "8vh" }}>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "9vh" }}>
                                 {previousMatch.name}
                             </h1>
                         </div>
                         <div className="my-16">
-                            <h1 className="text-white font-bold text-center" style={{ fontSize: "6vh" }}>
+                            <h1 className="text-white font-bold text-center" style={{ fontSize: "7vh" }}>
                                 Match ended
                             </h1>
                         </div>
