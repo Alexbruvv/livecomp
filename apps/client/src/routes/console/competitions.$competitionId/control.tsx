@@ -115,7 +115,13 @@ function RouteComponent() {
                                                     (match) =>
                                                         competitionClock?.getMatchStatus(match.id) === "inProgress"
                                                 )
-                                                .map((match) => match.name)
+                                                .map(
+                                                    (match) =>
+                                                        `${match.name} (${match.assignments
+                                                            .filter((assignment) => !!assignment.team)
+                                                            .map((assignment) => assignment.team?.shortName)
+                                                            .join(", ")})`
+                                                )
                                                 .join(", ") || "None",
                                     },
                                 ]}
