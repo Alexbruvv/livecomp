@@ -1,7 +1,7 @@
 import { Button, Checkbox, ColumnLayout, Input, SpaceBetween } from "@cloudscape-design/components";
 import { AppRouterInput, AppRouterOutput } from "@livecomp/server";
 import { ExcludeNull } from "../../../utils/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../utils/trpc";
 import { showFlashbar } from "../../../state/flashbars";
 
@@ -29,6 +29,12 @@ export default function NuclearCleanupScorer({
             },
         }
     );
+
+    useEffect(() => {
+        if (match.scoreEntry) {
+            setState(match.scoreEntry.scoreData as InputData);
+        }
+    }, [match]);
 
     const { mutate: submitScores, isPending } = api.scores.submitNuclearCleanupScores.useMutation({
         onError: (error) => showFlashbar({ type: "error", content: error.message }),
