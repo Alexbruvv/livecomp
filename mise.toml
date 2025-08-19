@@ -1,0 +1,25 @@
+[tools]
+bun = "latest"
+
+[tasks.install-deps]
+description = "Install dependencies for all projects in the workspace"
+run = "bun install"
+
+[tasks.dev]
+description = "Run the development server for the project"
+run = "bun run dev"
+
+[tasks.generate]
+description = "Generate database migrations"
+dir = "{{ config_root }}/apps/server"
+run = "bun --bun drizzle-kit generate"
+
+[tasks.migrate]
+description = "Run database migrations"
+dir = "{{ config_root }}/apps/server"
+run = "bun --bun drizzle-kit migrate"
+
+[tasks.build]
+description = "Build the client for production"
+dir = "{{ config_root }}/apps/client"
+run = "bun run build"

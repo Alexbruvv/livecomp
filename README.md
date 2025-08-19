@@ -34,3 +34,6 @@ Steps:
 5. Navigate to the `packages/server` directory and run `bun run src/main.ts create-sysadmin-user <username> <password>` to create a system administrator user
 6. Run `bun dev` - check the client output for the port the client is running on
 
+## mise-en-place
+
+The project has a [mise-en-place](https://mise.jdx.dev/) configuration (`mise.toml`) to install tooling and run common tasks.
