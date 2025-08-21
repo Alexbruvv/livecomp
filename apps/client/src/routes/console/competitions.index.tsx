@@ -5,6 +5,7 @@ import { api } from "../../utils/trpc";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import DeleteCompetitionButton from "../../components/console/competitions/DeleteCompetitionButton";
 import Restricted from "../../components/console/util/Restricted";
+import ArchiveRestoreCompetitionButton from "../../components/console/competitions/ArchiveRestoreCompetitionButton";
 
 export const Route = createFileRoute("/console/competitions/")({
     component: RouteComponent,
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/console/competitions/")({
 function RouteComponent() {
     const navigate = useNavigate();
 
-    const { data: competitions, isPending, isError } = api.competitions.fetchAll.useQuery();
+    const { data: competitions, isPending, isError } = api.competitions.fetchAll.useQuery({ includeArchived: true });
     const { items, collectionProps } = useCollection(competitions ?? [], {});
 
     return (
@@ -63,17 +64,26 @@ function RouteComponent() {
                                 {competition.name}
                             </Link>
                         ),
-                        width: "50%",
+                        width: "35%",
+                    },
+                    {
+                        id: "archied",
+                        header: "Archived",
+                        cell: (competition) => (competition.archivedAt ? "Yes" : "No"),
+                        width: "15%",
                     },
                     {
                         id: "actions",
                         header: "Actions",
                         cell: (competition) => (
-                            <Restricted permissions={{ competition: ["delete"] }}>
-                                <SpaceBetween direction="horizontal" size="xs">
+                            <SpaceBetween direction="horizontal" size="xs">
+                                <Restricted permissions={{ competition: ["archive"] }}>
+                                    <ArchiveRestoreCompetitionButton competition={competition} />
+                                </Restricted>
+                                <Restricted permissions={{ competition: ["delete"] }}>
                                     <DeleteCompetitionButton competition={competition} />
-                                </SpaceBetween>
-                            </Restricted>
+                                </Restricted>
+                            </SpaceBetween>
                         ),
                     },
                 ]}

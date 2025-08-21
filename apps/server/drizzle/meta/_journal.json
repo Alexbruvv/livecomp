@@ -407,6 +407,13 @@
       "when": 1753889965722,
       "tag": "0057_boring_demogoblin",
       "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1755796768293,
+      "tag": "0058_daffy_silhouette",
+      "breakpoints": true
     }
   ]
 }

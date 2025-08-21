@@ -21,9 +21,17 @@ export const competitionsRouter = router({
             return await competitionsRepository.create(data);
         }),
 
-    fetchAll: publicProcedure.query(async () => {
-        return await competitionsRepository.findMany();
-    }),
+    fetchAll: publicProcedure
+        .input(z.object({ includeArchived: z.boolean().default(false) }).optional())
+        .query(async ({ input }) => {
+            if (input?.includeArchived) {
+                return await competitionsRepository.findMany();
+            }
+
+            return await competitionsRepository.findMany({
+                where: isNull(competitions.archivedAt),
+            });
+        }),
 
     fetchById: publicProcedure
         .input(

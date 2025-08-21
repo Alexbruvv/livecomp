@@ -25,6 +25,8 @@ export const competitions = pgTable("competitions", {
     venueId: uuid()
         .references(() => venues.id, { onDelete: "restrict", onUpdate: "cascade" })
         .notNull(),
+
+    archivedAt: timestamp({ withTimezone: false }),
 });
 
 export const competitionsRelations = relations(competitions, ({ one, many }) => ({

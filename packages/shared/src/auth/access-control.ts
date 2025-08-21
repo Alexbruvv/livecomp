@@ -4,7 +4,7 @@ import { adminAc, defaultStatements } from "better-auth/plugins/admin/access";
 const statement = {
     ...defaultStatements,
     system: ["login"],
-    competition: ["create", "update", "configure", "control", "score", "delete"],
+    competition: ["create", "update", "configure", "control", "score", "archive", "delete"],
     game: ["create", "update", "configure", "delete"],
     venue: ["create", "update", "configure", "delete"],
 } as const;
@@ -22,7 +22,7 @@ const marshal = accessControl.newRole({
 
 const admin = accessControl.newRole({
     ...marshal.statements,
-    competition: ["create", "update", "configure", "control", "score", "delete"],
+    competition: ["create", "update", "configure", "control", "score", "archive", "delete"],
     game: ["create", "update", "configure", "delete"],
     venue: ["create", "update", "configure", "delete"],
 });
