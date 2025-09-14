@@ -7,11 +7,12 @@ import {
     Table,
     Popover,
 } from "@cloudscape-design/components";
-import { authClient } from "@livecomp/shared";
+import { authClient, User } from "@livecomp/shared";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import RevokeUserSessionButton from "../../components/console/users/RevokeUserSessionButton";
+import EditUserModalButton from "../../components/console/users/EditUserModalButton";
 
 export const Route = createFileRoute("/console/users/$userId")({
     component: RouteComponent,
@@ -42,7 +43,13 @@ function RouteComponent() {
     const sessions = useMemo(() => sessionsData?.data?.sessions ?? [], [sessionsData]);
 
     return (
-        <ContentLayout header={<Header variant="h1">{user?.name ?? "..."}</Header>}>
+        <ContentLayout
+            header={
+                <Header variant="h1" actions={user ? <EditUserModalButton user={user as User} /> : undefined}>
+                    {user?.name ?? "..."}
+                </Header>
+            }
+        >
             <SpaceBetween size="s">
                 <Container
                     header={
