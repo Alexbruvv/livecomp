@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react";
-import { adminClient } from "better-auth/client/plugins";
+import { adminClient, apiKeyClient } from "better-auth/client/plugins";
 import { accessControl, roles } from "@livecomp/shared";
 
 type AuthClientOptions = Parameters<typeof createAuthClient>[0];
@@ -11,6 +11,7 @@ export const authClientOptions = {
             ac: accessControl,
             roles,
         }),
+        apiKeyClient(),
     ],
 } as const satisfies AuthClientOptions;
 

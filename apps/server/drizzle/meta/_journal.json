@@ -414,6 +414,13 @@
       "when": 1755796768293,
       "tag": "0058_daffy_silhouette",
       "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1757882645183,
+      "tag": "0059_broad_jigsaw",
+      "breakpoints": true
     }
   ]
 }
