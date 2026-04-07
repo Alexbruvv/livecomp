@@ -1,1 +1,0 @@
-ALTER TABLE "match_score_entries" ADD COLUMN "league_points" json NOT NULL;

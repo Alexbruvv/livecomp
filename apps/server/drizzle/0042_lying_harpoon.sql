@@ -1,1 +1,0 @@
-ALTER TABLE "matches" ADD COLUMN "buffer" integer DEFAULT 0 NOT NULL;

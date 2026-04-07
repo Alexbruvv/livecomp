@@ -1,1 +1,0 @@
-ALTER TABLE "match_periods" DROP COLUMN IF EXISTS "cursor_position";

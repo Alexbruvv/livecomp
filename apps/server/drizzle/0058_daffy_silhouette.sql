@@ -1,1 +1,0 @@
-ALTER TABLE "competitions" ADD COLUMN "archived_at" timestamp;

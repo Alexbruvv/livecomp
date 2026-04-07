@@ -1,1 +1,0 @@
-ALTER TABLE "displays" ADD COLUMN "last_heartbeat" timestamp;

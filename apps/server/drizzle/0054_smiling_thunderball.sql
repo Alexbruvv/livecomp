@@ -1,1 +1,0 @@
-ALTER TABLE "teams" ADD CONSTRAINT "teams_shortName_unique" UNIQUE("short_name");

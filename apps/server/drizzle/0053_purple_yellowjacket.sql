@@ -1,1 +1,0 @@
-ALTER TABLE "starting_zones" ADD CONSTRAINT "starting_zones_name_unique" UNIQUE("name");

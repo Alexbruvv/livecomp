@@ -1,2 +1,0 @@
-ALTER TABLE "competitions" ADD COLUMN "display_token" uuid DEFAULT gen_random_uuid() NOT NULL;--> statement-breakpoint
-ALTER TABLE "competitions" ADD CONSTRAINT "competitions_displayToken_unique" UNIQUE("display_token");

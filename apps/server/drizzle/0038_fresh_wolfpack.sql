@@ -1,1 +1,0 @@
-ALTER TABLE "matches" DROP CONSTRAINT "matches_sequenceNumber_unique";

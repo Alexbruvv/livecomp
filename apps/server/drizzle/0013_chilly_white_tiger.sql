@@ -1,1 +1,0 @@
-ALTER TABLE "match_periods" ALTER COLUMN "cursor_position" SET DEFAULT -1;
