@@ -1,0 +1,17 @@
+{
+  "name": "livecomp",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@keyv/sqlite": "^4.0.8",
+    "keyv": "^5.6.0",
+    "zod": "^4.3.6"
+  }
+}
