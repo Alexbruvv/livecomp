@@ -14,7 +14,7 @@ const tinCanRallyValidator = z.object({
             present: z.boolean(),
             disqualified: z.boolean(),
             actions: z.string().regex(/^[CIX]*$/, "Invalid actions format"),
-        })
+        }),
     ),
 });
 
@@ -24,7 +24,7 @@ const nuclearCleanupValidator = z.object({
             teamId: z.string(),
             present: z.boolean(),
             leftStartingZone: z.boolean(),
-        })
+        }),
     ),
     zoneTokenCounts: z.object({
         outerWest: z.number(),
@@ -54,20 +54,20 @@ export const scoresRouter = router({
 
                     for (const action of team.actions) {
                         if (action === "C") {
-                            accumulatedScore--;
+                            accumulatedScore += 3;
                         } else if (action === "X") {
                             lineDeficit++;
                         } else if (action === "I") {
                             if (lineDeficit > 0) {
                                 lineDeficit--;
                             } else {
-                                accumulatedScore += 2;
+                                accumulatedScore++;
                             }
                         }
                     }
 
                     return [team.teamId, Math.max(0, accumulatedScore)];
-                })
+                }),
             );
 
             let leaguePoints: Record<string, number>;
@@ -80,7 +80,7 @@ export const scoresRouter = router({
                         .map(([teamId], idx) => [
                             teamId,
                             data.teams.find((team) => team.teamId === teamId)?.present ? 2 * idx + 2 : 0,
-                        ])
+                        ]),
                 );
             }
 
@@ -100,7 +100,7 @@ export const scoresRouter = router({
                     },
                     {
                         where: eq(matchScoreEntries.matchId, match.id),
-                    }
+                    },
                 );
             }
         }),
@@ -125,7 +125,7 @@ export const scoresRouter = router({
                         (idx === 0
                             ? 3 * data.zoneTokenCounts.outerEast + data.zoneTokenCounts.innerEast
                             : 3 * data.zoneTokenCounts.outerWest + data.zoneTokenCounts.innerWest),
-                ])
+                ]),
             );
 
             const leaguePoints = Object.fromEntries(
@@ -134,7 +134,7 @@ export const scoresRouter = router({
                     .map(([teamId], idx) => [
                         teamId,
                         data.teams.find((team) => team.teamId === teamId)?.present ? 2 * idx + 2 : 0,
-                    ])
+                    ]),
             );
 
             if (!match.scoreEntry) {
@@ -153,7 +153,7 @@ export const scoresRouter = router({
                     },
                     {
                         where: eq(matchScoreEntries.matchId, match.id),
-                    }
+                    },
                 );
             }
         }),
